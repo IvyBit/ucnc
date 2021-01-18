@@ -3830,7 +3830,7 @@ F 3 "" H 15400 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:USB_B_Mini J12
+L cnc-universal-input-rescue:USB_B_Mini-Connector J12
 U 1 1 609D7711
 P 13150 5350
 F 0 "J12" H 13207 5817 50  0000 C CNN
