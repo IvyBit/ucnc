@@ -1,2 +1,7 @@
+firmware/ucnc/Debug
 plot/
 *-bak
+*.elf
+*.hex
+*.lss
+*.map
