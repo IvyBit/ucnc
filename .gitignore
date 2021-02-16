@@ -1,13 +1,9 @@
 firmware/ucnc/Debug/
+firmware/ucnc/Release/
 plot/
 *-bak
 *.elf
 *.hex
 *.lss
 *.map
-firmware/ucnc/Debug/main.o
-firmware/ucnc/Debug/ucnc.elf
-firmware/ucnc/Debug/ucnc.hex
-firmware/ucnc/Debug/ucnc.lss
-firmware/ucnc/Debug/ucnc.map
-firmware/ucnc/Debug/ucnc.srec
+
