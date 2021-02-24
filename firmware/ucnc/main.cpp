@@ -8,12 +8,13 @@
 
 #define F_CPU	18432000UL
 #define BAUD	115200UL
-#define CUBRR		((F_CPU / 16 / BAUD) - 1)
+#define CUBRR	((F_CPU / 16 / BAUD) - 1)
 
 #include <stdlib.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+#include <avr/eeprom.h>
 #include <util/delay.h>
 
 
@@ -24,124 +25,47 @@
 #include "compiler.h"
 #include "terminal.h"
 
+#include "edit.h"
 
-#define IN_SRCLR	(PINC0)
-#define IN_SRCLK	(PINC1)
-#define IN_RCLK		(PINC2)
-#define IN_OE		(PINC3)
-#define IN_SER		(PINC4)
+#include "hal.h"
 
-#define AUX_BTN		(PINC5)
-#define RESET		(PINC6)
-
-#define	OUT_SER		(PIND2)
-#define	OUT_OE		(PIND3)
-#define	OUT_RCLK	(PIND4)
-#define	OUT_SRCLK	(PIND5)
-#define	OUT_SRCLR	(PIND6)
-
-
-#define SSEL_A		(PINB0)
-#define SSEL_B		(PINB1)
-#define SSEL_C		(PINB2)
-#define ASIN		(PINE2)
-
-//inverted select signal  
-#define ASA	((uint8_t)(~0x03 & 0x07)) //011 -> 100 -> 0x04
-#define ASB	((uint8_t)(~0x00 & 0x07)) //000 -> 111 -> 0x07
-#define ASC	((uint8_t)(~0x05 & 0x07)) //101 -> 010 -> 0x02
-#define ASD	((uint8_t)(~0x01 & 0x07)) //001 -> 110 -> 0x06
-#define ASE	((uint8_t)(~0x07 & 0x07)) //111 -> 000 -> 0x00
-#define ASF	((uint8_t)(~0x02 & 0x07)) //010 -> 101 -> 0x05
-#define ASG	((uint8_t)(~0x06 & 0x07)) //110 -> 001 -> 0x01
-#define ASH	((uint8_t)(~0x04 & 0x07)) //100 -> 011 -> 0x03
-
-const uint8_t ASI_MAP[8] PROGMEM= { ASA, ASB, ASC, ASD, ASE, ASF, ASG, ASH };
+struct InputConfig{
+	uint8_t		threshold	= 0;
+	uint8_t		hysteresis  = 0;
+	bool		inverted	= false;
+	op::OpCode  last_state  = op::OpCode::FALSE;
 	
-void setup_uart(){
-	UBRR0H = (uint8_t)(CUBRR >> 8);
-	UBRR0L = (uint8_t)(CUBRR);
-	UCSR0B =  (1 << TXEN0) | (1 << RXEN0);
-	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
-}
-
-void setup_adc(){
-	//select 5v reference and ADC6
-	ADMUX |= (1 << REFS0) | (1 << MUX2) | (1 << MUX1);
-	//enable ADC, enable interrupt, set prescaler to 128
-	ADCSRA |= (1 << ADEN) | (1 << ADIE) | (1 << ADPS2)| (1 << ADPS1)| (1 << ADPS0);
-	
-	PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | pgm_read_byte(&ASI_MAP[0]));
-	//PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | ASA);
-}
-
-void setup(){
-	
-	//make PINC0-4 outputs
-	DDRC |= ((1 << IN_SRCLR) | (1 << IN_SRCLK) | (1 << IN_RCLK) | (1 << IN_OE) | (1 << IN_SER));
-	PORTC = 0x00;	
-	//disable input clear
-	PORTC |= (1 << IN_SRCLR);
-	//enable input indicators
-	PORTC &= ~(1 << IN_OE);
-	
-	//make PIND2-6 outputs
-	DDRD |= ((1 << OUT_SER) | (1 << OUT_OE) | (1 << OUT_RCLK) | (1 << OUT_SRCLK) | (1 << OUT_SRCLR));
-	//disable output clear
-	PORTD |= (1 << OUT_SRCLR);
-	//enable outputs
-	PORTD &= ~(1 << OUT_OE);
-	
-	//make PB0-PB2 outputs
-	DDRB |= (1 << SSEL_A) |(1 << SSEL_B) |(1 << SSEL_C);
-
-	setup_uart();
-	
-	setup_adc();	
-	
-	sei();
-}
-
-void set_input_indicators(uint8_t indicators){
-	
-	for (uint8_t i = 0; i < 8; i++)
-	{
-		//shift value into register
-		if(((indicators >> i) & 0x01)){
-			PORTC |= (1 << IN_SER);
-		}else{
-			PORTC &= ~(1 << IN_SER);
+	op::OpCode update(uint8_t value){
+		if(value > threshold + hysteresis){
+			if(inverted){
+				last_state = op::OpCode::FALSE;
+			} else {
+				last_state =  op::OpCode::TRUE;
+			}
+		} else if(value < threshold - hysteresis){
+			if(inverted){
+				last_state =  op::OpCode::TRUE;
+			} else {
+				last_state =  op::OpCode::FALSE;
+			}
 		}
-		//clock register
-		PORTC |= (1 << IN_SRCLK);
-		PORTC &= ~(1 << IN_SRCLK);
-	}	
-	
-	//clock output register
-	PORTC |= (1 << IN_RCLK);
-	PORTC &= ~(1 << IN_RCLK);	
-}
-
-void set_outputs(uint8_t outputs){
-	for (uint8_t i = 0; i < 8; i++)
-	{
-		//shift value into register
-		if(((outputs >> i) & 0x01)){
-			PORTD |= (1 << OUT_SER);
-			}else{
-			PORTD &= ~(1 << OUT_SER);
-		}
-		//clock register
-		PORTD |= (1 << OUT_SRCLK);
-		PORTD &= ~(1 << OUT_SRCLK);
-	}
 		
-	//clock output register
-	PORTD |= (1 << OUT_RCLK);
-	PORTD &= ~(1 << OUT_RCLK);
-}
+		return last_state;
+	}
+};
 
+struct OutputConfig{
+	avr_size_t text_index = 0;
+	bool active = false;
+};
 
+volatile uint8_t	adc_values[16]	= {0};
+volatile uint8_t*	adc_value_write	= nullptr;
+volatile uint8_t*	adc_value_read	= nullptr;
+volatile bool	    adc_busy		= false;
+
+InputConfig			inputs[8];
+OutputConfig		outputs[8];
 
 void err::on_error(const Error& ec) {
 	while (true)
@@ -154,39 +78,6 @@ void err::on_error(const Error& ec) {
 		//UART OUT ERROR		
 	}
 }
-
-struct Input{
-	uint8_t		threshold	= 50;	
-	uint8_t		hysteresis  = 5;
-	bool		inverted	= false;
-	op::OpCode	state		= op::OpCode::FALSE;
-	
-	op::OpCode update(uint8_t value){		
-		if(value > threshold + hysteresis){
-			if(inverted){
-				state = op::OpCode::FALSE;				
-			}
-			else {
-				state = op::OpCode::TRUE;	
-			}
-		}else if(value < threshold - hysteresis){
-			if(inverted){
-				state = op::OpCode::TRUE;
-			}
-			else {
-				state = op::OpCode::FALSE;
-			}
-		}	
-		
-		return state;	
-	}
-};
-
-
-volatile uint8_t	adc_values[16]	= {0};
-volatile uint8_t*	adc_value_write	= nullptr;
-volatile uint8_t*	adc_value_read	= nullptr;
-volatile bool adc_busy = false;
 
 ISR(ADC_vect){
 	
@@ -210,12 +101,12 @@ ISR(ADC_vect){
 		adc_max = av;
 		adc_mul = (100.0 / av);
 	}
-		
+	
 	adc_value_write[current_index] = (uint8_t)(adc_mul * av);
 	
 	if(adc_index < 7){
 		ADCSRA |= (1 << ADSC);
-	}else{
+		}else{
 		adc_busy = false;
 	}
 }
@@ -225,14 +116,14 @@ void adc_busy_wait(){
 	while(adc_busy){n++;}
 }
 
-void adc_start_conversion(){	
+void adc_start_conversion(){
 	
 	adc_busy = true;
 	
 	if(adc_value_read != adc_values){
 		adc_value_read = &adc_values[0];
 		adc_value_write = &adc_values[8];
-	} else{
+		} else{
 		adc_value_read = &adc_values[8];
 		adc_value_write = &adc_values[0];
 	}
@@ -240,200 +131,817 @@ void adc_start_conversion(){
 	ADCSRA |= (1 << ADSC);
 }
 
-Input inputs[] = 
-{
-	{50, 5, false, op::OpCode::FALSE},//A
-	{50, 5, false, op::OpCode::FALSE},//B
-	{50, 5, false, op::OpCode::FALSE},//C
-	{50, 5, false, op::OpCode::FALSE},//D
-	{50, 5, false, op::OpCode::FALSE},//E
-	{50, 5, false, op::OpCode::FALSE},//F
-	{40, 5, true,  op::OpCode::FALSE},//G
-	{40, 5, true,  op::OpCode::FALSE} //H
-};
+template<avr_size_t size>
+void read_expression(OutputConfig* oc, str::StringBuffer<size>& target){
+	
+	for (avr_size_t i = oc->text_index; i < oc->text_index + size; i++)
+	{
+		char chr = str::END;
+		eeprom_read_block((void*)&chr, (void*)i, 1);
+		if(chr != str::END){
+			target.append(chr);
+		} else {
+			return;
+		}
+	}
+}
+
+OutputConfig* find_next_expression(const OutputConfig* exp) {
+	OutputConfig* next = nullptr;
+	for (uint8_t i = 0; i < 8; i++)
+	{
+		if (outputs[i].text_index > exp->text_index) {
+			if (!next || outputs[i].text_index < next->text_index) {
+				next = &outputs[i];
+			}
+		}
+	}
+	return next;
+}
+
+void move_expression(OutputConfig* exp_source, OutputConfig* exp_target) {
+	uint8_t index_source = exp_source->text_index;
+	uint8_t index_target = exp_target->text_index;
+
+	str::StringBuffer<120> source;
+	read_expression(exp_source, source);
+	
+	eeprom_update_block(source.ptr(), (void*)(exp_target->text_index), source.length() + 1);
+
+	exp_target->text_index = index_target + source.length() + 1;;
+	exp_source->text_index = index_target;
+}
+
+template<avr_size_t size>
+void update_expression(OutputConfig* exp, str::StringBuffer<size>& text) {
+	
+	OutputConfig* exp_next = find_next_expression(exp);
+	
+	while (exp_next) {
+		move_expression(exp_next, exp);
+		exp_next = find_next_expression(exp);
+	}
+	
+	eeprom_update_block(text.ptr(), (void*)exp->text_index, text.length() + 1); 
+}
+
+template<avr_size_t buffer_size>
+void save_expression(str::StringBuffer<buffer_size> text){
+	
+}
 
 
 
 
 
-ctr::Array<op::OpCode, 1024> expression_buffer;
-ctr::Array<op::OpCode, 256> stack_buffer;
-ex::Expression expressions[8];
-comp::ExpressionCompiler compiler;
 
-//char expression_string[200];
+__attribute__((noreturn)) void run_mode();
+__attribute__((noreturn)) void edit_mode();
 
-ex::ExpressionData data;
+
+void load_configuration();
+void save_configuration();
+void reset_configuration();
 
 int main(void)
 {
-    setup();	
+	wdt_really_off();
+    setup();
 	
-	int g = sizeof(ctr::Array<op::OpCode, 10>);
+    clear_outputs();
+    clear_input_indicators();
+		
+	load_configuration();	
 	
-	//char x = expression_string[0];
-	
-	comp::CompilerResult cr;
+	if(aux_btn_down()){
+		edit_mode();		
+	} else {
+		run_mode();		
+	}	
+}
 
-	
-	bool result = true;
-	{
-		avr_size_t offset = 0;
-		expressions[0].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("(~$A & $B) | ($A & ~$B)", expressions[0], stack_buffer, cr);
-		offset += expressions[0].length();
-		
-		expressions[1].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("$B", expressions[1], stack_buffer, cr);
-		offset += expressions[1].length();
-		
-		expressions[2].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("$C", expressions[2], stack_buffer, cr);
-		offset += expressions[2].length();
-		
-		expressions[3].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("$D", expressions[3], stack_buffer, cr);
-		offset += expressions[3].length();
-		
-		expressions[4].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("$E", expressions[4], stack_buffer, cr);
-		offset += expressions[4].length();
-		
-		expressions[5].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("$F", expressions[5], stack_buffer, cr);
-		offset += expressions[5].length();
-		
-		expressions[6].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("$G", expressions[6], stack_buffer, cr);
-		offset += expressions[6].length();
-		
-		expressions[7].set_buffer(&expression_buffer[offset]);
-		result &= compiler.compile_expression("$H", expressions[7], stack_buffer, cr);
-		offset += expressions[7].length();
-		
-	}
 
-	if (!result) {	
-		while (1)
-		{
-			set_input_indicators(0xFF);
-			_delay_ms(200);
-			set_input_indicators(0x00);
-		}
-	}
-
+void load_configuration(){
+	avr_size_t offset = 0;
 	
-	for (avr_size_t n = 0; n < 100; n++)
-	{
-		adc_start_conversion();
-		adc_busy_wait();
-	}
+	uint8_t initialized = 0;
+	eeprom_read_block((void*)&initialized, (void*)0, 1);
+	offset += sizeof(uint8_t);
 	
-	
-	
-	char buffer[6] = {0};
-	while(1){
+	if(initialized != 0xFF){
+		reset_configuration();
+	} else {
 		
-		adc_busy_wait();
-		adc_start_conversion();
-		
-		//if(adc_value_read == adc_values){
-			//term::write_string("A:\t");
-		//} else{
-			//term::write_string("B:\t");
-		//}
-		//
-		//for (avr_size_t i = 0; i < 120; i++)
-		//{
-			//if(i < adc_value_read[7])
-				//term::write_char('X');			
-			//else
-				//term::write_char(' ');			
-		//}
-		//
-		//term::write_string("\r\n");
-		//continue;
-		
+		//uint8_t	threshold	= 0;
+		//uint8_t	hysteresis  = 0;
+		//boolinverted	= false;
 		for (uint8_t i = 0; i < 8; i++)
 		{
+			eeprom_read_block(&inputs[i].threshold, (void*)offset, sizeof(uint8_t));
+			offset += sizeof(uint8_t);
+			
+			eeprom_read_block(&inputs[i].hysteresis, (void*)offset, sizeof(uint8_t));
+			offset += sizeof(uint8_t);
+			
+			eeprom_read_block(&inputs[i].inverted, (void*)offset, sizeof(bool));
+			offset += sizeof(bool);
+			
+			if(inputs[i].threshold > 100) inputs[i].threshold = 100;
+			if(inputs[i].hysteresis > 100) inputs[i].hysteresis = 100;
+		}
+
+		eeprom_read_block(&outputs, (void*)offset, sizeof(OutputConfig) * 8);
+		offset += sizeof(OutputConfig) * 8;
+	}
+}
+
+void reset_configuration() 
+{
+	avr_size_t offset = 0; 
+	
+	uint8_t initialized = 0xFF;
+	eeprom_update_block((void*)&initialized, (void*)offset, sizeof(uint8_t));
+	offset += sizeof(uint8_t);	
+	
+	for (uint8_t i = 0; i < 8; i++)
+	{		
+		inputs[i] = {45, 0, false};
+			
+		eeprom_update_block(&inputs[i].threshold, (void*)offset, sizeof(uint8_t));
+		offset += sizeof(uint8_t);
 		
+		eeprom_update_block(&inputs[i].hysteresis, (void*)offset, sizeof(uint8_t));
+		offset += sizeof(uint8_t);
+		
+		eeprom_update_block(&inputs[i].inverted, (void*)offset, sizeof(bool));
+		offset += sizeof(bool);
+	}
+	
+	
+	for (uint8_t i = 0; i < 8; i++) {
+		outputs[i] = {offset + (sizeof(OutputConfig) * 8) + (i * 3), true};
+	}	
+	eeprom_update_block((void*)&outputs, (void*)offset, sizeof(OutputConfig) * 8);
+	offset += sizeof(OutputConfig) * 8;	
+	
+	const char buffer[] = "$A\0$B\0$C\0$D\0$E\0$F\0$G\0$H\0";
+	eeprom_update_block((void*)&buffer, (void*)offset, sizeof(buffer));
+	offset += sizeof(buffer);
+}
+
+void save_configuration()
+{	
+	avr_size_t offset = 1; 
+	
+	//uint8_t	threshold	= 0;
+	//uint8_t	hysteresis  = 0;
+	//boolinverted	= false;
+	for (uint8_t i = 0; i < 8; i++)
+	{
+		eeprom_update_block(&inputs[i].threshold, (void*)offset, sizeof(uint8_t));
+		offset += sizeof(uint8_t);
+		
+		eeprom_update_block(&inputs[i].hysteresis, (void*)offset, sizeof(uint8_t));
+		offset += sizeof(uint8_t);
+		
+		eeprom_update_block(&inputs[i].inverted, (void*)offset, sizeof(bool));
+		offset += sizeof(bool);
+	}
+	
+	
+	eeprom_update_block(&outputs, (void*)offset, sizeof(OutputConfig) * 8);
+	offset += sizeof(OutputConfig) * 8;
+}
+
+
+//RUN MODE	
+__attribute__((noreturn)) void run_mode() {	
+	
+	ctr::Array<op::OpCode, 128>		target_buffer;
+	comp::ExpressionCompiler		compiler;
+	comp::CompilerResult			compiler_result;
+	ctr::Array<uint8_t, 256>		truth_table;
+	
+	for(uint8_t i = 0; i < 8; i++){
+		
+		if(outputs[i].active){
 			
-			//term::write_char('[');
-			//term::write_char((char)(65 + i));
-			//term::write_string("] : ");
+			str::StringBuffer<128>		exp_text;
+			ctr::Array<op::OpCode, 128>	stack_buffer;
+		
+			//read text expression from eeprom
+			read_expression(&outputs[i], exp_text);
+		
+			ex::Expression exp;
+			exp.set_buffer(&target_buffer[0]);
 			
-			if(inputs[i].update(adc_value_read[i]) == op::OpCode::TRUE){
-				//term::write_string("TRUE");
-			}else{
-				//term::write_string("FALSE");
-			}
-			
-			data.set_at(i, inputs[i].state);
 					
-			//term::write_string("-> (");
-			
-			utoa((avr_size_t)(adc_value_read[i]), buffer, 10);
-			//term::write_string(buffer);
-			//term::write_char(')');
-	
-			
-	
-			//term::write_string("\t");		
+			//compile expression
+			compiler.compile_expression(exp_text, exp, stack_buffer, compiler_result);
+		
+			//execute expression and update truth table		
+			for (avr_size_t ti = 0; ti < truth_table.length(); ti++)
+			{
+				ex::ExpressionData	data((uint8_t)ti);
+				op::OpCode exp_result = exp.eval(data, stack_buffer);
+				if(exp_result == op::OpCode::TRUE){
+					truth_table[ti] |= (1 << (7 - i));
+				} else {				
+					truth_table[ti] &= ~(1 << (7 - i));
+				}
+			}
+		} else {
+			for (avr_size_t ti = 0; ti < truth_table.length(); ti++) {				
+				truth_table[ti] &= ~(1 << (7 - i));				
+			}
 		}
 		
+	}
+	
+	ex::ExpressionData	data;
+	while(true) {		
+		
+		adc_busy_wait();
+		adc_start_conversion();		
+		
+		for (uint8_t i = 0; i < 8; i++) {
+			inputs[i].update(adc_value_read[i]);
+			data.set_at(i, inputs[i].update(adc_value_read[i]));
+		}
 		
 		set_input_indicators(data.data());
-		uint8_t output = 0;
-		for (uint8_t i = 0; i < 8; i++)
-		{
-			op::OpCode exp_result = expressions[i].eval(data, stack_buffer);
-			if(exp_result == op::OpCode::TRUE){
-				output |= (1 << (7 - i));
-			}else{
-				
-			}
-		}		
-		set_outputs(output);
+		set_outputs(truth_table[data.data()]);
+	}
+}
+//RUN MODE
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*MENU############################################################*/
+
+void print_header(){
+	term::write_line_P(PSTR("\x1b[90m::[\x1b[37mUCNC 1.0 - IvyBit 2021\x1b[90m]\x1b[0m\r\n"));
+}
+
+void handle_menu_start(RootMenuState& menu_root){
+	term::clear_screen();
+	term::hide_cursor();
+	print_header();
+	print_banner();
+	
+	term::cursor_move(5, 10);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mDisplay Live Device Status\x1B[0m"));
+	
+	term::cursor_move(5, 11);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Input Setup\x1B[0m"));
+	
+	term::cursor_move(5, 12);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Output Setup\x1B[0m"));
+			
+	term::cursor_move(5, 13);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Help Menu\x1B[0m"));
+	
+	term::cursor_move(5, 14);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mReset Device And Restore Defaults\x1B[0m"));
+	
+	term::cursor_move(5, 15);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mExit Setup And Enter Run Mode\x1B[0m"));
+	
+	uint8_t r = 0;
+	
+	while(menu_root == RootMenuState::START){
 		
-		//term::write_string("\r\n");		
+		term::cursor_move(8, r + 10);
+		term::write_string_P(PSTR("\x1b[33m#\x1B[0m"));
+		term::cursor_move(8, r + 10);
+		
+		term::ArrowKey ak = term::read_arrow();
+		switch (ak)
+		{
+			case term::ArrowKey::UP:
+			if(r > 0){
+				term::write_string_P(PSTR("\x1B[0m "));
+				r--;
+			}
+			
+			break;
+			
+			case term::ArrowKey::DOWN:
+			if(r < 5){
+				term::write_string_P(PSTR("\x1B[0m "));
+				r++;
+			}
+			break;
+			
+			case term::ArrowKey::SELECT:
+			switch (r)
+			{
+				case 0: menu_root = RootMenuState::STATUS; break;
+				case 1: menu_root = RootMenuState::INPUT; break;
+				case 2: menu_root = RootMenuState::OUTPUT; break;
+				case 3: menu_root = RootMenuState::HELP; break;
+				case 4: menu_root = RootMenuState::HARDRESET; break;
+				case 5: menu_root = RootMenuState::EXIT; break;
+			}
+			break;
+		}
 	}
 	
-
-	//str::StringBuffer<100> s;
-	//while (true)
-	//{
-		//
-		//term::write_string("\r\n");
-		//term::write_string("::[?] : ");
-		//term::read_line(s);
-		//
-		//term::write_line(s);
-		//
-		//comp::CompilerResult cr;
-		//ex::Expression<100> expr;
-		//ex::ExpressionData dat;
-		//
-		//bool result = false;
-		//{
-			//result = comp::compile_expression(s, expr, cr);
-		//}
-//
-		//if (result) {
-			//term::write_line("START!");
-			//for (avr_size_t n = 0; n < 10000; n++)
-			//{			
-				//dat.a(op::OpCode::TRUE);
-				//op::OpCode result1 = expr.eval(dat);	
-			//}
-			//term::write_line("DONE!");
-		//}
-	//}
-
 	
-		
-	
-
-		
-	
+	term::show_cursor();
 }
+
+void handle_menu_status(RootMenuState& menu_root){
+	term::clear_screen();
+	term::hide_cursor();
+	print_header();
+	print_banner();
+	term::cursor_up();
+		
+	uint8_t adc_buffer[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+	char input = str::END;
+	while ( input != ESC ){
+		
+		term::save_cursor();
+		
+		adc_start_conversion();
+		adc_busy_wait();
+		
+		for(uint8_t i = 0; i < 8; i++){
+			term::cursor_down(2);
+			if(adc_buffer[i] != adc_value_read[i]){
+				adc_buffer[i] = adc_value_read[i];
+			
+				term::write_string_P(PSTR("::[\x1B[33m"));
+				term::write_char(('A' + i));
+				term::write_string_P(PSTR("\x1B[0m] - ["));
+			
+				bool highlight = true;
+				term::write_string_P(PSTR("\x1B[43m"));
+				for(uint8_t p = 0; p < 62; p++) {
+					if(highlight && (100.0 / 62.0) * p >= adc_value_read[i]){
+						term::write_string_P(PSTR("\x1B[100m"));
+						highlight = false;
+					}
+					
+					term::write_char(' ');
+				}
+				term::write_string_P(PSTR("\x1B[40m"));
+				term::write_string_P(PSTR("] - [\x1B[33m"));
+			
+				char buffer[4];
+				utoa(adc_value_read[i], buffer, 10);
+				if(adc_value_read[i] < 100){
+					term::write_char('0');
+				}
+				if(adc_value_read[i] < 10){
+					term::write_char('0');
+				}
+			
+				term::write_string(buffer);
+			
+				term::write_string_P(PSTR("\x1B[0m]\r"));	
+			}
+		 }
+		 term::restore_cursor();
+		 input = term::read_char_delay();
+	}
+	term::show_cursor();
+	menu_root = RootMenuState::START;
+}
+
+void handle_menu_inputs(RootMenuState& menu_root) {
+	term::clear_screen();
+	term::hide_cursor();
+	print_header();
+	print_banner();
+	
+
+	term::cursor_move(5, 10);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mINP\x1b[0m] : [_A_]__[_B_]__[_C_]__[_D_]__[_E_]__[_F_]__[_G_]__[_H_]"));
+	
+	term::cursor_move(5, 11);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mINV\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	
+	term::cursor_move(5, 12);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mLIM\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	
+	term::cursor_move(5, 13);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mHYS\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	
+	for (uint8_t i = 0; i < 8; i++) 
+	{
+		{//INVERT
+			term::cursor_move(17 + 7 * i, 11);
+			if(inputs[i].inverted){
+				term::write_string_P(PSTR("\x1b[33m#\x1b[0m"));
+				} else {
+				term::write_string_P(PSTR("\x1b[33m \x1b[0m"));
+			}
+		}//INVERT
+		
+		{//THRESHOLD
+			term::cursor_move(16 + 7 * i, 12);
+			char buffer[4];
+			utoa(inputs[i].threshold, buffer, 10);
+			if(inputs[i].threshold < 100){
+				term::write_char(' ');
+				if(inputs[i].threshold < 10){
+					term::write_char(' ');					
+				}				
+			}
+			term::write_string_P(PSTR("\x1b[33m"));
+			term::write_string(buffer);
+			term::write_string_P(PSTR("\x1b[0m"));
+		}//THRESHOLD
+		
+		{//HYSTERESIS
+			term::cursor_move(16 + 7 * i, 13);
+			char buffer[4];
+			utoa(inputs[i].hysteresis, buffer, 10);
+			if(inputs[i].hysteresis < 100){
+				term::write_char(' ');
+				if(inputs[i].hysteresis < 10){
+					term::write_char(' ');
+				}
+			}
+			term::write_string_P(PSTR("\x1b[33m"));
+			term::write_string(buffer);
+			term::write_string_P(PSTR("\x1b[0m"));
+		}//HYSTERESIS
+	}
+	
+    term::show_cursor();
+	uint8_t r = 0;
+	uint8_t c = 0;
+
+	while(menu_root == RootMenuState::INPUT){	
+	
+		term::cursor_move(17 + 7 * c, r + 11);	
+	
+		term::ArrowKey ak = term::read_arrow();
+		switch (ak)
+		{
+			case term::ArrowKey::UP:
+			if(r > 0){
+				r--;
+			}		
+			break;
+		
+			case term::ArrowKey::DOWN:
+			if(r < 2){
+				r++;
+			}
+			break;
+			
+			case term::ArrowKey::LEFT:
+			if(c > 0){
+				c--;
+			}
+			break;
+			
+			case term::ArrowKey::RIGHT:
+			if(c < 7){
+				c++;
+			}
+			break;
+		
+			case term::ArrowKey::ESCAPE:
+				menu_root = RootMenuState::START;
+			break;
+			
+			case term::ArrowKey::SELECT:
+			switch (r) {	
+				//INPUT INVERTED
+				case 0: {
+					str::StringBuffer<1> s;
+					term::cursor_move(0,23);
+					term::write_string_P(PSTR("::[Invert Input? (y/n)]"));
+					while(s.length() < 1 || (s[0] != 'y' && s[0] != 'n')){
+						term::cursor_move(0,24);
+						term::read_line(s, 1);
+					}
+					term::cursor_move(0,23);
+					term::clear_line();
+					term::cursor_move(0,25);
+					term::clear_line();
+					term::cursor_move(17 + 7 * c, r + 11);
+					if(s[0] == 'y'){
+						inputs[c].inverted = true;
+						term::write_string_P(PSTR("\x1b[31m#\x1b[0m"));
+					} else {
+						inputs[c].inverted = false;
+						term::write_char(' ');
+					}
+					
+					
+					
+					if(c < 7)c++;
+				} break;
+				
+				
+				//INPUT LIMIT
+				case 1: {
+					str::StringBuffer<3> s;
+					term::cursor_move(0,23);
+					term::write_string_P(PSTR("::[Input Threshold? (0-100)]"));
+					bool inp_valid = false;
+					int value = 0;
+					while(!inp_valid){
+						term::cursor_move(0,24);
+						term::read_line(s, 3);
+						if(s.is_numeric()){
+							value = atoi(s.ptr());
+							if(value >= 0 && value <= 100){
+								inp_valid = true;
+							}
+						}						
+					}
+					
+					inputs[c].threshold = (uint8_t)value;
+					
+					term::cursor_move(0,23);
+					term::clear_line();
+					term::cursor_move(0,25);
+					term::clear_line();
+					term::cursor_move(16 + 7 * c, r + 11);
+					if(value < 100){
+						term::write_char(' ');
+						if(value < 10){
+							term::write_char(' ');
+						}
+					}
+					
+					term::write_string_P(PSTR("\x1b[31m"));
+					term::write_string(s);
+					term::write_string_P(PSTR("\x1b[0m"));
+					if(c < 7)c++;
+				} break;
+				
+				//INPUT HYSTERESIS
+				case 2: {
+					str::StringBuffer<3> s;
+					term::cursor_move(0,23);
+					term::write_string_P(PSTR("::[Input Hysteresis? (0-100)]"));
+					bool inp_valid = false;
+					int value = 0;
+					while(!inp_valid){
+						term::cursor_move(0,24);
+						term::read_line(s, 3);
+						if(s.is_numeric()){
+							value = atoi(s.ptr());
+							if(value >= 0 && value <= 100){
+								inp_valid = true;
+							}
+						}
+					}
+					
+					inputs[c].hysteresis = (uint8_t)value;
+					
+					term::cursor_move(0,23);
+					term::clear_line();
+					term::cursor_move(0,25);
+					term::clear_line();
+					term::cursor_move(16 + 7 * c, r + 11);
+					if(value < 100){
+						term::write_char(' ');
+						if(value < 10){
+							term::write_char(' ');
+						}
+					}
+					
+					term::write_string_P(PSTR("\x1b[31m"));
+					term::write_string(s);
+					term::write_string_P(PSTR("\x1b[0m"));
+					if(c < 7)c++;
+				} break;
+	
+			}
+			break;
+		}
+	}
+	
+	save_configuration();
+	term::show_cursor();
+	menu_root = RootMenuState::START;
+}
+
+void handle_menu_outputs(RootMenuState& menu_root) {
+	term::clear_screen();
+	term::hide_cursor();
+	print_header();
+	print_banner();
+	
+
+	term::cursor_move(5, 10);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mOUT\x1b[0m] : [_A_]__[_B_]__[_C_]__[_D_]__[_E_]__[_F_]__[_G_]__[_H_]"));
+	
+	term::cursor_move(5, 11);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mACT\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	
+	term::cursor_move(5, 12);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mEXP\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	
+
+	for (uint8_t i = 0; i < 8; i++)
+	{
+		//ACTIVE
+		term::cursor_move(17 + 7 * i, 11);
+		if(outputs[i].active){			
+			term::write_string_P(PSTR("\x1b[33m#\x1b[0m"));
+		} else{			
+			term::write_char(' ');
+		}
+		
+		//EXPRESSION LENGTH
+		term::cursor_move(16 + 7 * i, 12);
+		term::write_string_P(PSTR("\x1b[33mMOD\x1b[0m"));
+	}
+	
+	term::show_cursor();
+	uint8_t r = 0;
+	uint8_t c = 0;
+
+	while(menu_root == RootMenuState::OUTPUT){
+		
+		term::cursor_move(17 + 7 * c, r + 11);
+		
+		term::ArrowKey ak = term::read_arrow();
+		switch (ak) {
+			case term::ArrowKey::UP:
+				if(r > 0){
+					r--;
+				}
+			break;
+			
+			case term::ArrowKey::DOWN:
+				if(r < 1){
+					r++;
+				}
+			break;
+			
+			case term::ArrowKey::LEFT:
+				if(c > 0){
+					c--;
+				}
+			break;
+			
+			case term::ArrowKey::RIGHT:
+				if(c < 7){
+					c++;
+				}
+			break;
+			
+			case term::ArrowKey::ESCAPE:
+				menu_root = RootMenuState::START;
+			break;
+			
+			case term::ArrowKey::SELECT:
+			switch (r) {
+				//INPUT ACTIVE
+				case 0: {
+					str::StringBuffer<1> s;
+					term::cursor_move(0,23);
+					term::write_string_P(PSTR("::[Enable Output? (y/n)]"));
+					while(s.length() < 1 || (s[0] != 'y' && s[0] != 'n')){
+						term::cursor_move(0,24);
+						term::read_line(s, 1);
+					}
+					term::cursor_move(0,23);
+					term::clear_line();
+					term::cursor_move(0,25);
+					term::clear_line();
+					term::cursor_move(17 + 7 * c, r + 11);
+					if(s[0] == 'y'){
+						term::write_string_P(PSTR("\x1b[31m#\x1b[0m"));
+						outputs[c].active = true;
+					} else {
+						term::write_char(' ');
+						outputs[c].active = false;
+					}
+					if(c < 7)c++;
+				} break;
+				
+				
+				//INPUT EXPRESSION
+				case 1: {
+					str::StringBuffer<120> s;
+					read_expression(&outputs[c], s);
+					//s.append("(~$A & $B) | ($A & ~$B)");
+					term::cursor_move(0,23);
+					term::write_string_P(PSTR("::[Expression?]"));
+					term::cursor_move(0,24);
+					term::read_line(s, 60);
+					
+					update_expression(&outputs[c], s);
+										
+					term::cursor_move(0,23);
+					term::clear_line();
+					term::cursor_move(0,25);
+					term::clear_line();
+					term::cursor_move(16 + 7 * c, r + 11);
+					term::write_string_P(PSTR("\x1b[31mMOD\x1b[0m"));
+					if(c < 7)c++;
+				} break;
+			}
+			break;
+		}
+	}
+			
+	save_configuration();			
+	term::show_cursor();
+	menu_root = RootMenuState::START;
+}
+
+
+void handle_menu_help(RootMenuState& menu_root){
+	term::clear_screen();
+	
+	
+	term::cursor_down(2);
+	
+
+	term::write_string("continue...");
+	while(term::read_char() != CR);
+	menu_root = RootMenuState::START;
+}
+
+void handle_menu_reset(RootMenuState& menu_root){
+	term::clear_screen();
+	
+	
+	term::cursor_down(2);
+	
+	reset_configuration();
+	load_configuration();
+
+	term::write_string("continue...");
+	while(term::read_char() != CR);
+	menu_root = RootMenuState::START;
+}
+
+
+//EDIT MODE
+__attribute__((noreturn)) void edit_mode(){
+	
+	while (true) {
+		RootMenuState menu_root = RootMenuState::START; //ROOT MENU
+	
+		while(menu_root != RootMenuState::EXIT){
+			term::clear_screen();
+		
+			switch (menu_root)
+			{
+				case RootMenuState::START:
+					handle_menu_start(menu_root);
+				break;
+			
+				case RootMenuState::STATUS:
+					handle_menu_status(menu_root);
+				break;
+				
+				case RootMenuState::INPUT:
+					handle_menu_inputs(menu_root);
+				break;
+				
+				case RootMenuState::OUTPUT:
+					handle_menu_outputs(menu_root);
+				break;				
+				
+				case RootMenuState::HELP:
+					handle_menu_help(menu_root);
+				break;
+				
+				case RootMenuState::HARDRESET:
+					handle_menu_reset(menu_root);
+				break;
+			
+				case RootMenuState::EXIT:
+					menu_root = RootMenuState::EXIT;
+				break;
+				
+				default: break;
+			}	
+		}
+		
+		term::clear_screen();
+		reset_mcu();
+		//reset();
+	}
+}
+//EDIT MODE	
+
+/*MENU############################################################*/	
+	
+
 

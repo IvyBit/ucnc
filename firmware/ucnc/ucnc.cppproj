@@ -190,10 +190,16 @@
     <Compile Include="headers\containers.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="headers\edit.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="headers\errors.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="headers\expression.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="headers\hal.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="headers\opcodes.h">

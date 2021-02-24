@@ -66,18 +66,51 @@ namespace str {
 
     //returns the index of the first match or NO_MATCH (-1) starting at start_index
     int16_t index_of(const char* src, int16_t start_index, const char* match) {
+	
         for (; src[start_index] != END; start_index++) {
+			bool matched = true;
+			avr_size_t index = start_index;
             for (const char* m = match; *m != END; m++) {
-                if (*m == src[start_index]) return start_index;
+				if(*m != src[index++]) {
+					matched = false;
+					break;
+				}
             }
+			if(matched){
+				return start_index;
+			}
         }
         return NO_MATCH;
     }
+	
+	    //returns the index of the first match or NO_MATCH (-1) starting at start_index
+	    int16_t index_of_P(const char* src, int16_t start_index, const char* match) {
+		    
+		    for (; src[start_index] != END; start_index++) {
+			    bool matched = true;
+			    avr_size_t index = start_index;
+			    for (const char* m = match; pgm_read_byte(m) != END; m++) {
+				    if(pgm_read_byte(m) != src[index++]) {
+					    matched = false;
+					    break;
+				    }
+			    }
+			    if(matched){
+				    return start_index;
+			    }
+		    }
+		    return NO_MATCH;
+	    }
 
     //returns the index of the first match or NO_MATCH (-1)
     int16_t index_of(const char* src, const char* match) {
         return index_of(src, 0, match);
     }
+	
+	//returns the index of the first match or NO_MATCH (-1)
+	int16_t index_of_P(const char* src, const char* match) {
+		return index_of_P(src, 0, match);
+	}
 
 
     //returns true if src contains chr
@@ -275,7 +308,7 @@ namespace str {
 
 		void remove_at(avr_size_t index, avr_size_t length){
 			
-			if(index + length < size){
+			if(index + length <= size){
 				
 				for (;index < size; index++)
 				{
@@ -349,6 +382,30 @@ namespace str {
 
 		operator const char* () {
 			return _buffer;
+		}
+
+
+		void to_upper(){
+			for(char* p = _buffer; *p != str::END; p++){
+				*p = str::to_upper(*p);
+			}
+		}
+		
+		void to_lower(){
+			for(char* p = _buffer; *p != str::END; p++){
+				*p = str::to_lower(*p);
+			}
+		}
+		
+		bool is_numeric(){
+			if(_cursor > 0){
+				for(char* p = _buffer; *p != str::END; p++){
+					if(!str::is_blank(*p) && !str::is_digit(*p)) return false;
+				}
+				return true;
+			} else{
+				return false;
+			}
 		}
 
 		private:

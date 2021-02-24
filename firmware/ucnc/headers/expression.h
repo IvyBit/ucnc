@@ -10,9 +10,12 @@ namespace ex {
 		public:
 		NONCOPY(ExpressionData)
 		ExpressionData(){}
+		ExpressionData(const uint8_t data) : _data(data){}
 		~ExpressionData(){}
 			
 		uint8_t data(){ return _data;}
+			
+		void data(const uint8_t data){ _data = data;}
 			
 		void set_at(uint8_t index, op::OpCode state){
 			if (state == op::OpCode::TRUE)	
@@ -22,10 +25,10 @@ namespace ex {
 		}
 		
 		op::OpCode get_at(uint8_t index){
-			if(_data & (1 << (7 - index)) != 0){
-				op::OpCode::TRUE;
+			if((_data & (1 << (7 - index))) != 0){
+				return op::OpCode::TRUE;
 			} else {
-				op::OpCode::FALSE;
+				return op::OpCode::FALSE;
 			}
 		}
 		
@@ -77,7 +80,6 @@ namespace ex {
 		template<avr_size_t stack_buffer_size>
 		op::OpCode eval(ExpressionData& input, ctr::Array<op::OpCode, stack_buffer_size>& stack_buffer) {
 
-			
 			avr_size_t stack_index = 0;
 			
 			for (avr_size_t index = 0; index < _length; index++)
@@ -258,7 +260,12 @@ namespace ex {
 				}
 			}//LOOP
 
-			return stack_buffer[--stack_index];
+			if(stack_index > 0) {
+				return stack_buffer[--stack_index];
+			} else {
+				return op::OpCode::FALSE;	
+			}
+				
 		}
 
 	private:

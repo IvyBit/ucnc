@@ -4,64 +4,88 @@
 //https://espterm.github.io/docs/VT100%20escape%20codes.html //
 
 #define ESC (27)
-#define CH_C (67)
-#define CH_D (68)
+#define CH_A ('A')
+#define CH_B ('B')
+#define CH_C ('C')
+#define CH_D ('D')
 #define DEL (127)
 #define BS  (8)
+#define CR  (13)
 
 #include "avrtypes.h"
 #include "strings.h"
 #include <stdlib.h>
 namespace term {
-
+	
+	enum class ArrowKey: uint8_t{
+		LEFT,
+		RIGHT,
+		UP,
+		DOWN,
+		SELECT,
+		ESCAPE
+	};
+	
+	
 	char read_char() {
 		while ( !(UCSR0A & (1 << RXC0)) );
 		return UDR0;
 	}
+	
+	char read_char_delay() {
+		if((UCSR0A & (1 << RXC0))){
+			return UDR0;			
+		}else{
+			_delay_ms(20);
+			if((UCSR0A & (1 << RXC0))){				
+				return UDR0;
+			}else{
+				return str::END;
+			}
+		}
+	}
+	
+	ArrowKey read_arrow(){
+		while(true){
+			char input = term::read_char();
+			if(input == ESC){
+				input = term::read_char_delay();
+				if(input == '['){
+					input = term::read_char();
+					//left
+					if(input == CH_D){
+						return ArrowKey::LEFT;
+						//right
+						} else if(input == CH_C){
+						return ArrowKey::RIGHT;
+						//up
+						} else if(input == CH_A){
+						return ArrowKey::UP;
+						//down
+						} else if(input == CH_B){
+						return ArrowKey::DOWN;
+					}
+				} else if(input == str::END){
+					return ArrowKey::ESCAPE;
+				}
+			} else if(input == CR){
+				return ArrowKey::SELECT;
+			}
+		}
+	}
+
 
     void write_char(const char chr) {
 		while ( !( UCSR0A & (1<<UDRE0)) );
 		UDR0 = chr;
     }
 	
-
-	
-
-	
-	
-	//int8_t read_int8_t(){
-		//char buffer[4] = {0};
-		//uint8_t index = 0;
-		//char input = '\0';
-		//do {
-			//input = read_char();	
-			//
-			//if(index < 4){
-				//if(input == '-' && index == 0) {
-					//buffer[index++] = input;
-					//term::write_char(input);
-				//}
-				//else if(str::is_digit(input)) {
-					//buffer[index++] = input;
-					//term::write_char(input);
-				//}	
-			//}
-								//
-		//} while (input != '\r');		
-		//
-		//term::write_string("\r\n");
-		//
-		//int result = atoi(buffer);
-		//if(result > 127 || result < -127){
-			//return 0;
-		//} else {
-			//return (int8_t)result;
-		//}
-	//}
-	
-	
-	
-	
+	void write_string_P(const char* src){
+		for (; pgm_read_byte(src) != '\0'; src++)
+		{			
+			write_char(pgm_read_byte(src));
+		}
+	}
 
     void write_string(const char* src) {
         for (; *src != '\0'; src++)
@@ -70,6 +94,14 @@ namespace term {
         }
     }
 	
+	void write_line_P(const char* src) {
+		for (; pgm_read_byte(src) != '\0'; src++)
+		{
+			write_char(pgm_read_byte(src));
+		}
+		write_string("\r\n");
+	}
+		
 	void write_line(const char* src) {
 		for (; *src != '\0'; src++)
 		{
@@ -77,7 +109,16 @@ namespace term {
 		}
 		write_string("\r\n");
 	}
+	
+
+    void show_cursor(){
+	    write_string("\x1B[?25h");
+    }
     
+    void hide_cursor(){
+	    write_string("\x1B[?25l");
+    }
+    	
 
     //move cursor to top left position
     void cursor_home() {
@@ -126,13 +167,15 @@ namespace term {
     }
 
     //move cursor left N column
-    void cursor_left(uint8_t lines) {
-        char str[4]{ 0 };
-        utoa(lines, &str[0], 10);
+    void cursor_left(uint8_t cols) {
+		if(cols > 0){
+			char str[4]{ 0 };
+			utoa(cols, &str[0], 10);
 
-        write_string("\x1B[");
-        write_string(str);
-        write_char('D');
+			write_string("\x1B[");
+			write_string(str);
+			write_char('D');
+		}
     }
 
 
@@ -143,13 +186,15 @@ namespace term {
     }
 
     //move cursor right N columns
-    void cursor_right(uint8_t lines) {
-        char str[4]{ 0 };
-        utoa(lines, &str[0], 10);
-  
-        write_string("\x1B[");
-        write_string(str);
-        write_char('C');
+    void cursor_right(uint8_t cols) {
+		if(cols > 0) {
+			char str[4]{ 0 };
+			utoa(cols, &str[0], 10);
+			
+			write_string("\x1B[");
+			write_string(str);
+			write_char('C');
+		}
     }
 
 
@@ -189,64 +234,120 @@ namespace term {
 		term::write_char('8');
 	}
 	
+	void clear_line(){
+		write_string("\x1B[K");
+	}
 	
-		//reads a maximum of N characters including '\0'
-		template<avr_size_t buffer_size>
-		void read_line(str::StringBuffer<buffer_size>& dest){
-			
-			char input = '\0';
-			int16_t length = dest.length();
-			int16_t index = length;
-			
-			term::write_string(dest);
-			
-			
-			do {
-				
-				input = read_char();
-				
-				if((str::is_graph(input) || str::is_blank(input)) && length < buffer_size){
-					dest.insert(input, index++);
-					term::write_char(input);
-					length++;
-					term::save_cursor();	
-					term::write_string(&dest[index]);
-					term::restore_cursor();
-					
-				}else if(input == DEL){
-				if(index < length && length > 0){
-						dest.remove_at(index, 1);
-						length--;
-						
-						term::save_cursor();
-						term::write_string(&dest[index]);
-						term::write_char(' ');
-						term::restore_cursor();
+	 void clear_screen() {
+		term::cursor_home();
+		for (uint8_t r = 0; r < 25; r++)
+		{
+			term::clear_line();
+			term::cursor_down();
+		}
+		term::cursor_home();
+	 }
+	 
+
+	
+	/*
+	::[?]:
+	*/
+	const char INPUT[] PROGMEM ="::[\x1b[33m?\x1b[0m] : ";
+	template<avr_size_t buffer_size>
+	void read_line(str::StringBuffer<buffer_size>& dest, avr_size_t view_width){
+		
+		avr_size_t view_index = 0;
+		avr_size_t cursor_index = 0;
+		term::write_string_P(INPUT);
+		
+		while (true)
+		{
+			term::save_cursor();
+			term::hide_cursor();
+			term::cursor_left(cursor_index + sizeof(INPUT));
+			term::write_string_P(INPUT);
+			term::write_string("\x1b[33m");
+			for (avr_size_t index = 0; index < view_width; index++)
+			{
+				if(dest[index + view_index] != '\0'){
+					if(index + view_index < buffer_size){
+						term::write_char(dest[index + view_index]);
 					}
-				}  else if(input == ESC){
-					input = read_char();
-					if(input == '['){
-						input = read_char();
-						//right
-						if(input == CH_C){
-							if(index < length){
-								index++;
+					} else {
+					term::write_char(' ');
+				}
+			}
+			term::write_string("\x1B[0m");
+			term::show_cursor();
+			term::restore_cursor();
+			
+			char input = term::read_char();
+			
+			if(input == ESC){
+				input = term::read_char();
+				if(input == '['){
+					input = term::read_char();
+					//right
+					if(input == CH_C){
+						if(view_index + cursor_index < dest.length()){
+							if(cursor_index + 1 < view_width){
+								cursor_index++;
 								term::cursor_right();
+							} else if(view_index < buffer_size){
+								view_index++;
 							}
-							//left
-							} else if(input == CH_D){
-							if(index > 0){
-								index--;
-								term::cursor_left();
-							}
+						}
+						//left
+						} else if(input == CH_D){
+						if(cursor_index  > 0){
+							cursor_index--;
+							term::cursor_left();
+						} else if(view_index > 0){
+							view_index--;
 						}
 					}
 				}
-				
-			} while (input != '\r');
-			
-			term::write_string("\r\n");
-		}
+				}else if((str::is_graph(input) || input == ' ') && dest.length() < (int16_t)buffer_size){
+					
+					if(view_index + cursor_index < dest.length() && dest.length() != 0){
+						dest.insert(input, view_index + cursor_index);
+					} else {
+						dest.append(input);
+					}
+					if(cursor_index < view_width){
+						cursor_index++;
+						term::cursor_right();
+					} else {
+						view_index++;
+					}
+					
+				}else if(input == DEL){
+					
+					if(view_index + cursor_index < dest.length() && dest.length() > 0){
+						dest.remove_at(view_index + cursor_index, 1);
+					}
+					
+				}else if(input == BS){
+					
+					if(view_index + cursor_index  > 0 && dest.length() > 0){
+						dest.remove_at(view_index + cursor_index - 1, 1);
+						if(cursor_index > 0){
+							cursor_index--;
+							term::cursor_left();
+						} else {
+							view_index--;
+						}
+					}
+					
+				}else if(input == CR){
+					return;
+				}
+		}//WHILE
+	}	
+	
+
+
 			
 };
 /*  

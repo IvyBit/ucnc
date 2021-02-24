@@ -457,7 +457,6 @@ namespace comp {
 				target[target_index++] = stack_buffer[--stack_index];
 				//_stack_buffer.pop();
 			}
-
 			target.set_length(target_index);
 
 		}
