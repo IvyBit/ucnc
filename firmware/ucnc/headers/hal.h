@@ -17,6 +17,7 @@
 #define	OUT_RCLK	(PIND4)
 #define	OUT_SRCLK	(PIND5)
 #define	OUT_SRCLR	(PIND6)
+#define	EN_PULLUP	(PIND7)
 
 
 #define SSEL_A		(PINB0)
@@ -123,8 +124,8 @@ void setup(){
 	//enable input indicators
 	PORTC &= ~(1 << IN_OE);
 	
-	//make PIND2-6 outputs
-	DDRD |= ((1 << OUT_SER) | (1 << OUT_OE) | (1 << OUT_RCLK) | (1 << OUT_SRCLK) | (1 << OUT_SRCLR));
+	//make PIND2-7 outputs
+	DDRD |= ((1 << OUT_SER) | (1 << OUT_OE) | (1 << OUT_RCLK) | (1 << OUT_SRCLK) | (1 << OUT_SRCLR) | (1 << EN_PULLUP));
 	//disable output clear
 	PORTD |= (1 << OUT_SRCLR);
 	//enable outputs
@@ -138,6 +139,14 @@ void setup(){
 	setup_adc();
 
 	sei();
+}
+
+void enable_pullups(){
+	PORTD |= (1 << EN_PULLUP);
+}
+
+void disable_pullups(){
+	PORTD &= ~(1 << EN_PULLUP);
 }
 
 void set_input_indicators(uint8_t indicators){

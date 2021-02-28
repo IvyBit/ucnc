@@ -10,6 +10,9 @@
 #define BAUD	115200UL
 #define CUBRR	((F_CPU / 16 / BAUD) - 1)
 
+#define EXP_TEXT_LIM 128
+
+
 #include <stdlib.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -110,7 +113,7 @@ void move_expression(OutputConfig* exp_source, OutputConfig* exp_target) {
 	//uint8_t index_source = exp_source->text_index;
 	uint8_t index_target = exp_target->text_index;
 
-	str::StringBuffer<120> source;
+	str::StringBuffer<EXP_TEXT_LIM> source;
 	read_expression(exp_source, source);
 	
 	eeprom_update_block(source.ptr(), (void*)(exp_target->text_index), source.length() + 1);
@@ -224,6 +227,34 @@ void save_configuration()
 	offset += sizeof(OutputConfig) * 8;
 }
 
+avr_size_t get_eeprom_free(){
+	
+	int16_t eeprom_free = 1024;
+	//inputs
+	eeprom_free -= (3 * 8);
+	//outputs	
+	eeprom_free -= (sizeof(OutputConfig) * 8);
+	
+	for (uint8_t oi = 0; oi < 8; oi++)
+	{
+		for (avr_size_t i = outputs[oi].text_index; i < 1024; i++)
+		{
+			char chr = str::END;
+			eeprom_read_block((void*)&chr, (void*)i, 1);							
+			eeprom_free--;
+			if(chr == str::END){
+				break;
+			}
+		}
+	}
+	
+	if(eeprom_free < 0 ){		
+		err::on_error({0, 0});
+	} else {
+		return (avr_size_t)eeprom_free;
+	}
+	
+}
 
 
 __attribute__((noreturn)) void run_mode();
@@ -239,6 +270,8 @@ int main(void)
     clear_input_indicators();
 		
 	load_configuration();	
+	
+	enable_pullups();
 	
 	if(aux_btn_down()){
 		edit_mode();		
@@ -292,7 +325,7 @@ __attribute__((noreturn)) void run_mode() {
 		if(outputs[i].active){
 			
 			//read text expression from eeprom
-			str::StringBuffer<128> exp_text;
+			str::StringBuffer<EXP_TEXT_LIM> exp_text;
 			read_expression(&outputs[i], exp_text);
 		
 			ctr::Array<op::OpCode, 128>		target_buffer;
@@ -779,7 +812,7 @@ bool handle_expression_edit(OutputConfig& output, str::StringBuffer<buffer_size>
 	
 	term::save_cursor();
 	term::hide_cursor();
-	term::cursor_move(20,20);	
+	term::cursor_move(5,20);	
 	term::clear_line();
 	if(msg){
 		term::write_line_P(msg);
@@ -787,7 +820,7 @@ bool handle_expression_edit(OutputConfig& output, str::StringBuffer<buffer_size>
 		term::write_line_P(PSTR("Unknown error"));	
 	}
 	
-	term::cursor_move(20,20);	
+	term::cursor_move(5,20);	
 	_delay_ms(1000);
 	term::clear_line();
 	term::show_cursor();
@@ -839,6 +872,35 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 	uint8_t c = 0;
 
 	while(menu_root == RootMenuState::OUTPUT){
+		
+		
+		{//show selected expression
+			term::save_cursor();
+			
+			term::cursor_move(5,14);
+			term::clear_line();		
+			term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mMEM\x1b[0m] : "));
+			term::write_uint16_t(get_eeprom_free());
+			term::write_string_P(PSTR(" bytes free"));
+			
+			
+			str::StringBuffer<EXP_TEXT_LIM> expression;
+			read_expression(&outputs[c], expression);
+			
+		
+			term::cursor_move(5,16);
+			term::clear_line();		
+			term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mEXP\x1b[0m] : "));		
+			term::write_string(expression, 40);
+			
+			term::cursor_move(5,17);
+			term::clear_line();		
+			term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mLEN\x1b[0m] : "));	
+			term::write_uint16_t(expression.length());
+			term::write_string_P(PSTR(" bytes"));			
+		
+			term::restore_cursor();
+		}		
 		
 		term::cursor_move(17 + 7 * c, r + 11);
 		
@@ -901,7 +963,7 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 				
 				//INPUT EXPRESSION
 				case 1: {
-					str::StringBuffer<120> expression;
+					str::StringBuffer<EXP_TEXT_LIM> expression;
 					read_expression(&outputs[c], expression);
 					
 					term::cursor_move(0,23);
@@ -911,14 +973,12 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 					bool expression_valid = false;
 					do 
 					{
+						avr_size_t eeprom_free = get_eeprom_free();
 						term::cursor_move(0,24);
 						term::clear_line();
-						term::read_line(expression, 60);							
+						term::read_line(expression, 60, eeprom_free);							
 						expression_valid = handle_expression_edit(outputs[c], expression);
-					} while (!expression_valid);
-					
-					
-					
+					} while (!expression_valid);	
 										
 					term::cursor_move(0,23);
 					term::clear_line();
@@ -931,6 +991,11 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 			}
 			break;
 		}
+		
+
+		
+		
+		
 	}
 			
 	save_configuration();			

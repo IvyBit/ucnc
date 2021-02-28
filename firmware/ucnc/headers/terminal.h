@@ -36,7 +36,7 @@ namespace term {
 		if((UCSR0A & (1 << RXC0))){
 			return UDR0;			
 		}else{
-			_delay_ms(50);
+			_delay_ms(25);
 			if((UCSR0A & (1 << RXC0))){				
 				return UDR0;
 			}else{
@@ -87,10 +87,12 @@ namespace term {
 		}
 	}
 
-    void write_string(const char* src) {
-        for (; *src != '\0'; src++)
+    void write_string(const char* src, avr_size_t limit = 0xFFFF) {
+		
+        for (; *src != '\0' && limit > 0; src++)
         {
             write_char(*src);
+			limit--;
         }
     }
 
@@ -274,10 +276,15 @@ namespace term {
 	*/
 	const char INPUT[] PROGMEM ="::[\x1b[33m?\x1b[0m] : ";
 	template<avr_size_t buffer_size>
-	void read_line(str::StringBuffer<buffer_size>& dest, avr_size_t view_width){
+	void read_line(str::StringBuffer<buffer_size>& dest, avr_size_t view_width, avr_size_t limit = buffer_size){
 		
 		avr_size_t view_index = 0;
 		avr_size_t cursor_index = 0;
+		
+		if(limit > buffer_size){
+			limit = buffer_size;
+		}
+		
 		term::write_string_P(INPUT);
 		
 		while (true)
@@ -290,7 +297,7 @@ namespace term {
 			for (avr_size_t index = 0; index < view_width; index++)
 			{
 				if(dest[index + view_index] != '\0'){
-					if(index + view_index < buffer_size){
+					if(index + view_index < limit){
 						term::write_char(dest[index + view_index]);
 					}
 					} else {
@@ -313,7 +320,7 @@ namespace term {
 							if(cursor_index + 1 < view_width){
 								cursor_index++;
 								term::cursor_right();
-							} else if(view_index < buffer_size){
+							} else if(view_index < limit){
 								view_index++;
 							}
 						}
@@ -327,7 +334,7 @@ namespace term {
 						}
 					}
 				}
-			} else if((str::is_graph(input) || input == ' ') && dest.length() < (int16_t)buffer_size){
+			} else if((str::is_graph(input) || input == ' ') && dest.length() < limit){
 					
 				if(view_index + cursor_index < dest.length() && dest.length() != 0){
 					dest.insert(input, view_index + cursor_index);
