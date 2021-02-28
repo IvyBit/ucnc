@@ -59,13 +59,11 @@ struct OutputConfig{
 	bool active = false;
 };
 
-volatile uint8_t	adc_values[16]	= {0};
-volatile uint8_t*	adc_value_write	= nullptr;
-volatile uint8_t*	adc_value_read	= nullptr;
-volatile bool	    adc_busy		= false;
+
 
 InputConfig			inputs[8];
 OutputConfig		outputs[8];
+
 
 void err::on_error(const Error& ec) {
 	while (true)
@@ -73,63 +71,12 @@ void err::on_error(const Error& ec) {
 		//BLINK OUTPUTS
 		set_input_indicators(0xFF);
 		_delay_ms(500);
-		set_input_indicators(0x00);	
-			
-		//UART OUT ERROR		
+		set_input_indicators(0x00);
+		
+		//UART OUT ERROR
 	}
 }
 
-ISR(ADC_vect){
-	
-	static avr_size_t	adc_max	  = 1;
-	static double		adc_mul   = 1;
-	static uint8_t		adc_index = 0;
-	
-	uint8_t current_index = adc_index;
-	adc_index++;
-	
-	if(adc_index > 7) adc_index = 0;
-	
-	PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | pgm_read_byte(&ASI_MAP[adc_index]));
-	
-	avr_size_t av = 0;
-	
-	av |= ADCL;
-	av |= (uint16_t)(ADCH << 8);
-	
-	if(adc_max < av){
-		adc_max = av;
-		adc_mul = (100.0 / av);
-	}
-	
-	adc_value_write[current_index] = (uint8_t)(adc_mul * av);
-	
-	if(adc_index < 7){
-		ADCSRA |= (1 << ADSC);
-		}else{
-		adc_busy = false;
-	}
-}
-
-void adc_busy_wait(){
-	volatile avr_size_t n = 0;
-	while(adc_busy){n++;}
-}
-
-void adc_start_conversion(){
-	
-	adc_busy = true;
-	
-	if(adc_value_read != adc_values){
-		adc_value_read = &adc_values[0];
-		adc_value_write = &adc_values[8];
-		} else{
-		adc_value_read = &adc_values[8];
-		adc_value_write = &adc_values[0];
-	}
-	
-	ADCSRA |= (1 << ADSC);
-}
 
 template<avr_size_t size>
 void read_expression(OutputConfig* oc, str::StringBuffer<size>& target){
@@ -160,7 +107,7 @@ OutputConfig* find_next_expression(const OutputConfig* exp) {
 }
 
 void move_expression(OutputConfig* exp_source, OutputConfig* exp_target) {
-	uint8_t index_source = exp_source->text_index;
+	//uint8_t index_source = exp_source->text_index;
 	uint8_t index_target = exp_target->text_index;
 
 	str::StringBuffer<120> source;
@@ -185,50 +132,48 @@ void update_expression(OutputConfig* exp, str::StringBuffer<size>& text) {
 	eeprom_update_block(text.ptr(), (void*)exp->text_index, text.length() + 1); 
 }
 
-template<avr_size_t buffer_size>
-void save_expression(str::StringBuffer<buffer_size> text){
-	
-}
-
-
-
-
-
-
-__attribute__((noreturn)) void run_mode();
-__attribute__((noreturn)) void edit_mode();
-
-
-void load_configuration();
-void save_configuration();
-void reset_configuration();
-
-int main(void)
+void reset_configuration()
 {
-	wdt_really_off();
-    setup();
+	avr_size_t offset = 0;
 	
-    clear_outputs();
-    clear_input_indicators();
+	uint8_t initialized = 0xFF - 1;
+	eeprom_update_block((void*)&initialized, (void*)offset, sizeof(uint8_t));
+	offset += sizeof(uint8_t);
+	
+	for (uint8_t i = 0; i < 8; i++)
+	{
+		inputs[i] = {45, 0, false};
 		
-	load_configuration();	
+		eeprom_update_block(&inputs[i].threshold, (void*)offset, sizeof(uint8_t));
+		offset += sizeof(uint8_t);
+		
+		eeprom_update_block(&inputs[i].hysteresis, (void*)offset, sizeof(uint8_t));
+		offset += sizeof(uint8_t);
+		
+		eeprom_update_block(&inputs[i].inverted, (void*)offset, sizeof(bool));
+		offset += sizeof(bool);
+	}
 	
-	if(aux_btn_down()){
-		edit_mode();		
-	} else {
-		run_mode();		
-	}	
+	
+	for (uint8_t i = 0; i < 8; i++) {
+		outputs[i] = {offset + (sizeof(OutputConfig) * 8) + (i * 3), true};
+	}
+	eeprom_update_block((void*)&outputs, (void*)offset, sizeof(OutputConfig) * 8);
+	offset += sizeof(OutputConfig) * 8;
+	
+	const char buffer[] = "$A\0$B\0$C\0$D\0$E\0$F\0$G\0$H\0";
+	eeprom_update_block((void*)&buffer, (void*)offset, sizeof(buffer));
+	offset += sizeof(buffer);
 }
-
 
 void load_configuration(){
 	avr_size_t offset = 0;
 	
 	uint8_t initialized = 0;
-	eeprom_read_block((void*)&initialized, (void*)0, 1);
+	eeprom_read_block((void*)&initialized, (void*)offset, 1);
 	offset += sizeof(uint8_t);
 	
-	if(initialized != 0xFF){
+	if(initialized != 0xFF - 1){
 		reset_configuration();
 	} else {
 		
@@ -255,43 +200,9 @@ void load_configuration(){
 	}
 }
 
-void reset_configuration() 
-{
-	avr_size_t offset = 0; 
-	
-	uint8_t initialized = 0xFF;
-	eeprom_update_block((void*)&initialized, (void*)offset, sizeof(uint8_t));
-	offset += sizeof(uint8_t);	
-	
-	for (uint8_t i = 0; i < 8; i++)
-	{		
-		inputs[i] = {45, 0, false};
-			
-		eeprom_update_block(&inputs[i].threshold, (void*)offset, sizeof(uint8_t));
-		offset += sizeof(uint8_t);
-		
-		eeprom_update_block(&inputs[i].hysteresis, (void*)offset, sizeof(uint8_t));
-		offset += sizeof(uint8_t);
-		
-		eeprom_update_block(&inputs[i].inverted, (void*)offset, sizeof(bool));
-		offset += sizeof(bool);
-	}
-	
-	
-	for (uint8_t i = 0; i < 8; i++) {
-		outputs[i] = {offset + (sizeof(OutputConfig) * 8) + (i * 3), true};
-	}	
-	eeprom_update_block((void*)&outputs, (void*)offset, sizeof(OutputConfig) * 8);
-	offset += sizeof(OutputConfig) * 8;	
-	
-	const char buffer[] = "$A\0$B\0$C\0$D\0$E\0$F\0$G\0$H\0";
-	eeprom_update_block((void*)&buffer, (void*)offset, sizeof(buffer));
-	offset += sizeof(buffer);
-}
-
 void save_configuration()
-{	
-	avr_size_t offset = 1; 
+{
+	avr_size_t offset = 1;
 	
 	//uint8_t	threshold	= 0;
 	//uint8_t	hysteresis  = 0;
@@ -314,63 +225,121 @@ void save_configuration()
 }
 
 
+
+__attribute__((noreturn)) void run_mode();
+__attribute__((noreturn)) void edit_mode();
+
+
+int main(void)
+{
+	wdt_really_off();
+    setup();
+	
+    clear_outputs();
+    clear_input_indicators();
+		
+	load_configuration();	
+	
+	if(aux_btn_down()){
+		edit_mode();		
+	} else {
+		run_mode();		
+	}	
+}
+
+
+
+void handle_compiler_error(comp::CompilerResult result){
+	switch(result.status){
+		case comp::CompilerStatus::ERROR_MAX_LENGTH_EXCEEDED: break;
+		case comp::CompilerStatus::ERROR_INVALID_OPERAND: break;
+		case comp::CompilerStatus::ERROR_MISSING_BRACKET: break;
+		case comp::CompilerStatus::ERROR_INVALID_CHARACTER: break;
+		case comp::CompilerStatus::ERROR_INVALID_RHS_EXPRESSION: break;
+		case comp::CompilerStatus::ERROR_INVALID_LHS_EXPRESSION: break;
+		case comp::CompilerStatus::ERROR_MISSING_RHS_EXPRESSION: break;
+		case comp::CompilerStatus::ERROR_MISSING_LHS_EXPRESSION: break;
+		case comp::CompilerStatus::ERROR_EMPTY_EXPRESSION: break;
+		default: break;
+	}	
+}
+
+template<avr_size_t buffer_size, avr_size_t text_size>
+comp::CompilerResult compile_expression(ctr::Array<op::OpCode, buffer_size>&	exp_buffer, 
+										str::StringBuffer<text_size>&			text,
+										ex::Expression&							expression){
+	
+	comp::CompilerResult				compiler_result;
+	ctr::Array<op::OpCode, buffer_size>	stack_buffer;	
+	
+	expression.set_buffer(&exp_buffer[0]);	
+	comp::compile_expression(text, expression, stack_buffer, compiler_result);
+	
+	return compiler_result;	
+}
+
+
+
 //RUN MODE	
 __attribute__((noreturn)) void run_mode() {	
 	
-	ctr::Array<op::OpCode, 128>		target_buffer;
-	comp::ExpressionCompiler		compiler;
-	comp::CompilerResult			compiler_result;
-	ctr::Array<uint8_t, 256>		truth_table;
+	term::clear_screen();
+	
+	ctr::Array<uint8_t, 256>		result_table;
 	
 	for(uint8_t i = 0; i < 8; i++){
-		
+				
 		if(outputs[i].active){
 			
-			str::StringBuffer<128>		exp_text;
-			ctr::Array<op::OpCode, 128>	stack_buffer;
-		
 			//read text expression from eeprom
+			str::StringBuffer<128> exp_text;
 			read_expression(&outputs[i], exp_text);
 		
-			ex::Expression exp;
-			exp.set_buffer(&target_buffer[0]);
-			
-					
-			//compile expression
-			compiler.compile_expression(exp_text, exp, stack_buffer, compiler_result);
+			ctr::Array<op::OpCode, 128>		target_buffer;
+			ex::Expression expression;
 		
-			//execute expression and update truth table		
-			for (avr_size_t ti = 0; ti < truth_table.length(); ti++)
-			{
-				ex::ExpressionData	data((uint8_t)ti);
-				op::OpCode exp_result = exp.eval(data, stack_buffer);
-				if(exp_result == op::OpCode::TRUE){
-					truth_table[ti] |= (1 << (7 - i));
-				} else {				
-					truth_table[ti] &= ~(1 << (7 - i));
+			comp::CompilerResult result = compile_expression(target_buffer, exp_text, expression);
+			
+			if(result.status == comp::CompilerStatus::OK){
+				ctr::Array<op::OpCode, 128>	stack_buffer;
+				//execute expression and update truth table		
+				for (avr_size_t ti = 0; ti < result_table.length(); ti++)
+				{				
+					ex::ExpressionData	data((uint8_t)ti);
+					op::OpCode exp_result = expression.eval(data, stack_buffer);
+					if(exp_result == op::OpCode::TRUE){
+						result_table[ti] |= (1 << (7 - i));
+					} else {				
+						result_table[ti] &= ~(1 << (7 - i));
+					}
 				}
+			} else {								
+				handle_compiler_error(result);
+				//flash error code through indicators
+				//set all outputs to their on state
 			}
 		} else {
-			for (avr_size_t ti = 0; ti < truth_table.length(); ti++) {				
-				truth_table[ti] &= ~(1 << (7 - i));				
+			for (avr_size_t ti = 0; ti < result_table.length(); ti++) {				
+				result_table[ti] &= ~(1 << (7 - i));				
 			}
 		}
 		
 	}
 	
-	ex::ExpressionData	data;
 	while(true) {		
 		
 		adc_busy_wait();
 		adc_start_conversion();		
+		
+		ex::ExpressionData	data;
 		
 		for (uint8_t i = 0; i < 8; i++) {
 			inputs[i].update(adc_value_read[i]);
 			data.set_at(i, inputs[i].update(adc_value_read[i]));
 		}
 		
+		set_outputs(result_table[data.data()]);
 		set_input_indicators(data.data());
-		set_outputs(truth_table[data.data()]);
 	}
 }
 //RUN MODE
@@ -388,6 +357,65 @@ __attribute__((noreturn)) void run_mode() {
 
 
 /*MENU############################################################*/
+#define ROWS2D(D2) ((avr_size_t)(sizeof(D2) / sizeof(D2[0])))
+#define COLS2D(D2) ((avr_size_t)(sizeof(D2[0])))
+
+enum class RootMenuState : uint8_t{
+	START,
+	STATUS,
+	INPUT,
+	OUTPUT,
+	SAVE,
+	RESTORE,
+	HELP,
+	HARDRESET,
+	EXIT
+};
+
+enum class EditMenuState : uint8_t{
+	START,
+	EXIT
+};
+/*
+_________/\/\/\/\__________________________/\/\/\/\/\____/\/\______/\/\_________
+__________/\/\____/\/\__/\/\__/\/\__/\/\__/\/\____/\/\__________/\/\/\/\/\______
+_________/\/\____/\/\__/\/\__/\/\__/\/\__/\/\/\/\/\____/\/\______/\/\___________
+________/\/\______/\/\/\______/\/\/\/\__/\/\____/\/\__/\/\______/\/_____________
+_____/\/\/\/\______/\____________/\/\__/\/\/\/\/\____/\/\/\____/\/\/\___________
+__________________________/\/\/\/\______________________________________________
+*/
+const char BANNER[6][81] PROGMEM =
+{
+	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
+	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
+	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
+	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
+	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
+	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 }
+};
+
+void print_banner(){
+	
+	term::write_string_P(PSTR("\x1b[90m"));
+	for (avr_size_t r = 0; r < ROWS2D(BANNER); r++)
+	{
+		bool highlight = false;
+		for (avr_size_t c = 0; c < COLS2D(BANNER); c++)
+		{
+			char chr = pgm_read_byte(&BANNER[r][c]);
+			if(!highlight && chr == '/'){
+				term::write_string_P(PSTR("\x1B[33m"));
+				highlight = true;
+				} else if(highlight && chr == '_') {
+				term::write_string_P(PSTR("\x1b[90m"));
+				highlight = false;
+			}
+			term::write_char(chr);
+		}
+		term::write_string("\r\n");
+	}
+	term::write_string_P(PSTR("\x1b[0m"));
+}
 
 void print_header(){
 	term::write_line_P(PSTR("\x1b[90m::[\x1b[37mUCNC 1.0 - IvyBit 2021\x1b[90m]\x1b[0m\r\n"));
@@ -454,6 +482,8 @@ void handle_menu_start(RootMenuState& menu_root){
 				case 5: menu_root = RootMenuState::EXIT; break;
 			}
 			break;
+			
+			default : break;
 		}
 	}
 	
@@ -638,7 +668,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 					term::cursor_move(17 + 7 * c, r + 11);
 					if(s[0] == 'y'){
 						inputs[c].inverted = true;
-						term::write_string_P(PSTR("\x1b[31m#\x1b[0m"));
+						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
 					} else {
 						inputs[c].inverted = false;
 						term::write_char(' ');
@@ -682,7 +712,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 						}
 					}
 					
-					term::write_string_P(PSTR("\x1b[31m"));
+					term::write_string_P(PSTR("\x1b[32m"));
 					term::write_string(s);
 					term::write_string_P(PSTR("\x1b[0m"));
 					if(c < 7)c++;
@@ -720,7 +750,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 						}
 					}
 					
-					term::write_string_P(PSTR("\x1b[31m"));
+					term::write_string_P(PSTR("\x1b[32m"));
 					term::write_string(s);
 					term::write_string_P(PSTR("\x1b[0m"));
 					if(c < 7)c++;
@@ -734,6 +764,42 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 	save_configuration();
 	term::show_cursor();
 	menu_root = RootMenuState::START;
+}
+
+template<avr_size_t buffer_size>
+bool handle_expression_edit(OutputConfig& output, str::StringBuffer<buffer_size>& exp_text){
+	ctr::Array<op::OpCode, 128>	 target_buffer;
+	ex::Expression				 expression;
+	
+	comp::CompilerResult result = compile_expression(target_buffer, exp_text, expression);
+	
+	
+		
+	const char* msg = comp::get_compiler_status_msg(result.status);	
+	
+	term::save_cursor();
+	term::hide_cursor();
+	term::cursor_move(20,20);	
+	term::clear_line();
+	if(msg){
+		term::write_line_P(msg);
+	} else {
+		term::write_line_P(PSTR("Unknown error"));	
+	}
+	
+	term::cursor_move(20,20);	
+	_delay_ms(1000);
+	term::clear_line();
+	term::show_cursor();
+	term::restore_cursor();		
+		
+	if(result.status == comp::CompilerStatus::OK){	
+		update_expression(&output, exp_text);
+		save_configuration();	
+		return true;
+	} else {		
+		return false;
+	}
 }
 
 void handle_menu_outputs(RootMenuState& menu_root) {
@@ -823,7 +889,7 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 					term::clear_line();
 					term::cursor_move(17 + 7 * c, r + 11);
 					if(s[0] == 'y'){
-						term::write_string_P(PSTR("\x1b[31m#\x1b[0m"));
+						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
 						outputs[c].active = true;
 					} else {
 						term::write_char(' ');
@@ -835,22 +901,31 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 				
 				//INPUT EXPRESSION
 				case 1: {
-					str::StringBuffer<120> s;
-					read_expression(&outputs[c], s);
-					//s.append("(~$A & $B) | ($A & ~$B)");
+					str::StringBuffer<120> expression;
+					read_expression(&outputs[c], expression);
+					
 					term::cursor_move(0,23);
 					term::write_string_P(PSTR("::[Expression?]"));
 					term::cursor_move(0,24);
-					term::read_line(s, 60);
 					
-					update_expression(&outputs[c], s);
+					bool expression_valid = false;
+					do 
+					{
+						term::cursor_move(0,24);
+						term::clear_line();
+						term::read_line(expression, 60);							
+						expression_valid = handle_expression_edit(outputs[c], expression);
+					} while (!expression_valid);
+					
+					
+					
 										
 					term::cursor_move(0,23);
 					term::clear_line();
 					term::cursor_move(0,25);
 					term::clear_line();
 					term::cursor_move(16 + 7 * c, r + 11);
-					term::write_string_P(PSTR("\x1b[31mMOD\x1b[0m"));
+					term::write_string_P(PSTR("\x1b[32mMOD\x1b[0m"));
 					if(c < 7)c++;
 				} break;
 			}
@@ -862,7 +937,6 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 	term::show_cursor();
 	menu_root = RootMenuState::START;
 }
-
 
 void handle_menu_help(RootMenuState& menu_root){
 	term::clear_screen();

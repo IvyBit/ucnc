@@ -36,7 +36,7 @@ namespace term {
 		if((UCSR0A & (1 << RXC0))){
 			return UDR0;			
 		}else{
-			_delay_ms(20);
+			_delay_ms(50);
 			if((UCSR0A & (1 << RXC0))){				
 				return UDR0;
 			}else{
@@ -93,7 +93,7 @@ namespace term {
             write_char(*src);
         }
     }
-	
+
 	void write_line_P(const char* src) {
 		for (; pgm_read_byte(src) != '\0'; src++)
 		{
@@ -110,11 +110,30 @@ namespace term {
 		write_string("\r\n");
 	}
 	
+	
+	void write_uint8_t(uint8_t value){
+		char buffer[4];
+		utoa(value, buffer, 10);
+		write_string(buffer);
+	}
+	
+	void write_uint16_t(uint16_t value){
+		char buffer[6];
+		utoa(value, buffer, 10);
+		write_string(buffer);
+	}
+	
+	void write_uint32_t(uint32_t value){
+		char buffer[11];
+		utoa(value, buffer, 10);
+		write_string(buffer);
+	}
+	
 
     void show_cursor(){
 	    write_string("\x1B[?25h");
     }
-    
+   
     void hide_cursor(){
 	    write_string("\x1B[?25l");
     }
@@ -299,7 +318,7 @@ namespace term {
 							}
 						}
 						//left
-						} else if(input == CH_D){
+					} else if(input == CH_D){
 						if(cursor_index  > 0){
 							cursor_index--;
 							term::cursor_left();
@@ -308,41 +327,41 @@ namespace term {
 						}
 					}
 				}
-				}else if((str::is_graph(input) || input == ' ') && dest.length() < (int16_t)buffer_size){
+			} else if((str::is_graph(input) || input == ' ') && dest.length() < (int16_t)buffer_size){
 					
-					if(view_index + cursor_index < dest.length() && dest.length() != 0){
-						dest.insert(input, view_index + cursor_index);
+				if(view_index + cursor_index < dest.length() && dest.length() != 0){
+					dest.insert(input, view_index + cursor_index);
 					} else {
-						dest.append(input);
-					}
-					if(cursor_index < view_width){
-						cursor_index++;
-						term::cursor_right();
-					} else {
-						view_index++;
-					}
-					
-				}else if(input == DEL){
-					
-					if(view_index + cursor_index < dest.length() && dest.length() > 0){
-						dest.remove_at(view_index + cursor_index, 1);
-					}
-					
-				}else if(input == BS){
-					
-					if(view_index + cursor_index  > 0 && dest.length() > 0){
-						dest.remove_at(view_index + cursor_index - 1, 1);
-						if(cursor_index > 0){
-							cursor_index--;
-							term::cursor_left();
-						} else {
-							view_index--;
-						}
-					}
-					
-				}else if(input == CR){
-					return;
+					dest.append(input);
 				}
+				if(cursor_index < view_width){
+					cursor_index++;
+					term::cursor_right();
+					} else {
+					view_index++;
+				}
+					
+			}else if(input == DEL){
+					
+				if(view_index + cursor_index < dest.length() && dest.length() > 0){
+					dest.remove_at(view_index + cursor_index, 1);
+				}
+					
+			}else if(input == BS){
+					
+				if(view_index + cursor_index  > 0 && dest.length() > 0){
+					dest.remove_at(view_index + cursor_index - 1, 1);
+					if(cursor_index > 0){
+						cursor_index--;
+						term::cursor_left();
+					} else {
+						view_index--;
+					}
+				}
+					
+			}else if(input == CR){
+				return;
+			}
 		}//WHILE
 	}	
 	

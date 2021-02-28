@@ -9,10 +9,9 @@
 #include "errors.h"
 #include "avrtypes.h"
 
-#define OPTRUE op::OpCode::TRUE
-#define OPFALSE op::OpCode::FALSE
 
 namespace op{
+	
 enum class OpCode : uint8_t {
 	NONE,	//		0000 0000
 
@@ -64,164 +63,89 @@ uint8_t precedence(OpCode op) {
 
 
 
-bool is_gte(OpCode lhs_operator, OpCode rhs_operator) {
-	return  precedence(lhs_operator) >= precedence(rhs_operator);
-}
-
-bool is_valid(OpCode op) {
-	switch (op)
-	{
-	case op::OpCode::NONE:
-		break;
-	case op::OpCode::NOT:
-		break;
-	case op::OpCode::AND:
-		break;
-	case op::OpCode::NAND:
-		break;
-	case op::OpCode::OR:
-		break;
-	case op::OpCode::NOR:
-		break;
-	case op::OpCode::XOR:
-		break;
-	case op::OpCode::EQ:
-		break;
-	case op::OpCode::OPD_A:
-		break;
-	case op::OpCode::OPD_B:
-		break;
-	case op::OpCode::OPD_C:
-		break;
-	case op::OpCode::OPD_D:
-		break;
-	case op::OpCode::OPD_E:
-		break;
-	case op::OpCode::OPD_F:
-		break;
-	case op::OpCode::OPD_G:
-		break;
-	case op::OpCode::OPD_H:
-		break;
-	case op::OpCode::EPS:
-		break;
-	case op::OpCode::EPE:
-		break;
-	case op::OpCode::MS:
-		break;
-	case op::OpCode::ME:
-		break;
-	case op::OpCode::FALSE:
-		break;
-	case op::OpCode::TRUE:
-		break;
-	default:
-		return false;
+	bool is_gte(OpCode lhs_operator, OpCode rhs_operator) {
+		return  precedence(lhs_operator) >= precedence(rhs_operator);
 	}
-	return true;
-}
+
+	bool is_valid(OpCode op) {
+		switch (op)
+		{
+		case op::OpCode::NONE:
+			break;
+		case op::OpCode::NOT:
+			break;
+		case op::OpCode::AND:
+			break;
+		case op::OpCode::NAND:
+			break;
+		case op::OpCode::OR:
+			break;
+		case op::OpCode::NOR:
+			break;
+		case op::OpCode::XOR:
+			break;
+		case op::OpCode::EQ:
+			break;
+		case op::OpCode::OPD_A:
+			break;
+		case op::OpCode::OPD_B:
+			break;
+		case op::OpCode::OPD_C:
+			break;
+		case op::OpCode::OPD_D:
+			break;
+		case op::OpCode::OPD_E:
+			break;
+		case op::OpCode::OPD_F:
+			break;
+		case op::OpCode::OPD_G:
+			break;
+		case op::OpCode::OPD_H:
+			break;
+		case op::OpCode::EPS:
+			break;
+		case op::OpCode::EPE:
+			break;
+		case op::OpCode::MS:
+			break;
+		case op::OpCode::ME:
+			break;
+		case op::OpCode::FALSE:
+			break;
+		case op::OpCode::TRUE:
+			break;
+		default:
+			return false;
+		}
+		return true;
+	}
 
 
-bool is_true(OpCode op) {
-	return op == op::OpCode::TRUE;
-}
+	bool is_true(OpCode op) {
+		return op == op::OpCode::TRUE;
+	}
 
-bool is_operator(OpCode op) {
-	return ((uint8_t)op & (uint8_t)OpCode::NOT) == (uint8_t)OpCode::NOT;
-}
+	bool is_operator(OpCode op) {
+		return ((uint8_t)op & (uint8_t)OpCode::NOT) == (uint8_t)OpCode::NOT;
+	}
 
-bool is_operand(OpCode op) {
-	return ((uint8_t)op & (uint8_t)OpCode::OPD_A) == (uint8_t)OpCode::OPD_A;
-}
+	bool is_operand(OpCode op) {
+		return ((uint8_t)op & (uint8_t)OpCode::OPD_A) == (uint8_t)OpCode::OPD_A;
+	}
 
-bool is_subexp(OpCode op) {
-	return op == OpCode::EPS || op == OpCode::EPE;
-}
+	bool is_subexp(OpCode op) {
+		return op == OpCode::EPS || op == OpCode::EPE;
+	}
 
-bool is_start(OpCode op) {
-	return op == OpCode::EPS;
-}
+	bool is_start(OpCode op) {
+		return op == OpCode::EPS;
+	}
 
-bool is_end(OpCode op) {
-	return op == OpCode::EPE;
-}
+	bool is_end(OpCode op) {
+		return op == OpCode::EPE;
+	}
 
 };
 
 
 
-#ifndef AVR
-
-std::ostream& operator<<(std::ostream& os, op::OpCode &op) {
-	switch (op)
-	{
-	case op::OpCode::NONE:
-		os << "NONE";
-		break;
-	case op::OpCode::NOT:
-		os << "NOT";
-		break;
-	case op::OpCode::AND:
-		os << "AND";
-		break;
-	case op::OpCode::NAND:
-		os << "NAND";
-		break;
-	case op::OpCode::OR:
-		os << "OR";
-		break;
-	case op::OpCode::NOR:
-		os << "NOR";
-		break;
-	case op::OpCode::XOR:
-		os << "XOR";
-		break;
-	case op::OpCode::EQ:
-		os << "EQ";
-		break;
-	case op::OpCode::OPD_A:
-		os << "OPD_A";
-		break;
-	case op::OpCode::OPD_B:
-		os << "OPD_B";
-		break;
-	case op::OpCode::OPD_C:
-		os << "OPD_C";
-		break;
-	case op::OpCode::OPD_D:
-		os << "OPD_D";
-		break;
-	case op::OpCode::OPD_E:
-		os << "OPD_E";
-		break;
-	case op::OpCode::OPD_F:
-		os << "OPD_F";
-		break;
-	case op::OpCode::OPD_G:
-		os << "OPD_G";
-		break;
-	case op::OpCode::OPD_H:
-		os << "OPD_H";
-		break;
-	case op::OpCode::EPS:
-		os << "EPS";
-		break;
-	case op::OpCode::EPE:
-		os << "EPE";
-		break;
-	case op::OpCode::MS:
-		os << "MS";
-		break;
-	case op::OpCode::ME:
-		os << "ME";
-		break;
-	default:
-		os << "INVALID";
-		break;
-	}
-	return os;
-}
-
-
-
-#endif // !AVR

@@ -3,7 +3,6 @@
 #include "opcodes.h"
 #include "containers.h"
 
-#include <alloca.h>
 namespace ex {
 	
 	class ExpressionData final {		
@@ -88,21 +87,16 @@ namespace ex {
 			
 				if (op != op::OpCode::NONE) {
 
-					switch (op)
-					{
+					switch (op){
 
 					case op::OpCode::NOT: {
 						op::OpCode rhs;
 	
-						rhs = stack_buffer[--stack_index];
-						//stack.pop();						
+						rhs = stack_buffer[--stack_index];		
 
 						if (rhs == op::OpCode::TRUE)  {
-							//stack.push(op::OpCode::TRUE);
 							stack_buffer[stack_index++] = op::OpCode::FALSE;
-						}
-						else {
-							//stack.push(op::OpCode::FALSE);
+						} else {
 							stack_buffer[stack_index++] = op::OpCode::TRUE;
 						}
 
@@ -113,17 +107,11 @@ namespace ex {
 						op::OpCode rhs, lhs;
 
 						rhs = stack_buffer[--stack_index];
-						//stack.pop();
-
 						lhs = stack_buffer[--stack_index];
-						//stack.pop();
 
 						if (((uint8_t)rhs & (uint8_t)lhs) == (uint8_t)op::OpCode::TRUE)  {
-							//stack.push(op::OpCode::TRUE);
 							stack_buffer[stack_index++] = op::OpCode::TRUE;
-						}
-						else {
-							//stack.push(op::OpCode::FALSE);
+						} else {
 							stack_buffer[stack_index++] = op::OpCode::FALSE;
 						}
 					} break;
@@ -132,17 +120,11 @@ namespace ex {
 						op::OpCode rhs, lhs;
 
 						rhs = stack_buffer[--stack_index];
-						//stack.pop();
-
 						lhs = stack_buffer[--stack_index];
-						//stack.pop();
 
 						if (!(rhs == op::OpCode::TRUE && lhs == op::OpCode::TRUE))  {
-							//stack.push(op::OpCode::TRUE);
 							stack_buffer[stack_index++] = op::OpCode::TRUE;
-						}
-						else {
-							//stack.push(op::OpCode::FALSE);
+						} else {
 							stack_buffer[stack_index++] = op::OpCode::FALSE;
 						}
 					} break;
@@ -152,17 +134,11 @@ namespace ex {
 						op::OpCode rhs, lhs;
 
 						rhs = stack_buffer[--stack_index];
-						//stack.pop();
-
 						lhs = stack_buffer[--stack_index];
-						//stack.pop();
 
 						if (rhs == op::OpCode::TRUE || lhs == op::OpCode::TRUE)  {
-							//stack.push(op::OpCode::TRUE);
 							stack_buffer[stack_index++] = op::OpCode::TRUE;
-						}
-						else {
-							//stack.push(op::OpCode::FALSE);
+						} else {
 							stack_buffer[stack_index++] = op::OpCode::FALSE;
 						}
 					} break;
@@ -171,17 +147,11 @@ namespace ex {
 						op::OpCode rhs, lhs;
 
 						rhs = stack_buffer[--stack_index];
-						//stack.pop();
-
 						lhs = stack_buffer[--stack_index];
-						//stack.pop();
 
 						if (!(rhs == op::OpCode::TRUE || lhs == op::OpCode::TRUE))  {
-							//stack.push(op::OpCode::TRUE);
 							stack_buffer[stack_index++] = op::OpCode::TRUE;
-						}
-						else {
-							//stack.push(op::OpCode::FALSE);
+						} else {
 							stack_buffer[stack_index++] = op::OpCode::FALSE;
 						}
 					} break;
@@ -190,17 +160,11 @@ namespace ex {
 						op::OpCode rhs, lhs;
 
 						rhs = stack_buffer[--stack_index];
-						//stack.pop();
-
 						lhs = stack_buffer[--stack_index];
-						//stack.pop();
 
 						if ((rhs != lhs)) {
-							//stack.push(op::OpCode::TRUE);
 							stack_buffer[stack_index++] = op::OpCode::TRUE;
-						}
-						else {
-							//stack.push(op::OpCode::FALSE);
+						} else {
 							stack_buffer[stack_index++] = op::OpCode::FALSE;
 						}
 					} break;
@@ -210,24 +174,18 @@ namespace ex {
 						op::OpCode rhs, lhs;
 
 						rhs = stack_buffer[--stack_index];
-						//stack.pop();
-
 						lhs = stack_buffer[--stack_index];
-						//stack.pop();
-
+						
 						if ((rhs == lhs)) {
-							//stack.push(op::OpCode::TRUE);
 							stack_buffer[stack_index++] = op::OpCode::TRUE;
-						}
-						else {
-							//stack.push(op::OpCode::FALSE);
+						} else {
 							stack_buffer[stack_index++] = op::OpCode::FALSE;
 						}
 					} break;
 
 					case op::OpCode::OPD_A:
 						stack_buffer[stack_index++] = input.a();
-						break;
+						break;						
 					case op::OpCode::OPD_B:
 						stack_buffer[stack_index++] = input.b();
 						break;

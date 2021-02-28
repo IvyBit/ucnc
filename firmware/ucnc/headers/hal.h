@@ -36,6 +36,64 @@
 
 const uint8_t ASI_MAP[8] PROGMEM= { ASA, ASB, ASC, ASD, ASE, ASF, ASG, ASH };
 
+
+volatile uint8_t	adc_values[16]	= {0};
+volatile uint8_t*	adc_value_write	= nullptr;
+volatile uint8_t*	adc_value_read	= nullptr;
+volatile bool	    adc_busy		= false;
+
+ISR(ADC_vect){
+	
+	static avr_size_t	adc_max	  = 1;
+	static double		adc_mul   = 1;
+	static uint8_t		adc_index = 0;
+	
+	uint8_t current_index = adc_index;
+	adc_index++;
+	
+	if(adc_index > 7) adc_index = 0;
+	
+	PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | pgm_read_byte(&ASI_MAP[adc_index]));
+	
+	avr_size_t av = 0;
+	
+	av |= ADCL;
+	av |= (uint16_t)(ADCH << 8);
+	
+	if(adc_max < av){
+		adc_max = av;
+		adc_mul = (100.0 / av);
+	}
+	
+	adc_value_write[current_index] = (uint8_t)(adc_mul * av);
+	
+	if(adc_index < 7){
+		ADCSRA |= (1 << ADSC);
+		}else{
+		adc_busy = false;
+	}
+}
+
+void adc_busy_wait(){
+	volatile avr_size_t n = 0;
+	while(adc_busy){n++;}
+}
+
+void adc_start_conversion(){
+	
+	adc_busy = true;
+	
+	if(adc_value_read != adc_values){
+		adc_value_read = &adc_values[0];
+		adc_value_write = &adc_values[8];
+		} else{
+		adc_value_read = &adc_values[8];
+		adc_value_write = &adc_values[0];
+	}
+	
+	ADCSRA |= (1 << ADSC);
+}
+
 void setup_uart(){
 	UBRR0H = (uint8_t)(CUBRR >> 8);
 	UBRR0L = (uint8_t)(CUBRR);
@@ -50,7 +108,6 @@ void setup_adc(){
 	ADCSRA |= (1 << ADEN) | (1 << ADIE) | (1 << ADPS2)| (1 << ADPS1)| (1 << ADPS0);
 	
 	PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | pgm_read_byte(&ASI_MAP[0]));
-	//PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | ASA);
 }
 
 void setup(){
@@ -119,7 +176,7 @@ void set_outputs(uint8_t outputs){
 		//shift value into register
 		if(((outputs >> i) & 0x01)){
 			PORTD |= (1 << OUT_SER);
-			}else{
+		}else{
 			PORTD &= ~(1 << OUT_SER);
 		}
 		//clock register
@@ -165,8 +222,8 @@ void reset_mcu(){
 	}
 }
 
-avr_size_t mem_free(){
-	uint8_t dummy;
-	extern unsigned char __heap_start;
-	return (avr_size_t)&dummy - (avr_size_t) &__heap_start;
-}
+//avr_size_t mem_free(){
+	//uint8_t dummy;
+	//extern unsigned char __heap_start;
+	//return (avr_size_t)&dummy - (avr_size_t) &__heap_start;
+//}

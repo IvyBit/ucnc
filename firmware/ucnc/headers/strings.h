@@ -8,22 +8,6 @@ namespace str {
 
 
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     char* find_end(char* src) {
         while (*src != str::END) {
             src++;
@@ -347,7 +331,7 @@ namespace str {
 			return false;
 		}
 
-		bool insert(const char* src, avr_size_t insert_index = 2) {
+		bool insert(const char* src, avr_size_t insert_index) {
 			//	A B C D E F G H	I _ _ _|
 			//	A B X X X X C D E F G I|
 			if (insert_index < size) {

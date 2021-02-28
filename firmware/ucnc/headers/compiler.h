@@ -12,18 +12,49 @@
 
 namespace comp {
 
+	const char CERR_OK[] PROGMEM							= "\x1B[32mOk\x1B[0m";
+	const char CERR_ERROR_MAX_LENGTH_EXCEEDED	[] PROGMEM	= "\x1B[31mMax length exceeded\x1B[0m";
+	const char CERR_ERROR_INVALID_OPERAND[] PROGMEM			= "\x1B[31mInvalid operand\x1B[0m";
+	const char CERR_ERROR_MISSING_BRACKET[] PROGMEM			= "\x1B[31mMissing bracket\x1B[0m";
+	const char CERR_ERROR_INVALID_CHARACTER[] PROGMEM		= "\x1B[31mInvalid character\x1B[0m";
+	const char CERR_ERROR_INVALID_RHS_EXPRESSION[] PROGMEM	= "\x1B[31mInvalid rhs expression\x1B[0m";
+	const char CERR_ERROR_INVALID_LHS_EXPRESSION[] PROGMEM	= "\x1B[31mInvalid lhs expression\x1B[0m";
+	const char CERR_ERROR_MISSING_RHS_EXPRESSION[] PROGMEM	= "\x1B[31mMissing rhs expression\x1B[0m";
+	const char CERR_ERROR_MISSING_LHS_EXPRESSION[] PROGMEM	= "\x1B[31mMissing lhs expression\x1B[0m";
+	const char CERR_ERROR_EMPTY_EXPRESSION[] PROGMEM		= "\x1B[31mEmpty expression\x1B[0m";
+	
 	enum class CompilerStatus : uint8_t {
 		OK = 0x00,					//No Error
-		ERROR_MAX_LENGTH_EXCEEDED = 0x01,
-		ERROR_INVALID_OPERAND = 0x02,
-		ERROR_MISSING_BRACKET = 0x03,
-		ERROR_INVALID_CHARACTER = 0x04,
-		ERROR_INVALID_RHS_EXPRESSION = 0x05,
-		ERROR_INVALID_LHS_EXPRESSION = 0x06,
-		ERROR_MISSING_RHS_EXPRESSION = 0x07,
-		ERROR_MISSING_LHS_EXPRESSION = 0x08,
-		ERROR_EMPTY_EXPRESSION		 = 0x09,
+		ERROR_MAX_LENGTH_EXCEEDED		= 0x01,
+		ERROR_INVALID_OPERAND			= 0x02,
+		ERROR_MISSING_BRACKET			= 0x03,
+		ERROR_INVALID_CHARACTER			= 0x04,
+		ERROR_INVALID_RHS_EXPRESSION	= 0x05,
+		ERROR_INVALID_LHS_EXPRESSION	= 0x06,
+		ERROR_MISSING_RHS_EXPRESSION	= 0x07,
+		ERROR_MISSING_LHS_EXPRESSION	= 0x08,
+		ERROR_EMPTY_EXPRESSION			= 0x09,
 	};
+	
+
+	
+	const char* get_compiler_status_msg(CompilerStatus status){
+		switch (status)
+		{
+			case CompilerStatus::OK:							return CERR_OK;
+			case CompilerStatus::ERROR_MAX_LENGTH_EXCEEDED:		return CERR_ERROR_MAX_LENGTH_EXCEEDED;
+			case CompilerStatus::ERROR_INVALID_OPERAND:			return CERR_ERROR_INVALID_OPERAND;
+			case CompilerStatus::ERROR_MISSING_BRACKET:			return CERR_ERROR_MISSING_BRACKET;
+			case CompilerStatus::ERROR_INVALID_CHARACTER:		return CERR_ERROR_INVALID_CHARACTER;
+			case CompilerStatus::ERROR_INVALID_RHS_EXPRESSION:	return CERR_ERROR_INVALID_RHS_EXPRESSION;
+			case CompilerStatus::ERROR_INVALID_LHS_EXPRESSION:	return CERR_ERROR_INVALID_LHS_EXPRESSION;
+			case CompilerStatus::ERROR_MISSING_RHS_EXPRESSION:	return CERR_ERROR_MISSING_RHS_EXPRESSION;
+			case CompilerStatus::ERROR_MISSING_LHS_EXPRESSION:	return CERR_ERROR_MISSING_LHS_EXPRESSION;
+			case CompilerStatus::ERROR_EMPTY_EXPRESSION:		return CERR_ERROR_EMPTY_EXPRESSION;
+			default : return nullptr;
+		}
+	}
+
 
 	struct CompilerResult {
 		avr_size_t		index = 0;
@@ -31,47 +62,6 @@ namespace comp {
 	};
 
 
-	
-	class ExpressionCompiler final{
-
-	public:
-		NONCOPY(ExpressionCompiler)
-		ExpressionCompiler(){}
-		~ExpressionCompiler(){}
-
-	public:
-		
-		
-
-		
-		template<avr_size_t stack_buffer_size>
-		bool compile_expression(const char* exp_src, 
-								ex::Expression& target,
-								ctr::Array<op::OpCode, stack_buffer_size>& stack_buffer,
-								CompilerResult& cr) {
-			
-			
-			//target.set_buffer(&expression_buffer[expression_buffer_offset]);
-			//target.set_length(expression_buffer_size- expression_buffer_offset);
-			
-			if (cr.status != CompilerStatus::OK) return false;
-			validate_syntax(exp_src, stack_buffer, cr);
-		
-
-			if (cr.status != CompilerStatus::OK) return false;
-			tokenize_expression(exp_src, target, cr);
-
-
-			if (cr.status != CompilerStatus::OK) return false;
-			validate_syntax(target, cr);
-
-			if (cr.status != CompilerStatus::OK) return false;
-			convert_postfix(target, stack_buffer, cr);
-
-			return cr.status == CompilerStatus::OK;
-		}
-	
-	private:
 	
 		bool fetch_operand(const char* &exp_src, ex::Expression& target, avr_size_t& target_index) {
 		
@@ -117,7 +107,6 @@ namespace comp {
 				return false;
 			}
 		}
-
 		
 		bool fetch_operator(const char*& exp_src, ex::Expression& target, avr_size_t& target_index) {
 
@@ -165,7 +154,6 @@ namespace comp {
 			exp_src++;
 			return true;		
 		}
-
 
 		bool fetch_limiter(const char*& exp_src, ex::Expression& target, avr_size_t& target_index) {
 
@@ -221,8 +209,8 @@ namespace comp {
 		}
 
 	   
+	    //check if expression contains invalid characters or brackets don't match
 		template<avr_size_t stack_buffer_size>
-		//check if expression contains invalid characters or brackets don't match
 		void validate_syntax(const char* exp_src, ctr::Array<op::OpCode, stack_buffer_size>& stack_buffer, CompilerResult &cr) {
 
 			int8_t brackets = 0;
@@ -233,7 +221,7 @@ namespace comp {
 				}
 
 				//only test non alphanum and non blank symbols
-				if (!str::is_alphanum(*vsrc) && !str::is_blank(*vsrc)) {
+				if (!str::is_alpha(*vsrc) && !str::is_blank(*vsrc)) {
 					switch (*vsrc)
 					{
 					case '$':
@@ -287,8 +275,6 @@ namespace comp {
 
 				if (op::is_operator(op)) {
 				
-				
-
 					//NOT is special because it doesn't require an lhs operand
 					if (op == op::OpCode::NOT) {
 						//normal operators require rhs operand
@@ -399,16 +385,15 @@ namespace comp {
 				}//SUBEXPRESSION
 
 			}
-
 		}
+	
 	
 		template<avr_size_t stack_buffer_size>
 		void convert_postfix( ex::Expression& target, ctr::Array<op::OpCode, stack_buffer_size>& stack_buffer, CompilerResult& cr) {
 			
 			avr_size_t stack_index = 0; 
-			//_stack_buffer.clear();
-			
 			avr_size_t target_index = 0;
+			
 			for (avr_size_t index = 0; index < target.length(); index++)
 			{		
 			
@@ -421,7 +406,6 @@ namespace comp {
 						target[target_index++] = op;
 					}
 					else if (op::is_start(op)) {
-						//_stack_buffer.push(op);
 						stack_buffer[stack_index++] = op;
 					}
 					else if (op::is_end(op)) {
@@ -430,9 +414,7 @@ namespace comp {
 							!op::is_start(stack_buffer[stack_index - 1])) {
 
 							target[target_index++] = stack_buffer[--stack_index];
-							//_stack_buffer.pop();
 						}
-						//_stack_buffer.pop();
 						stack_index--;
 					}
 					else if (op::is_operator(op)) {
@@ -444,9 +426,7 @@ namespace comp {
 							op::is_gte(stack_buffer[stack_index - 1], op)) {
 
 							target[target_index++] = stack_buffer[--stack_index];
-							//_stack_buffer.pop();
 						}
-						//_stack_buffer.push(op);
 						stack_buffer[stack_index++] = op;
 					}
 				}
@@ -455,11 +435,34 @@ namespace comp {
 			//append all remaining tokens
 			while (stack_index > 0) {
 				target[target_index++] = stack_buffer[--stack_index];
-				//_stack_buffer.pop();
 			}
 			target.set_length(target_index);
 
 		}
 
-	};
+		template<avr_size_t text_size, avr_size_t stack_buffer_size>
+		bool compile_expression(str::StringBuffer<text_size>& exp_src,
+								ex::Expression& target,
+								ctr::Array<op::OpCode, stack_buffer_size>& stack_buffer,
+								CompilerResult& cr) {
+			
+			if (cr.status != CompilerStatus::OK) return false;
+			validate_syntax(exp_src, stack_buffer, cr);
+			
+
+			if (cr.status != CompilerStatus::OK) return false;
+			tokenize_expression(exp_src, target, cr);
+
+
+			if (cr.status != CompilerStatus::OK) return false;
+			validate_syntax(target, cr);
+
+
+			if (cr.status != CompilerStatus::OK) return false;
+			convert_postfix(target, stack_buffer, cr);
+
+			return cr.status == CompilerStatus::OK;
+		}
+		
+
 };
