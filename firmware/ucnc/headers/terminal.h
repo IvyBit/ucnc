@@ -8,6 +8,8 @@
 #define CH_B ('B')
 #define CH_C ('C')
 #define CH_D ('D')
+#define CH_3 ('3')
+#define CH_TL ('~')
 #define DEL (127)
 #define BS  (8)
 #define CR  (13)
@@ -331,6 +333,15 @@ namespace term {
 							term::cursor_left();
 						} else if(view_index > 0){
 							view_index--;
+						}
+						//delete escaped
+					} else if(input == CH_3){
+						
+						input = term::read_char();
+						if(input == CH_TL){
+							if(view_index + cursor_index < dest.length() && dest.length() > 0){
+								dest.remove_at(view_index + cursor_index, 1);
+							}
 						}
 					}
 				}

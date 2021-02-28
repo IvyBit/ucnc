@@ -11,7 +11,9 @@
 #define CUBRR	((F_CPU / 16 / BAUD) - 1)
 
 #define EXP_TEXT_LIM 128
-
+#define CONFIG_INITIALIZED 1
+#define CONFIG_EN_PULLUP 2
+#define CONFIG_EN_SERIAL 4
 
 #include <stdlib.h>
 #include <avr/io.h>
@@ -36,36 +38,48 @@ struct InputConfig{
 	uint8_t		threshold	= 0;
 	uint8_t		hysteresis  = 0;
 	bool		inverted	= false;
+	bool		trigger     = false;
 	op::OpCode  last_state  = op::OpCode::FALSE;
 	
+	
 	op::OpCode update(uint8_t value){
-		if(value > threshold + hysteresis){
-			if(inverted){
+		if(!inverted){
+			uint8_t limit = hysteresis > threshold ? 0 : threshold - hysteresis;
+			
+			if(!trigger && value >= threshold){
+				trigger = true;
+				last_state = op::OpCode::TRUE;
+			} else if(trigger && value < limit){
+				trigger = false;
 				last_state = op::OpCode::FALSE;
-			} else {
-				last_state =  op::OpCode::TRUE;
 			}
-		} else if(value < threshold - hysteresis){
-			if(inverted){
-				last_state =  op::OpCode::TRUE;
-			} else {
-				last_state =  op::OpCode::FALSE;
+		} else {
+			uint8_t limit = hysteresis + threshold > 100 ? 100 : hysteresis + threshold;
+			
+			if(!trigger && value <= threshold){
+				trigger = true;
+				last_state = op::OpCode::TRUE;
+			} else if(trigger && value > limit){
+				trigger = false;
+				last_state = op::OpCode::FALSE;
 			}
-		}
+		}		
 		
 		return last_state;
 	}
-};
+	
+} inputs[8];
 
 struct OutputConfig{
 	avr_size_t text_index = 0;
 	bool active = false;
-};
+} outputs[8];
 
+struct RuntimeConfig{
+	bool enable_pullups = false;
+	bool enable_serial = false;
+} runtime_config;
 
-
-InputConfig			inputs[8];
-OutputConfig		outputs[8];
 
 
 void err::on_error(const Error& ec) {
@@ -139,13 +153,13 @@ void reset_configuration()
 {
 	avr_size_t offset = 0;
 	
-	uint8_t initialized = 0xFF - 1;
-	eeprom_update_block((void*)&initialized, (void*)offset, sizeof(uint8_t));
+	uint8_t config = CONFIG_INITIALIZED;
+	eeprom_update_block((void*)&config, (void*)offset, sizeof(uint8_t));
 	offset += sizeof(uint8_t);
 	
 	for (uint8_t i = 0; i < 8; i++)
 	{
-		inputs[i] = {45, 0, false};
+		inputs[i] = {50, 0, false};
 		
 		eeprom_update_block(&inputs[i].threshold, (void*)offset, sizeof(uint8_t));
 		offset += sizeof(uint8_t);
@@ -172,13 +186,26 @@ void reset_configuration()
 void load_configuration(){
 	avr_size_t offset = 0;
 	
-	uint8_t initialized = 0;
-	eeprom_read_block((void*)&initialized, (void*)offset, 1);
+	uint8_t config = 0;
+	eeprom_read_block((void*)&config, (void*)offset, 1);
 	offset += sizeof(uint8_t);
 	
-	if(initialized != 0xFF - 1){
+	if((config & CONFIG_INITIALIZED) != CONFIG_INITIALIZED){
 		reset_configuration();
 	} else {
+		
+		if((config & CONFIG_EN_PULLUP) == CONFIG_EN_PULLUP){
+			runtime_config.enable_pullups = true;
+		} else {
+			runtime_config.enable_pullups = false;
+		}
+		
+		if((config & CONFIG_EN_SERIAL) == CONFIG_EN_SERIAL){
+			runtime_config.enable_serial = true;
+		} else {
+			runtime_config.enable_serial = false;
+		}
+		
 		
 		//uint8_t	threshold	= 0;
 		//uint8_t	hysteresis  = 0;
@@ -205,7 +232,14 @@ void load_configuration(){
 
 void save_configuration()
 {
-	avr_size_t offset = 1;
+	avr_size_t offset = 0;
+	
+	uint8_t config = CONFIG_INITIALIZED;
+	if(runtime_config.enable_pullups){
+		config |= CONFIG_EN_PULLUP; 
+	}
+	eeprom_update_block(&config, (void*)offset, sizeof(uint8_t));	
+	offset += sizeof(uint8_t);
 	
 	//uint8_t	threshold	= 0;
 	//uint8_t	hysteresis  = 0;
@@ -230,6 +264,8 @@ void save_configuration()
 avr_size_t get_eeprom_free(){
 	
 	int16_t eeprom_free = 1024;
+	//init and pullup flag
+	eeprom_free -= sizeof(uint8_t);
 	//inputs
 	eeprom_free -= (3 * 8);
 	//outputs	
@@ -263,6 +299,9 @@ __attribute__((noreturn)) void edit_mode();
 
 int main(void)
 {
+	
+
+	
 	wdt_really_off();
     setup();
 	
@@ -270,9 +309,7 @@ int main(void)
     clear_input_indicators();
 		
 	load_configuration();	
-	
-	enable_pullups();
-	
+
 	if(aux_btn_down()){
 		edit_mode();		
 	} else {
@@ -358,6 +395,11 @@ __attribute__((noreturn)) void run_mode() {
 		}
 		
 	}
+	
+	
+	if(runtime_config.enable_pullups){
+		enable_pullups();
+	}	
 	
 	while(true) {		
 		
@@ -456,7 +498,7 @@ void print_header(){
 
 void handle_menu_start(RootMenuState& menu_root){
 	term::clear_screen();
-	term::hide_cursor();
+	//term::hide_cursor();
 	print_header();
 	print_banner();
 	
@@ -545,22 +587,69 @@ void handle_menu_status(RootMenuState& menu_root){
 			if(adc_buffer[i] != adc_value_read[i]){
 				adc_buffer[i] = adc_value_read[i];
 			
-				term::write_string_P(PSTR("::[\x1B[33m"));
+				
+				if(inputs[i].update(adc_value_read[i]) == op::OpCode::TRUE){
+					term::write_string_P(PSTR("::[\x1B[32m"));
+				} else {
+					term::write_string_P(PSTR("::[\x1B[31m"));
+				}
 				term::write_char(('A' + i));
 				term::write_string_P(PSTR("\x1B[0m] - ["));
 			
+				
 				bool highlight = true;
-				term::write_string_P(PSTR("\x1B[43m"));
-				for(uint8_t p = 0; p < 62; p++) {
-					if(highlight && (100.0 / 62.0) * p >= adc_value_read[i]){
-						term::write_string_P(PSTR("\x1B[100m"));
-						highlight = false;
-					}
+				bool threshold = true;	
 					
-					term::write_char(' ');
+	
+				
+				if(inputs[i].inverted){	
+					term::write_string_P(PSTR("\x1B[100m"));				
+					for(uint8_t p = 0; p < 62; p++) {
+						if(highlight && (100.0 / 62.0) * p >= adc_value_read[i]){
+							if(inputs[i].update(adc_value_read[i]) == op::OpCode::TRUE){
+								term::write_string_P(PSTR("\x1B[42m"));
+							} else {
+								term::write_string_P(PSTR("\x1B[41m"));
+							}
+							highlight = false;
+						}
+						
+						if(threshold && (100.0 / 62.0) * p >= inputs[i].threshold){
+							threshold = false;
+							term::write_char('|');
+							} else {
+							term::write_char(' ');
+						}
+					}	
+					term::write_string_P(PSTR("\x1B[100m"));
+				} else {
+					if(inputs[i].update(adc_value_read[i]) == op::OpCode::TRUE){
+						term::write_string_P(PSTR("\x1B[42m"));
+					} else {
+						term::write_string_P(PSTR("\x1B[41m"));
+					}
+					for(uint8_t p = 0; p < 62; p++) {
+						if(highlight && (100.0 / 62.0) * p >= adc_value_read[i]){
+							term::write_string_P(PSTR("\x1B[100m"));
+							highlight = false;
+						}	
+					
+						if(threshold && (100.0 / 62.0) * p >= inputs[i].threshold){
+							threshold = false;
+							term::write_char('|');
+						} else {					
+							term::write_char(' ');
+						}									
+					}
 				}
 				term::write_string_P(PSTR("\x1B[40m"));
-				term::write_string_P(PSTR("] - [\x1B[33m"));
+				term::write_string_P(PSTR("] - ["));
+				if(inputs[i].update(adc_value_read[i]) == op::OpCode::TRUE){
+					term::write_string_P(PSTR("\x1B[32m"));
+				} else {
+					term::write_string_P(PSTR("\x1B[31m"));
+				}
+			
 			
 				char buffer[4];
 				utoa(adc_value_read[i], buffer, 10);
@@ -957,6 +1046,7 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 						term::write_char(' ');
 						outputs[c].active = false;
 					}
+					save_configuration();
 					if(c < 7)c++;
 				} break;
 				
@@ -991,20 +1081,18 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 			}
 			break;
 		}
-		
-
-		
-		
-		
 	}
 			
-	save_configuration();			
+				
 	term::show_cursor();
 	menu_root = RootMenuState::START;
 }
 
 void handle_menu_help(RootMenuState& menu_root){
 	term::clear_screen();
+	term::hide_cursor();
+	print_header();
+	print_banner();
 	
 	
 	term::cursor_down(2);
@@ -1017,15 +1105,24 @@ void handle_menu_help(RootMenuState& menu_root){
 
 void handle_menu_reset(RootMenuState& menu_root){
 	term::clear_screen();
+	term::hide_cursor();
+	print_header();
+	print_banner();
 	
 	
-	term::cursor_down(2);
+	term::cursor_move(28, 14);
+	term::write_string_P(PSTR("\x1B[91;103m Are you sure? yes/no \x1B[0m"));
 	
-	reset_configuration();
-	load_configuration();
+	term::cursor_move(0,24);
+	term::clear_line();
+	str::StringBuffer<3> input;
+	term::read_line(input, 5);
+	
+	if(str::index_of_P(input, PSTR("yes")) != str::NO_MATCH){
+		reset_configuration();
+		load_configuration();
+	}
 
-	term::write_string("continue...");
-	while(term::read_char() != CR);
 	menu_root = RootMenuState::START;
 }
 
