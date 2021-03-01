@@ -238,6 +238,10 @@ void save_configuration()
 	if(runtime_config.enable_pullups){
 		config |= CONFIG_EN_PULLUP; 
 	}
+	
+	if(runtime_config.enable_serial){
+		config |= CONFIG_EN_SERIAL;
+	}
 	eeprom_update_block(&config, (void*)offset, sizeof(uint8_t));	
 	offset += sizeof(uint8_t);
 	
@@ -298,10 +302,7 @@ __attribute__((noreturn)) void edit_mode();
 
 
 int main(void)
-{
-	
-
-	
+{	
 	wdt_really_off();
     setup();
 	
@@ -440,6 +441,7 @@ enum class RootMenuState : uint8_t{
 	STATUS,
 	INPUT,
 	OUTPUT,
+	CONFIG,
 	SAVE,
 	RESTORE,
 	HELP,
@@ -498,7 +500,7 @@ void print_header(){
 
 void handle_menu_start(RootMenuState& menu_root){
 	term::clear_screen();
-	//term::hide_cursor();
+	term::hide_cursor();
 	print_header();
 	print_banner();
 	
@@ -510,14 +512,17 @@ void handle_menu_start(RootMenuState& menu_root){
 	
 	term::cursor_move(5, 12);
 	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Output Setup\x1B[0m"));
-			
+	
 	term::cursor_move(5, 13);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Configuration\x1B[0m"));
+			
+	term::cursor_move(5, 14);
 	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Help Menu\x1B[0m"));
 	
-	term::cursor_move(5, 14);
+	term::cursor_move(5, 15);
 	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mReset Device And Restore Defaults\x1B[0m"));
 	
-	term::cursor_move(5, 15);
+	term::cursor_move(5, 16);
 	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mExit Setup And Enter Run Mode\x1B[0m"));
 	
 	uint8_t r = 0;
@@ -540,7 +545,7 @@ void handle_menu_start(RootMenuState& menu_root){
 			break;
 			
 			case term::ArrowKey::DOWN:
-			if(r < 5){
+			if(r < 6){
 				term::write_string_P(PSTR("\x1B[0m "));
 				r++;
 			}
@@ -552,9 +557,10 @@ void handle_menu_start(RootMenuState& menu_root){
 				case 0: menu_root = RootMenuState::STATUS; break;
 				case 1: menu_root = RootMenuState::INPUT; break;
 				case 2: menu_root = RootMenuState::OUTPUT; break;
-				case 3: menu_root = RootMenuState::HELP; break;
-				case 4: menu_root = RootMenuState::HARDRESET; break;
-				case 5: menu_root = RootMenuState::EXIT; break;
+				case 3: menu_root = RootMenuState::CONFIG; break;
+				case 4: menu_root = RootMenuState::HELP; break;
+				case 5: menu_root = RootMenuState::HARDRESET; break;
+				case 6: menu_root = RootMenuState::EXIT; break;
 			}
 			break;
 			
@@ -1088,6 +1094,114 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 	menu_root = RootMenuState::START;
 }
 
+void handle_menu_config(RootMenuState& menu_root){
+	term::clear_screen();
+	term::hide_cursor();
+	print_header();
+	print_banner();
+	
+	
+	term::cursor_move(5, 10);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mENP\x1b[0m] [   ] : Enable Output Pull Ups "));
+	if(runtime_config.enable_pullups){
+		term::cursor_move(15, 10);
+		term::write_string_P(PSTR("\x1b[33m#"));
+	}
+	
+	term::cursor_move(5, 11);
+	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mSSO\x1b[0m] [   ] : Enable Serial Status Output"));
+	if(runtime_config.enable_serial){
+		term::cursor_move(15, 11);
+		term::write_string_P(PSTR("\x1b[33m#"));
+	}
+	
+	term::show_cursor();
+	uint8_t r = 0;
+	
+	while(menu_root == RootMenuState::CONFIG){
+		term::cursor_move(15, r + 10);
+	
+		term::ArrowKey ak = term::read_arrow();
+		
+		switch (ak) {
+			case term::ArrowKey::UP:
+			if(r > 0){
+				r--;
+			}
+			break;
+		
+			case term::ArrowKey::DOWN:
+			if(r < 1){
+				r++;
+			}
+			break;	
+			
+		
+			case term::ArrowKey::ESCAPE:
+				menu_root = RootMenuState::START;
+			break;
+		
+			case term::ArrowKey::SELECT:
+			switch (r) {
+				//INPUT ACTIVE
+				case 0: {
+					str::StringBuffer<1> s;
+					term::cursor_move(0,23);
+					term::write_string_P(PSTR("::[Enable Output Pull Ups? (y/n)]"));
+					while(s.length() < 1 || (s[0] != 'y' && s[0] != 'n')){
+						term::cursor_move(0,24);
+						term::read_line(s, 1);
+					}
+					term::cursor_move(0,23);
+					term::clear_line();
+					term::cursor_move(0,25);
+					term::clear_line();
+					term::cursor_move(15, r + 10);
+					if(s[0] == 'y'){
+						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
+						runtime_config.enable_pullups = true;
+					} else {
+						term::write_char(' ');
+						runtime_config.enable_pullups = false;
+					}
+					save_configuration();
+				} break;
+			
+			
+				//INPUT EXPRESSION
+				case 1: {
+					str::StringBuffer<1> s;
+					term::cursor_move(0,23);
+					term::write_string_P(PSTR("::[Enable Serial Status Output? (y/n)]"));
+					while(s.length() < 1 || (s[0] != 'y' && s[0] != 'n')){
+						term::cursor_move(0,24);
+						term::read_line(s, 1);
+					}
+					term::cursor_move(0,23);
+					term::clear_line();
+					term::cursor_move(0,25);
+					term::clear_line();
+					term::cursor_move(15, r + 10);
+					if(s[0] == 'y'){
+						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
+						runtime_config.enable_serial = true;
+					} else {
+						term::write_char(' ');
+						runtime_config.enable_serial = false;
+					}
+					save_configuration();
+				} break;
+				
+			}
+			break;
+			default: break;
+		}
+	
+		
+	}
+	menu_root = RootMenuState::START;
+}
+
 void handle_menu_help(RootMenuState& menu_root){
 	term::clear_screen();
 	term::hide_cursor();
@@ -1152,7 +1266,11 @@ __attribute__((noreturn)) void edit_mode(){
 				
 				case RootMenuState::OUTPUT:
 					handle_menu_outputs(menu_root);
-				break;				
+				break;	
+				
+				case RootMenuState::CONFIG:
+					handle_menu_config(menu_root);
+				break;			
 				
 				case RootMenuState::HELP:
 					handle_menu_help(menu_root);
