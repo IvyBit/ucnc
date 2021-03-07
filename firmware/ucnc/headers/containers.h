@@ -2,10 +2,8 @@
 
 #include <stdlib.h>
 
-#ifndef AVR
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#endif
+#define ERR_INVALID_INDEX 3
+
 
 #include "errors.h"
 #include "avrtypes.h"
@@ -33,7 +31,7 @@ namespace ctr{
 				return _data[index];
 			}
 			else {
-				err::on_error({0, 0});
+				err::on_error(ERR_INVALID_INDEX);
 			}			
 		}
 

@@ -2,9 +2,7 @@
 
 #pragma once
 
-#ifndef AVR
-	#include <iostream>
-#endif // !AVR
+#define ERR_UNKNOWN_OP 2
 
 #include "errors.h"
 #include "avrtypes.h"
@@ -56,7 +54,7 @@ uint8_t precedence(OpCode op) {
 	case op::OpCode::OR: case op::OpCode::NOR: case op::OpCode::XOR:
 		return 1;	
 	default:
-		err::on_error({ 0, 0 });
+		err::on_error(ERR_UNKNOWN_OP);
 	}
 }
 

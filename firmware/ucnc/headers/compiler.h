@@ -1,9 +1,6 @@
 #pragma once
 
-#ifndef AVR
-	#include <iostream>
-	#include <iomanip>
-#endif // !AVR
+
 
 #include "avrtypes.h"
 #include "strings.h"

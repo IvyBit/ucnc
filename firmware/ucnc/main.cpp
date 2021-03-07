@@ -4,7 +4,6 @@
  * Created: 16.01.2021 20:55:30
  * Author : AlrHa
  */ 
-#define AVR
 
 #define F_CPU	18432000UL
 #define BAUD	115200UL
@@ -14,6 +13,10 @@
 #define CONFIG_INITIALIZED 1
 #define CONFIG_EN_PULLUP 2
 #define CONFIG_EN_SERIAL 4
+
+
+#define ERR_EEPROM_FULL 10
+#define ERR_COMPILER 20
 
 #include <stdlib.h>
 #include <avr/io.h>
@@ -29,8 +32,6 @@
 #include "expression.h"
 #include "compiler.h"
 #include "terminal.h"
-
-#include "edit.h"
 
 #include "hal.h"
 
@@ -82,15 +83,38 @@ struct RuntimeConfig{
 
 
 
-void err::on_error(const Error& ec) {
+void err::on_error(uint8_t ec) {
 	while (true)
 	{
-		//BLINK OUTPUTS
+		for(uint8_t c = 0; c < 4; c++){
+			for (uint8_t i = 0; i < 8; i++) {
+				set_input_indicators((0x01 << i) | (0x80 >> i));
+				_delay_ms(80);
+			}
+		}		
+		_delay_ms(250);
+		
+		for (uint8_t i = 0; i < 2; i++)
+		{
+			set_input_indicators(0xFF);
+			_delay_ms(50);
+			set_input_indicators(0x00);
+			_delay_ms(50);
+		}
+		_delay_ms(250);
+		
+		set_input_indicators(0x01);
+		_delay_ms(250);
+		set_input_indicators(ec);	
+		_delay_ms(2000);
+			
+		
 		set_input_indicators(0xFF);
 		_delay_ms(500);
 		set_input_indicators(0x00);
-		
-		//UART OUT ERROR
+		_delay_ms(500);
+		set_input_indicators(0xFF);
+	
 	}
 }
 
@@ -289,7 +313,7 @@ avr_size_t get_eeprom_free(){
 	}
 	
 	if(eeprom_free < 0 ){		
-		err::on_error({0, 0});
+		err::on_error(ERR_EEPROM_FULL);
 	} else {
 		return (avr_size_t)eeprom_free;
 	}
@@ -321,18 +345,9 @@ int main(void)
 
 
 void handle_compiler_error(comp::CompilerResult result){
-	switch(result.status){
-		case comp::CompilerStatus::ERROR_MAX_LENGTH_EXCEEDED: break;
-		case comp::CompilerStatus::ERROR_INVALID_OPERAND: break;
-		case comp::CompilerStatus::ERROR_MISSING_BRACKET: break;
-		case comp::CompilerStatus::ERROR_INVALID_CHARACTER: break;
-		case comp::CompilerStatus::ERROR_INVALID_RHS_EXPRESSION: break;
-		case comp::CompilerStatus::ERROR_INVALID_LHS_EXPRESSION: break;
-		case comp::CompilerStatus::ERROR_MISSING_RHS_EXPRESSION: break;
-		case comp::CompilerStatus::ERROR_MISSING_LHS_EXPRESSION: break;
-		case comp::CompilerStatus::ERROR_EMPTY_EXPRESSION: break;
-		default: break;
-	}	
+	if(runtime_config.enable_serial){
+		term::write_line_P(comp::get_compiler_status_msg(result.status));	
+	}
 }
 
 template<avr_size_t buffer_size, avr_size_t text_size>
@@ -350,6 +365,49 @@ comp::CompilerResult compile_expression(ctr::Array<op::OpCode, buffer_size>&	exp
 }
 
 
+void print_status(uint8_t input_data, uint8_t output_data){
+	term::hide_cursor();
+	term::cursor_move(0,0);
+	term::write_string_P(PSTR("INPUT : "));
+	for (uint8_t i = 0; i < 8; i++){
+		term::write_char('[');
+		if((input_data & (0x80 >> i)) > 0){
+			term::write_char('#');
+			} else {
+			term::write_char(' ');
+		}
+		term::write_char(']');
+		term::write_char(' ');	
+	}
+	
+	term::cursor_move(0,1);
+	term::write_string_P(PSTR("OUTPUT: "));
+	for (uint8_t i = 0; i < 8; i++){
+		term::write_char('[');
+		if((output_data & (0x80 >> i)) > 0){			
+			term::write_char('#');			
+		} else {
+			term::write_char(' ');		
+		}
+		term::write_char(']');
+		term::write_char(' ');
+	}
+	term::cursor_move(0,2);
+	
+	term::write_string_P(PSTR("ADCVAL: "));
+	for (uint8_t i = 0; i < 8; i++){
+		if(adc_value_read[i] < 100){
+			term::write_char('0');
+			if(adc_value_read[i] < 10){
+				term::write_char('0');
+			}			
+		}
+		term::write_uint8_t(adc_value_read[i]);
+		term::write_char(' ');
+	}
+	
+}
+
 
 //RUN MODE	
 __attribute__((noreturn)) void run_mode() {	
@@ -357,7 +415,7 @@ __attribute__((noreturn)) void run_mode() {
 	term::clear_screen();
 	
 	ctr::Array<uint8_t, 256>		result_table;
-	
+
 	for(uint8_t i = 0; i < 8; i++){
 				
 		if(outputs[i].active){
@@ -385,9 +443,7 @@ __attribute__((noreturn)) void run_mode() {
 					}
 				}
 			} else {								
-				handle_compiler_error(result);
-				//flash error code through indicators
-				//set all outputs to their on state
+				err::on_error(ERR_COMPILER);
 			}
 		} else {
 			for (avr_size_t ti = 0; ti < result_table.length(); ti++) {				
@@ -416,6 +472,10 @@ __attribute__((noreturn)) void run_mode() {
 		
 		set_outputs(result_table[data.data()]);
 		set_input_indicators(data.data());
+		
+		if(runtime_config.enable_serial){
+			print_status(data.data(), result_table[data.data()]);
+		}
 	}
 }
 //RUN MODE
@@ -453,84 +513,50 @@ enum class EditMenuState : uint8_t{
 	START,
 	EXIT
 };
-/*
-_________/\/\/\/\__________________________/\/\/\/\/\____/\/\______/\/\_________
-__________/\/\____/\/\__/\/\__/\/\__/\/\__/\/\____/\/\__________/\/\/\/\/\______
-_________/\/\____/\/\__/\/\__/\/\__/\/\__/\/\/\/\/\____/\/\______/\/\___________
-________/\/\______/\/\/\______/\/\/\/\__/\/\____/\/\__/\/\______/\/_____________
-_____/\/\/\/\______/\____________/\/\__/\/\/\/\/\____/\/\/\____/\/\/\___________
-__________________________/\/\/\/\______________________________________________
-*/
-const char BANNER[6][81] PROGMEM =
-{
-	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
-	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
-	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
-	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
-	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 },
-	{0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x2F, 0x5C, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x5F, 0x00 }
-};
 
-void print_banner(){
-	
-	term::write_string_P(PSTR("\x1b[90m"));
-	for (avr_size_t r = 0; r < ROWS2D(BANNER); r++)
-	{
-		bool highlight = false;
-		for (avr_size_t c = 0; c < COLS2D(BANNER); c++)
-		{
-			char chr = pgm_read_byte(&BANNER[r][c]);
-			if(!highlight && chr == '/'){
-				term::write_string_P(PSTR("\x1B[33m"));
-				highlight = true;
-				} else if(highlight && chr == '_') {
-				term::write_string_P(PSTR("\x1b[90m"));
-				highlight = false;
-			}
-			term::write_char(chr);
-		}
-		term::write_string("\r\n");
-	}
-	term::write_string_P(PSTR("\x1b[0m"));
-}
 
 void print_header(){
-	term::write_line_P(PSTR("\x1b[90m::[\x1b[37mUCNC 1.0 - IvyBit 2021\x1b[90m]\x1b[0m\r\n"));
+	term::write_line_P(PSTR("::[UCNC 1.0 - IvyBit 2021]"));
+}
+
+void print_table_row(){
+	for(uint8_t i = 0; i < 8; i++){
+		term::write_string_P(PSTR(" [   ] "));
+	}
 }
 
 void handle_menu_start(RootMenuState& menu_root){
 	term::clear_screen();
 	term::hide_cursor();
 	print_header();
-	print_banner();
 	
 	term::cursor_move(5, 10);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mDisplay Live Device Status\x1B[0m"));
+	term::write_string_P(PSTR("::[ ] : Display Live Device Status"));
 	
 	term::cursor_move(5, 11);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Input Setup\x1B[0m"));
+	term::write_string_P(PSTR("::[ ] : Open Input Setup"));
 	
 	term::cursor_move(5, 12);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Output Setup\x1B[0m"));
+	term::write_string_P(PSTR("::[ ] : Open Output Setup"));
 	
 	term::cursor_move(5, 13);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Configuration\x1B[0m"));
+	term::write_string_P(PSTR("::[ ] : Open Configuration"));
 			
 	term::cursor_move(5, 14);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mOpen Help Menu\x1B[0m"));
+	term::write_string_P(PSTR("::[ ] : Open Help Menu"));
 	
 	term::cursor_move(5, 15);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mReset Device And Restore Defaults\x1B[0m"));
+	term::write_string_P(PSTR("::[ ] : Reset Device And Restore Defaults"));
 	
 	term::cursor_move(5, 16);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[ ] : \x1B[37mExit Setup And Enter Run Mode\x1B[0m"));
+	term::write_string_P(PSTR("::[ ] : Exit Setup And Enter Run Mode"));
 	
 	uint8_t r = 0;
 	
 	while(menu_root == RootMenuState::START){
 		
 		term::cursor_move(8, r + 10);
-		term::write_string_P(PSTR("\x1b[33m#\x1B[0m"));
+		term::write_char('#');
 		term::cursor_move(8, r + 10);
 		
 		term::ArrowKey ak = term::read_arrow();
@@ -538,7 +564,7 @@ void handle_menu_start(RootMenuState& menu_root){
 		{
 			case term::ArrowKey::UP:
 			if(r > 0){
-				term::write_string_P(PSTR("\x1B[0m "));
+				term::write_char(' ');
 				r--;
 			}
 			
@@ -546,7 +572,7 @@ void handle_menu_start(RootMenuState& menu_root){
 			
 			case term::ArrowKey::DOWN:
 			if(r < 6){
-				term::write_string_P(PSTR("\x1B[0m "));
+				term::write_char(' ');
 				r++;
 			}
 			break;
@@ -576,8 +602,6 @@ void handle_menu_status(RootMenuState& menu_root){
 	term::clear_screen();
 	term::hide_cursor();
 	print_header();
-	print_banner();
-	term::cursor_up();
 		
 	uint8_t adc_buffer[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 	char input = str::END;
@@ -605,8 +629,7 @@ void handle_menu_status(RootMenuState& menu_root){
 				
 				bool highlight = true;
 				bool threshold = true;	
-					
-	
+						
 				
 				if(inputs[i].inverted){	
 					term::write_string_P(PSTR("\x1B[100m"));				
@@ -682,29 +705,35 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 	term::clear_screen();
 	term::hide_cursor();
 	print_header();
-	print_banner();
 	
 
 	term::cursor_move(5, 10);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mINP\x1b[0m] : [_A_]__[_B_]__[_C_]__[_D_]__[_E_]__[_F_]__[_G_]__[_H_]"));
-	
+	term::write_string_P(PSTR("::[INP] :"));
+	for(uint8_t i = 0; i < 8; i++){
+		term::write_string_P(PSTR(" [_"));
+		term::write_char('A' + i);
+		term::write_string_P(PSTR("_] "));
+	}
 	term::cursor_move(5, 11);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mINV\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	term::write_string_P(PSTR("::[INV] :"));
+	print_table_row();
 	
 	term::cursor_move(5, 12);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mLIM\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	term::write_string_P(PSTR("::[LIM] :"));
+	print_table_row();
 	
 	term::cursor_move(5, 13);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mHYS\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	term::write_string_P(PSTR("::[HYS] :"));
+	print_table_row();
 	
 	for (uint8_t i = 0; i < 8; i++) 
 	{
 		{//INVERT
 			term::cursor_move(17 + 7 * i, 11);
 			if(inputs[i].inverted){
-				term::write_string_P(PSTR("\x1b[33m#\x1b[0m"));
-				} else {
-				term::write_string_P(PSTR("\x1b[33m \x1b[0m"));
+				term::write_char('#');
+			} else {
+				term::write_char(' ');
 			}
 		}//INVERT
 		
@@ -718,9 +747,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 					term::write_char(' ');					
 				}				
 			}
-			term::write_string_P(PSTR("\x1b[33m"));
 			term::write_string(buffer);
-			term::write_string_P(PSTR("\x1b[0m"));
 		}//THRESHOLD
 		
 		{//HYSTERESIS
@@ -733,9 +760,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 					term::write_char(' ');
 				}
 			}
-			term::write_string_P(PSTR("\x1b[33m"));
 			term::write_string(buffer);
-			term::write_string_P(PSTR("\x1b[0m"));
 		}//HYSTERESIS
 	}
 	
@@ -796,7 +821,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 					term::cursor_move(17 + 7 * c, r + 11);
 					if(s[0] == 'y'){
 						inputs[c].inverted = true;
-						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
+						term::write_char('#');
 					} else {
 						inputs[c].inverted = false;
 						term::write_char(' ');
@@ -812,7 +837,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 				case 1: {
 					str::StringBuffer<3> s;
 					term::cursor_move(0,23);
-					term::write_string_P(PSTR("::[Input Threshold? (0-100)]"));
+					term::write_string_P(PSTR("::[Threshold? (0-100)]"));
 					bool inp_valid = false;
 					int value = 0;
 					while(!inp_valid){
@@ -840,9 +865,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 						}
 					}
 					
-					term::write_string_P(PSTR("\x1b[32m"));
 					term::write_string(s);
-					term::write_string_P(PSTR("\x1b[0m"));
 					if(c < 7)c++;
 				} break;
 				
@@ -850,7 +873,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 				case 2: {
 					str::StringBuffer<3> s;
 					term::cursor_move(0,23);
-					term::write_string_P(PSTR("::[Input Hysteresis? (0-100)]"));
+					term::write_string_P(PSTR("::[Hysteresis? (0-100)]"));
 					bool inp_valid = false;
 					int value = 0;
 					while(!inp_valid){
@@ -878,9 +901,7 @@ void handle_menu_inputs(RootMenuState& menu_root) {
 						}
 					}
 					
-					term::write_string_P(PSTR("\x1b[32m"));
 					term::write_string(s);
-					term::write_string_P(PSTR("\x1b[0m"));
 					if(c < 7)c++;
 				} break;
 	
@@ -934,32 +955,37 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 	term::clear_screen();
 	term::hide_cursor();
 	print_header();
-	print_banner();
 	
 
 	term::cursor_move(5, 10);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mOUT\x1b[0m] : [_A_]__[_B_]__[_C_]__[_D_]__[_E_]__[_F_]__[_G_]__[_H_]"));
+	term::write_string_P(PSTR("::[OUT] :"));
+	for(uint8_t i = 0; i < 8; i++){
+		term::write_string_P(PSTR(" [_"));
+		term::write_char('A' + i);
+		term::write_string_P(PSTR("_] "));		
+	}
 	
 	term::cursor_move(5, 11);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mACT\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
+	term::write_string_P(PSTR("::[ACT] :"));	
+	print_table_row();
 	
 	term::cursor_move(5, 12);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mEXP\x1b[0m] : [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]"));
-	
+	term::write_string_P(PSTR("::[EXP] :"));
+	print_table_row();
 
 	for (uint8_t i = 0; i < 8; i++)
 	{
 		//ACTIVE
 		term::cursor_move(17 + 7 * i, 11);
-		if(outputs[i].active){			
-			term::write_string_P(PSTR("\x1b[33m#\x1b[0m"));
+		if(outputs[i].active){
+			term::write_char('#');
 		} else{			
 			term::write_char(' ');
 		}
 		
 		//EXPRESSION LENGTH
 		term::cursor_move(16 + 7 * i, 12);
-		term::write_string_P(PSTR("\x1b[33mMOD\x1b[0m"));
+		term::write_string_P(PSTR("MOD"));
 	}
 	
 	term::show_cursor();
@@ -974,7 +1000,7 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 			
 			term::cursor_move(5,14);
 			term::clear_line();		
-			term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mMEM\x1b[0m] : "));
+			term::write_string_P(PSTR("::[MEM] : "));
 			term::write_uint16_t(get_eeprom_free());
 			term::write_string_P(PSTR(" bytes free"));
 			
@@ -985,12 +1011,12 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 		
 			term::cursor_move(5,16);
 			term::clear_line();		
-			term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mEXP\x1b[0m] : "));		
+			term::write_string_P(PSTR("::[EXP] : "));		
 			term::write_string(expression, 40);
 			
 			term::cursor_move(5,17);
 			term::clear_line();		
-			term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mLEN\x1b[0m] : "));	
+			term::write_string_P(PSTR("::[LEN] : "));	
 			term::write_uint16_t(expression.length());
 			term::write_string_P(PSTR(" bytes"));			
 		
@@ -1046,7 +1072,7 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 					term::clear_line();
 					term::cursor_move(17 + 7 * c, r + 11);
 					if(s[0] == 'y'){
-						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
+						term::write_char('#');
 						outputs[c].active = true;
 					} else {
 						term::write_char(' ');
@@ -1081,7 +1107,7 @@ void handle_menu_outputs(RootMenuState& menu_root) {
 					term::cursor_move(0,25);
 					term::clear_line();
 					term::cursor_move(16 + 7 * c, r + 11);
-					term::write_string_P(PSTR("\x1b[32mMOD\x1b[0m"));
+					term::write_string_P(PSTR("MOD"));
 					if(c < 7)c++;
 				} break;
 			}
@@ -1098,21 +1124,20 @@ void handle_menu_config(RootMenuState& menu_root){
 	term::clear_screen();
 	term::hide_cursor();
 	print_header();
-	print_banner();
 	
 	
 	term::cursor_move(5, 10);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mENP\x1b[0m] [   ] : Enable Output Pull Ups "));
+	term::write_string_P(PSTR("::[ENP] [   ] : Enable Output Pull Ups "));
 	if(runtime_config.enable_pullups){
 		term::cursor_move(15, 10);
-		term::write_string_P(PSTR("\x1b[33m#"));
+		term::write_char('#');
 	}
 	
 	term::cursor_move(5, 11);
-	term::write_string_P(PSTR("\x1B[37m::\x1B[0m[\x1b[33mSSO\x1b[0m] [   ] : Enable Serial Status Output"));
+	term::write_string_P(PSTR("::[SSO] [   ] : Enable Serial Status Output"));
 	if(runtime_config.enable_serial){
 		term::cursor_move(15, 11);
-		term::write_string_P(PSTR("\x1b[33m#"));
+		term::write_char('#');
 	}
 	
 	term::show_cursor();
@@ -1158,7 +1183,7 @@ void handle_menu_config(RootMenuState& menu_root){
 					term::clear_line();
 					term::cursor_move(15, r + 10);
 					if(s[0] == 'y'){
-						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
+						term::write_char('#');
 						runtime_config.enable_pullups = true;
 					} else {
 						term::write_char(' ');
@@ -1183,7 +1208,7 @@ void handle_menu_config(RootMenuState& menu_root){
 					term::clear_line();
 					term::cursor_move(15, r + 10);
 					if(s[0] == 'y'){
-						term::write_string_P(PSTR("\x1b[32m#\x1b[0m"));
+						term::write_char('#');
 						runtime_config.enable_serial = true;
 					} else {
 						term::write_char(' ');
@@ -1206,7 +1231,6 @@ void handle_menu_help(RootMenuState& menu_root){
 	term::clear_screen();
 	term::hide_cursor();
 	print_header();
-	print_banner();
 	
 	
 	term::cursor_down(2);
@@ -1220,12 +1244,10 @@ void handle_menu_help(RootMenuState& menu_root){
 void handle_menu_reset(RootMenuState& menu_root){
 	term::clear_screen();
 	term::hide_cursor();
-	print_header();
-	print_banner();
+	print_header();	
 	
-	
-	term::cursor_move(28, 14);
-	term::write_string_P(PSTR("\x1B[91;103m Are you sure? yes/no \x1B[0m"));
+	term::cursor_move(29, 14);
+	term::write_string_P(PSTR("Are you sure? yes/no"));
 	
 	term::cursor_move(0,24);
 	term::clear_line();
@@ -1290,7 +1312,6 @@ __attribute__((noreturn)) void edit_mode(){
 		
 		term::clear_screen();
 		reset_mcu();
-		//reset();
 	}
 }
 //EDIT MODE	

@@ -209,7 +209,7 @@ namespace ex {
 						break;
 
 					default:
-					err::on_error({0, 0});
+					err::on_error(ERR_UNKNOWN_OP);
 						break;
 					}
 				}

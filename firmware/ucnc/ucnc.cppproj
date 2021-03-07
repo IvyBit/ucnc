@@ -89,7 +89,6 @@
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
-  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
   <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
   <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
   <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
@@ -186,9 +185,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="headers\containers.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="headers\edit.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="headers\errors.h">
