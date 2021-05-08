@@ -179,17 +179,6 @@ F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/bzx84c2v4.pdf" H 13
 	1    13700 2200
 	0    1    1    0   
 $EndComp
-$Comp
-L MCU_Microchip_ATmega:ATmega328P-AU U1
-U 1 1 5FED5CD7
-P 10550 6200
-F 0 "U1" H 10900 7700 50  0000 C CNN
-F 1 "ATmega328PB" V 10500 6300 50  0000 C CNN
-F 2 "Package_QFP:TQFP-32_7x7mm_P0.8mm" H 10550 6200 50  0001 C CIN
-F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328_P%20AVR%20MCU%20with%20picoPower%20Technology%20Data%20Sheet%2040001984A.pdf" H 10550 6200 50  0001 C CNN
-	1    10550 6200
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	13550 1300 13550 1650
 $Comp
@@ -1315,10 +1304,10 @@ F 3 "" H 7150 3700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 7150 3450
-Text Label 9850 5200 2    50   ~ 0
+Text Label 9850 6900 2    50   ~ 0
 ASIN
 Wire Wire Line
-	9850 5200 9900 5200
+	9850 6900 9900 6900
 Text Label 7350 3450 0    50   ~ 0
 OA
 Wire Wire Line
@@ -2196,29 +2185,29 @@ Connection ~ 12400 6400
 $Comp
 L Device:C_Small C9
 U 1 1 61DDCFEB
-P 9500 5150
-F 0 "C9" V 9350 5200 50  0000 L CNN
-F 1 "100nF" V 9350 5000 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 9500 5150 50  0001 C CNN
-F 3 "~" H 9500 5150 50  0001 C CNN
-	1    9500 5150
+P 9800 5150
+F 0 "C9" V 9650 5300 50  0000 L CNN
+F 1 "100nF" V 9650 5000 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 9800 5150 50  0001 C CNN
+F 3 "~" H 9800 5150 50  0001 C CNN
+	1    9800 5150
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	9500 5050 9500 5000
+	9800 5050 9800 5000
 Wire Wire Line
-	9500 5000 9950 5000
+	9800 5000 9950 5000
 Wire Wire Line
-	9500 5250 9500 5600
+	9800 5250 9800 5300
 $Comp
 L power:GND #PWR0185
 U 1 1 61E7EF53
-P 9500 5600
-F 0 "#PWR0185" H 9500 5350 50  0001 C CNN
-F 1 "GND" H 9505 5427 50  0000 C CNN
-F 2 "" H 9500 5600 50  0001 C CNN
-F 3 "" H 9500 5600 50  0001 C CNN
-	1    9500 5600
+P 9800 5300
+F 0 "#PWR0185" H 9800 5050 50  0001 C CNN
+F 1 "GND" H 9805 5127 50  0000 C CNN
+F 2 "" H 9800 5300 50  0001 C CNN
+F 3 "" H 9800 5300 50  0001 C CNN
+	1    9800 5300
 	1    0    0    -1  
 $EndComp
 Wire Notes Line
@@ -4539,19 +4528,8 @@ F 3 "" H 11250 8300 50  0001 C CNN
 	1    11250 8300
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R_Small R1
-U 1 1 688EAC57
-P 11250 8400
-F 0 "R1" V 11150 8350 50  0000 L CNN
-F 1 "330" V 11350 8350 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric" H 11250 8400 50  0001 C CNN
-F 3 "~" H 11250 8400 50  0001 C CNN
-	1    11250 8400
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	11250 8500 11250 8550
+	11250 8300 11250 8550
 Wire Wire Line
 	11250 8550 11400 8550
 Text Label 11300 7300 0    50   ~ 0
@@ -4594,10 +4572,23 @@ F 3 "" H 12250 8600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	9950 5300 9900 5300
+	9950 7000 9900 7000
 Wire Wire Line
-	9900 5300 9900 5200
-Connection ~ 9900 5200
+	9900 7000 9900 6900
+Connection ~ 9900 6900
 Wire Wire Line
-	9900 5200 9950 5200
+	9900 6900 9950 6900
+$Comp
+L MCU_Microchip_ATmega:ATmega328PB-AU U1
+U 1 1 609CE2BE
+P 10550 6200
+F 0 "U1" H 10550 4611 50  0000 C CNN
+F 1 "ATmega328PB-AU" H 10550 4520 50  0000 C CNN
+F 2 "Package_QFP:TQFP-32_7x7mm_P0.8mm" H 10550 6200 50  0001 C CIN
+F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/40001906C.pdf" H 10550 6200 50  0001 C CNN
+	1    10550 6200
+	1    0    0    -1  
+$EndComp
+NoConn ~ 9950 6700
+NoConn ~ 9950 6800
 $EndSCHEMATC
