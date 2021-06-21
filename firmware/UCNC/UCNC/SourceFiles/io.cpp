@@ -91,10 +91,10 @@ namespace io {
 		DDRE = 0x00;
 		PORTE |= (1 << PINE0) | (1 << PINE1);
 
-		//select 5v reference and ADC6
-		ADMUX |= (1 << REFS0) | (1 << MUX2) | (1 << MUX1);
-		//enable ADC, enable interrupt, set prescaler to 128
-		ADCSRA |= (1 << ADEN) | (1 << ADIE) | (1 << ADPS2)| (1 << ADPS1)| (1 << ADPS0);
+		//select 5v reference input ADC6 and left align result
+		ADMUX |= (1 << REFS0) | (1 << MUX2) | (1 << MUX1) | (1 << ADLAR);
+		//enable ADC, enable interrupt, set prescaler to 16
+		ADCSRA |= (1 << ADEN) | (1 << ADIE) | (1 << ADPS2)| (0 << ADPS1)| (0 << ADPS0);
 
 		//select input A as adc source
 		PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | pgm_read_byte(&ASI_MAP[0]));
@@ -219,12 +219,12 @@ namespace io {
 
 		PORTB = (uint8_t)((PORTB & (uint8_t)~0x07) | pgm_read_byte(&ASI_MAP[adc_index]));
 
-		uint16_t av = 0;
+		uint8_t av = 0;
 
-		av |= ADCL;
-		av |= (uint16_t)(ADCH << 8);
+		//av |= ADCL;
+		av = ADCH;//(uint16_t)(ADCH << 8);
 
-		adc_value_write[current_index] = (uint8_t)(av * (100.0 /ADC_LIMIT));
+		adc_value_write[current_index] = (uint8_t)(av * (100.0 / ADC_LIMIT));
 		if(adc_value_write[current_index] > 100){
 			adc_value_write[current_index] = 100;
 		}
@@ -232,7 +232,7 @@ namespace io {
 		if(adc_index < 7){
 			//start conversion
 			ADCSRA |= (1 << ADSC);
-			}else{
+		}else{
 			adc_busy = false;
 		}
 	}

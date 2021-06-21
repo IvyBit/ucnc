@@ -9,7 +9,7 @@
 
 	#define F_CPU 18432000UL
 	#define BAUD 115200UL
-	#define ADC_LIMIT 910.0
+	#define ADC_LIMIT 255
 
 
 	#define STR_END			'\0'
