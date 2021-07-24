@@ -71,8 +71,8 @@ namespace io {
 		DDRC |= ((1 << DISP_SRCLR) | (1 << DISP_SRCLK) | (1 << DISP_RCLK) | (1 << DISP_OE) | (1 << DISP_SER));
 		//make PC5 an input
 		DDRC &= ~(1 << BTN_AUX);
-		//set PORTC to low and disable pullup for PC5
-		PORTC = 0x00;
+		//set PORTC to low and enable pullup for PC5
+		PORTC = (1 << BTN_AUX);
 		//disable input clear
 		PORTC |= (1 << DISP_SRCLR);
 		//enable input indicators

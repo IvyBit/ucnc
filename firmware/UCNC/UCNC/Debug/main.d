@@ -16,7 +16,10 @@ main.d main.o: .././main.cpp ../HeaderFiles/core.h \
  ../HeaderFiles/opcodes.h ../HeaderFiles/translation.h \
  ../HeaderFiles/opcodes.h ../HeaderFiles/config.h \
  ../HeaderFiles/stringbuffer.h ../HeaderFiles/stringsfunctions.h \
- ../HeaderFiles/io.h ../HeaderFiles/serial.h ../HeaderFiles/context.h
+ ../HeaderFiles/io.h ../HeaderFiles/serial.h ../HeaderFiles/context.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h
 
 ../HeaderFiles/core.h:
 
@@ -69,3 +72,9 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../HeaderFiles/serial.h:
 
 ../HeaderFiles/context.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:

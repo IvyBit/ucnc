@@ -16,7 +16,10 @@ SourceFiles/core.d SourceFiles/core.o: ../SourceFiles/core.cpp \
  ../HeaderFiles/opcodes.h ../HeaderFiles/translation.h \
  ../HeaderFiles/opcodes.h ../HeaderFiles/config.h \
  ../HeaderFiles/stringbuffer.h ../HeaderFiles/stringsfunctions.h \
- ../HeaderFiles/io.h ../HeaderFiles/serial.h ../HeaderFiles/context.h
+ ../HeaderFiles/io.h ../HeaderFiles/serial.h ../HeaderFiles/context.h \
+ ../HeaderFiles/protocol.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h
 
 ../HeaderFiles/core.h:
 
@@ -69,3 +72,9 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../HeaderFiles/serial.h:
 
 ../HeaderFiles/context.h:
+
+../HeaderFiles/protocol.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:

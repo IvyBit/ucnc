@@ -7,9 +7,9 @@
 #ifndef _DEFINES_H_
 #define _DEFINES_H_
 
-	#define F_CPU 18432000UL
-	#define BAUD 115200UL
-	#define ADC_LIMIT 255
+	#define F_CPU 16000000UL
+	#define BAUD 38400UL
+	#define ADC_LIMIT 222
 
 
 	#define STR_END			'\0'
@@ -25,7 +25,7 @@
 	#define STR_NO_MATCH -1
 
 	#define EEPROM_SIZE 1024
-	#define INPUT_BUFFER_SIZE 256
+	#define INPUT_BUFFER_SIZE 225
 
 
 
