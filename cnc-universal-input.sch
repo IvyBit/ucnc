@@ -4,10 +4,10 @@ EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
-Title ""
-Date ""
-Rev ""
-Comp ""
+Title "UCNC"
+Date "2021-08-13"
+Rev "1.5"
+Comp "IvyBit"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -4429,7 +4429,7 @@ L MCU_Microchip_ATmega:ATmega328PB-AU U1
 U 1 1 609CE2BE
 P 10550 6200
 F 0 "U1" H 10550 4611 50  0000 C CNN
-F 1 "ATmega328PB-AU" H 10550 4520 50  0000 C CNN
+F 1 "ATmega328PB-AU" V 10550 6200 50  0000 C CNN
 F 2 "Package_QFP:TQFP-32_7x7mm_P0.8mm" H 10550 6200 50  0001 C CIN
 F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/40001906C.pdf" H 10550 6200 50  0001 C CNN
 	1    10550 6200

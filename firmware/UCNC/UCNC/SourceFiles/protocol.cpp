@@ -203,7 +203,7 @@ namespace prot{
 
 
 		serial::write_P(PSTR("# Output"));																			serial::write_line();
-		serial::write_P(PSTR("# All outputs are open collector active low "));										serial::write_line();
+		serial::write_P(PSTR("# Active low open collector"));														serial::write_line();
 		serial::write_P(PSTR("# $3N0 - Active\t\t: Enable disable output"));										serial::write_line();
 		serial::write_P(PSTR("# $3N1 - Expression\t: Output trigger condition"));									serial::write_line(2);
 
