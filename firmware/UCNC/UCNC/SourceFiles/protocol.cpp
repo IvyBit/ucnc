@@ -170,7 +170,7 @@ namespace prot{
 			$100	- Serial Output 	(1/0)
 			$101	- Buzzer 			(1/0)
 		*/
-		serial::write_P(PSTR("# Ctrl-x\t: Reset")); serial::write_line(3);
+		serial::write_P(PSTR("# Ctrl-x\t: Reset"));																	serial::write_line(3);
 
 		serial::write_P(PSTR("# Input"));																			serial::write_line();
 		serial::write_P(PSTR("# $2N0 - Threshold\t: 0-100% Input(51%) >= 50% -> TRUE"));							serial::write_line();
@@ -243,7 +243,7 @@ namespace prot{
 		serial::write_line();
 		/*
 			$3N0	- Output # active 		(1/0)
-			$2N1	- Output # expression 	("$A | $B ...")
+			$3N1	- Output # expression 	("$A | $B ...")
 		*/
 		cmd = 300;
 		for(uint8_t i = 0; i < 8; i++){

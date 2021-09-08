@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Digital by H.Neemann -->
+
+<!-- created: Fri Aug 20 00:33:52 CEST 2021 -->
+
+<svg
+   width="78.762886mm"
+   height="29.099998mm"
+   viewBox="524 291 525.08591 194"
+   version="1.1"
+   id="svg568"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs572" />
+  <g
+     stroke-linecap="square"
+     id="g566"
+     transform="translate(-1173.6211,-132)">
+    <path
+       d="M 1840,600 V 480 h 80"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path6" />
+    <path
+       d="m 1820,440 v 120 h 100"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path10" />
+    <path
+       d="m 1980,580 h 20 v -40 h 40"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path14" />
+    <path
+       d="m 1760,440 h 60 40"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path16" />
+    <path
+       d="m 1900,440 h 20"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path18" />
+    <path
+       d="m 2100,520 h 60"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path24" />
+    <path
+       d="m 1760,600 h 80 20"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path28" />
+    <path
+       d="m 1900,600 h 20"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path30" />
+    <path
+       d="m 1980,460 h 20 v 40 h 40"
+       stroke="#3b3b3b"
+       stroke-width="4"
+       fill="none"
+       id="path34" />
+    <g
+       id="g484">
+      <path
+         d="m 1729,425 h 30 v 30 h -30 z"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="path474" />
+      <circle
+         cx="1744"
+         cy="440"
+         r="9"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="circle476" />
+      <text
+         text-anchor="end"
+         x="1715"
+         y="449"
+         fill="#000000"
+         style="font-size:24px"
+         id="text480"><tspan
+           style="font-style:italic"
+           id="tspan478">A</tspan></text>
+      <circle
+         cx="1760"
+         cy="440"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle482" />
+    </g>
+    <g
+       id="g496">
+      <path
+         d="m 1729,585 h 30 v 30 h -30 z"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="path486" />
+      <circle
+         cx="1744"
+         cy="600"
+         r="9"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="circle488" />
+      <text
+         text-anchor="end"
+         x="1715"
+         y="609"
+         fill="#000000"
+         style="font-size:24px"
+         id="text492"><tspan
+           style="font-style:italic"
+           id="tspan490">B</tspan></text>
+      <circle
+         cx="1760"
+         cy="600"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle494" />
+    </g>
+    <g
+       id="g508">
+      <path
+         d="m 2041,490 h 58 v 60 h -58 z"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="path498" />
+      <text
+         text-anchor="middle"
+         x="2070"
+         y="512"
+         fill="#000000"
+         style="font-size:24px"
+         id="text500">≥1</text>
+      <circle
+         cx="2040"
+         cy="500"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle502" />
+      <circle
+         cx="2040"
+         cy="540"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle504" />
+      <circle
+         cx="2100"
+         cy="520"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle506" />
+    </g>
+    <g
+       id="g520">
+      <path
+         d="m 1921,550 h 58 v 60 h -58 z"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="path510" />
+      <text
+         text-anchor="middle"
+         x="1950"
+         y="572"
+         fill="#000000"
+         style="font-size:24px"
+         id="text512">&amp;</text>
+      <circle
+         cx="1920"
+         cy="560"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle514" />
+      <circle
+         cx="1920"
+         cy="600"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle516" />
+      <circle
+         cx="1980"
+         cy="580"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle518" />
+    </g>
+    <g
+       id="g530">
+      <path
+         d="m 1861,590 h 18 v 20 h -18 z"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="path522" />
+      <circle
+         cx="1890"
+         cy="600"
+         r="9"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="circle524" />
+      <circle
+         cx="1860"
+         cy="600"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle526" />
+      <circle
+         cx="1900"
+         cy="600"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle528" />
+    </g>
+    <g
+       id="g542">
+      <path
+         d="m 1921,430 h 58 v 60 h -58 z"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="path532" />
+      <text
+         text-anchor="middle"
+         x="1950"
+         y="452"
+         fill="#000000"
+         style="font-size:24px"
+         id="text534">&amp;</text>
+      <circle
+         cx="1920"
+         cy="440"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle536" />
+      <circle
+         cx="1920"
+         cy="480"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle538" />
+      <circle
+         cx="1980"
+         cy="460"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle540" />
+    </g>
+    <g
+       id="g552">
+      <path
+         d="m 1861,430 h 18 v 20 h -18 z"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="path544" />
+      <circle
+         cx="1890"
+         cy="440"
+         r="9"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="circle546" />
+      <circle
+         cx="1860"
+         cy="440"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle548" />
+      <circle
+         cx="1900"
+         cy="440"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle550" />
+    </g>
+    <g
+       id="g564">
+      <circle
+         cx="2176"
+         cy="520"
+         r="9"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="circle554" />
+      <circle
+         cx="2176"
+         cy="520"
+         r="15"
+         stroke="#000000"
+         stroke-width="4"
+         fill="none"
+         id="circle556" />
+      <text
+         text-anchor="start"
+         x="2205"
+         y="529"
+         fill="#000000"
+         style="font-size:24px"
+         id="text560"><tspan
+           style="font-style:italic"
+           id="tspan558">C</tspan></text>
+      <circle
+         cx="2160"
+         cy="520"
+         r="2"
+         stroke="#3b3b3b"
+         stroke-width="4"
+         fill="#3b3b3b"
+         id="circle562" />
+    </g>
+  </g>
+</svg>

@@ -15,7 +15,7 @@ namespace parser{
 	const char CERR_OK[] PROGMEM							= "Ok";
 	const char CERR_ERROR_MAX_LENGTH_EXCEEDED	[] PROGMEM	= "Max length exceeded";
 	const char CERR_ERROR_INVALID_OPERAND[] PROGMEM			= "Invalid operand";
-	const char CERR_ERROR_MISSING_BRACKET[] PROGMEM			= "Missing bracket";
+	const char CERR_ERROR_MISSING_BRACKET[] PROGMEM			= "Missing parenthesis";
 	const char CERR_ERROR_INVALID_CHARACTER[] PROGMEM		= "Invalid character";
 	const char CERR_ERROR_INVALID_RHS_EXPRESSION[] PROGMEM	= "Invalid rhs expression";
 	const char CERR_ERROR_INVALID_LHS_EXPRESSION[] PROGMEM	= "Invalid lhs expression";

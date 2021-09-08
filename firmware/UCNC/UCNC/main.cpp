@@ -4,7 +4,8 @@
 #	2. Fix protocol.h $A isn't a fucking integer...
 #	3. Make buzzer go bzzz bzzz bzzz
 #	4. Make led go blinky blinky
-	5. Profit
+	5. Write a novel on how to use the bloody thing...
+	6. Profit... well fuck
 */
 
 #include "core.h"

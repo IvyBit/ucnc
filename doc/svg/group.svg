@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Digital by H.Neemann -->
+<!-- created: Fri Aug 20 01:58:20 CEST 2021 -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="61.8mm"
+   height="23.1mm"
+   viewBox="-226 603 412 154">
+<g stroke-linecap="square">
+<path d="M -20,640 L 0,640 L 0,660 L 20,660 L 24,660" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M -20,720 L 0,720 L 0,700 L 20,700 L 24,700" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M -160,740 L -80,740" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M 80,680 L 100,680" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M -160,680 L -120,680 L -120,660 L -80,660" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M -160,620 L -80,620" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M -120,680 L -120,700 L -80,700" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<g>
+<circle cx="-120.0" cy="680.0" r="4.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M -50,670 L -79,670 L -79,610 L -50,610 C -40,610 -20,620 -21,640 C -21,660 -40,670 -50,670 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="-80.0" cy="620.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="-80.0" cy="660.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="-20.0" cy="640.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<circle cx="116.0" cy="680.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<circle cx="116.0" cy="680.0" r="15.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="start" x="145.0" y="689.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">Out</tspan></text>
+<circle cx="100.0" cy="680.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M 30,710 L 20,710 C 30,700 30,660 20,650 L 30,650 C 40,650 60,660 80,680 C 60,700 40,710 30,710 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="20.0" cy="660.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="20.0" cy="700.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="80.0" cy="680.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M -50,750 L -79,750 L -79,690 L -50,690 C -40,690 -20,700 -21,720 C -21,740 -40,750 -50,750 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="-80.0" cy="700.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="-80.0" cy="740.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="-20.0" cy="720.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M -191,665 L -161,665 L -161,695 L -191,695 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="-176.0" cy="680.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="end" x="-205.0" y="689.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">In</tspan></text>
+<circle cx="-160.0" cy="680.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M -191,605 L -161,605 L -161,635 L -191,635 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="-176.0" cy="620.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="end" x="-205.0" y="629.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">In</tspan></text>
+<circle cx="-160.0" cy="620.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M -191,725 L -161,725 L -161,755 L -191,755 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="-176.0" cy="740.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="end" x="-205.0" y="749.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">In</tspan></text>
+<circle cx="-160.0" cy="740.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+</g>
+</svg>

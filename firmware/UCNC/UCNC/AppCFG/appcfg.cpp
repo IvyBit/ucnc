@@ -46,7 +46,6 @@ namespace apps{
 		switch(result){
 			case SER_OVERF:
 				prot::write_status(CMDE_LENGTH);
-				//error:11” : _(“Max characters per line exceeded. Line was not processed and executed.”)
 				return true;
 
 			case SER_RESET:

@@ -8,6 +8,7 @@
 
  namespace opcodes{
 
+	//(NOT) > (AND = NAND = EQ) > (OR = NOR = XOR)
 	 int8_t precedence(op_code op) {
 		 switch (op)
 		 {

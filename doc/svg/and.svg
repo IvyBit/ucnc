@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Digital by H.Neemann -->
+<!-- created: Fri Aug 20 01:49:09 CEST 2021 -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="40.8mm"
+   height="11.1mm"
+   viewBox="374 383 272 74">
+<g stroke-linecap="square">
+<path d="M 440,400 L 480,400" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M 540,420 L 560,420" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<path d="M 440,440 L 480,440" stroke="#3b3b3b" stroke-width="4.0" fill="none"/>
+<g>
+</g>
+<g>
+<path d="M 510,450 L 481,450 L 481,390 L 510,390 C 520,390 540,400 539,420 C 539,440 520,450 510,450 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="480.0" cy="400.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="480.0" cy="440.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+<circle cx="540.0" cy="420.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M 409,385 L 439,385 L 439,415 L 409,415 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="424.0" cy="400.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="end" x="395.0" y="409.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">In</tspan></text>
+<circle cx="440.0" cy="400.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<path d="M 409,425 L 439,425 L 439,455 L 409,455 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
+<circle cx="424.0" cy="440.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="end" x="395.0" y="449.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">In</tspan></text>
+<circle cx="440.0" cy="440.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+<g>
+<circle cx="576.0" cy="420.0" r="9.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<circle cx="576.0" cy="420.0" r="15.0" stroke="#000000" stroke-width="4.0" fill="none" />
+<text text-anchor="start" x="605.0" y="429.0" fill="#000000" style="font-size:24px"><tspan style="font-style:italic;">Out</tspan></text>
+<circle cx="560.0" cy="420.0" r="2.0" stroke="#3b3b3b" stroke-width="4.0" fill="#3b3b3b" />
+</g>
+</g>
+</svg>

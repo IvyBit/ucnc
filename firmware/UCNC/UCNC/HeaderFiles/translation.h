@@ -6,8 +6,8 @@
  */
 
  #include "opcodes.h"
-#ifndef MAPPING_H_
-#define MAPPING_H_
+#ifndef TRANSLATION_H_
+#define TRANSLATION_H_
 
 namespace translation{
 
@@ -22,4 +22,4 @@ namespace translation{
 	bool translate(translation_config &tc, uint8_t input_level);
 
 };
-#endif /* MAPPING_H_ */
+#endif /* TRANSLATION_H_ */
