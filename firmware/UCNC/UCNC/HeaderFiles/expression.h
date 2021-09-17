@@ -47,7 +47,7 @@ namespace expr{
 
 
 
-		opcodes::op_code eval(expression& exp, expression_data& input_data) ;
+		opcodes::op_code execute(expression& exp, expression_data& input_data) ;
 
 };
 #endif /* EXPRESSION_H_ */

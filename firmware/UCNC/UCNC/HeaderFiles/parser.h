@@ -23,7 +23,7 @@ namespace parser{
 	const char CERR_ERROR_MISSING_LHS_EXPRESSION[] PROGMEM	= "Missing lhs expression";
 	const char CERR_ERROR_EMPTY_EXPRESSION[] PROGMEM		= "Empty expression";
 
-	enum class compiler_status : uint8_t {
+	enum class parser_status : uint8_t {
 		OK = 0x00,					//No Error
 		ERROR_MAX_LENGTH_EXCEEDED		= 0x01,
 		ERROR_INVALID_OPERAND			= 0x02,
@@ -36,12 +36,12 @@ namespace parser{
 		ERROR_EMPTY_EXPRESSION			= 0x09,
 	};
 
-	struct compiler_result {
+	struct parser_result {
 		uint16_t		index = 0;
-		compiler_status	status = compiler_status::OK;
+		parser_status	status = parser_status::OK;
 	};
 
-	const char* get_compiler_status_msg(compiler_status status);
+	const char* get_compiler_status_msg(parser_status status);
 
 
 
@@ -51,21 +51,21 @@ namespace parser{
 
 	bool fetch_limiter(const char*& exp_src, expr::expression& target, uint16_t& target_index);
 
-	void validate_syntax(const char* exp_src, compiler_result &cr);
+	void validate_syntax(const char* exp_src, parser_result &cr);
 
 
 
-	void tokenize_expression(const char* exp_src, expr::expression& target, compiler_result& cr);
+	void tokenize_expression(const char* exp_src, expr::expression& target, parser_result& cr);
 
-	void validate_expression(expr::expression& target, compiler_result& cr);
+	void validate_expression(expr::expression& target, parser_result& cr);
 
-	void convert_postfix(expr::expression& target, compiler_result& cr);
+	void convert_postfix(expr::expression& target, parser_result& cr);
 
 
 
-	bool compile_expression(const char* exp_src,
+	bool parse_expression(const char* exp_src,
 							expr::expression& target,
-							compiler_result& cr);
+							parser_result& cr);
 
 };
 #endif /* PARSER_H_ */

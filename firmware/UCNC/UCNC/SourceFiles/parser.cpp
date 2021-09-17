@@ -10,19 +10,19 @@
  #include "stringbuffer.h"
  namespace parser{
 
-	const char* get_compiler_status_msg(compiler_status status){
+	const char* get_compiler_status_msg(parser_status status){
 		switch (status)
 		{
-			case compiler_status::OK:							return CERR_OK;
-			case compiler_status::ERROR_MAX_LENGTH_EXCEEDED:	return CERR_ERROR_MAX_LENGTH_EXCEEDED;
-			case compiler_status::ERROR_INVALID_OPERAND:		return CERR_ERROR_INVALID_OPERAND;
-			case compiler_status::ERROR_MISSING_BRACKET:		return CERR_ERROR_MISSING_BRACKET;
-			case compiler_status::ERROR_INVALID_CHARACTER:		return CERR_ERROR_INVALID_CHARACTER;
-			case compiler_status::ERROR_INVALID_RHS_EXPRESSION:	return CERR_ERROR_INVALID_RHS_EXPRESSION;
-			case compiler_status::ERROR_INVALID_LHS_EXPRESSION:	return CERR_ERROR_INVALID_LHS_EXPRESSION;
-			case compiler_status::ERROR_MISSING_RHS_EXPRESSION:	return CERR_ERROR_MISSING_RHS_EXPRESSION;
-			case compiler_status::ERROR_MISSING_LHS_EXPRESSION:	return CERR_ERROR_MISSING_LHS_EXPRESSION;
-			case compiler_status::ERROR_EMPTY_EXPRESSION:		return CERR_ERROR_EMPTY_EXPRESSION;
+			case parser_status::OK:							return CERR_OK;
+			case parser_status::ERROR_MAX_LENGTH_EXCEEDED:	return CERR_ERROR_MAX_LENGTH_EXCEEDED;
+			case parser_status::ERROR_INVALID_OPERAND:		return CERR_ERROR_INVALID_OPERAND;
+			case parser_status::ERROR_MISSING_BRACKET:		return CERR_ERROR_MISSING_BRACKET;
+			case parser_status::ERROR_INVALID_CHARACTER:		return CERR_ERROR_INVALID_CHARACTER;
+			case parser_status::ERROR_INVALID_RHS_EXPRESSION:	return CERR_ERROR_INVALID_RHS_EXPRESSION;
+			case parser_status::ERROR_INVALID_LHS_EXPRESSION:	return CERR_ERROR_INVALID_LHS_EXPRESSION;
+			case parser_status::ERROR_MISSING_RHS_EXPRESSION:	return CERR_ERROR_MISSING_RHS_EXPRESSION;
+			case parser_status::ERROR_MISSING_LHS_EXPRESSION:	return CERR_ERROR_MISSING_LHS_EXPRESSION;
+			case parser_status::ERROR_EMPTY_EXPRESSION:		return CERR_ERROR_EMPTY_EXPRESSION;
 			default : return nullptr;
 		}
 	}
@@ -143,13 +143,13 @@
 			return true;
 		}
 
-		void validate_syntax(const char* exp_src, compiler_result &cr) {
+		void validate_syntax(const char* exp_src, parser_result &cr) {
 
 			int8_t brackets = 0;
 			for (const char* vsrc = exp_src; *vsrc != '\0' && *vsrc != '#'; vsrc++) {
 
 				if (cr.index >= EXPRESSION_SIZE) {
-					cr.status = compiler_status::ERROR_MAX_LENGTH_EXCEEDED;
+					cr.status = parser_status::ERROR_MAX_LENGTH_EXCEEDED;
 				}
 
 				//only test non alphanum and non blank symbols
@@ -158,7 +158,7 @@
 					{
 						case '$':
 						if (str::lag(vsrc) < 'A' || str::lag(vsrc) > 'H') {
-							cr.status = compiler_status::ERROR_INVALID_OPERAND;
+							cr.status = parser_status::ERROR_INVALID_OPERAND;
 							return;
 						}
 						vsrc ++;
@@ -176,14 +176,14 @@
 						case ' ': case '\t': case '~': case '&': case '|': case '=': break;
 
 						default:
-						cr.status = compiler_status::ERROR_INVALID_CHARACTER;
+						cr.status = parser_status::ERROR_INVALID_CHARACTER;
 						return;
 					}
 				}
 
 
 				if (brackets < 0) {
-					cr.status = compiler_status::ERROR_MISSING_BRACKET;
+					cr.status = parser_status::ERROR_MISSING_BRACKET;
 					return;
 				}
 
@@ -192,13 +192,13 @@
 
 			//check for bracket mismatch
 			if (brackets != 0) {
-				cr.status = compiler_status::ERROR_MISSING_BRACKET;
+				cr.status = parser_status::ERROR_MISSING_BRACKET;
 			}
 		}
 
 
 
-		void tokenize_expression(const char* exp_src, expr::expression& target, compiler_result& cr) {
+		void tokenize_expression(const char* exp_src, expr::expression& target, parser_result& cr) {
 
 			const char* moving_ptr = exp_src;
 			uint16_t target_index = 0;
@@ -223,11 +223,11 @@
 			target.length = target_index;
 
 			if(target_index == 0){
-				cr.status = compiler_status::ERROR_EMPTY_EXPRESSION;
+				cr.status = parser_status::ERROR_EMPTY_EXPRESSION;
 			}
 		}
 
-		void validate_expression(expr::expression& target, compiler_result& cr) {
+		void validate_expression(expr::expression& target, parser_result& cr) {
 
 			for (uint16_t index = 0; index < target.length; index++)
 			{
@@ -241,37 +241,37 @@
 					if (op == opcodes::op_code::NOT) {
 						//normal operators require rhs operand
 						if (!rhs) {
-							cr.status = compiler_status::ERROR_MISSING_RHS_EXPRESSION;
+							cr.status = parser_status::ERROR_MISSING_RHS_EXPRESSION;
 							return;
 						}
 
 						//check if the lhs token is an operand or the start of a expression
 						if (*rhs != opcodes::op_code::EPS && !opcodes::is_operand(*rhs)) {
-							cr.status = compiler_status::ERROR_INVALID_RHS_EXPRESSION;
+							cr.status = parser_status::ERROR_INVALID_RHS_EXPRESSION;
 							return;
 						}
 					}
 					else {
 						//normal operators need both lhs and rhs operands
 						if (!rhs) {
-							cr.status = compiler_status::ERROR_MISSING_RHS_EXPRESSION;
+							cr.status = parser_status::ERROR_MISSING_RHS_EXPRESSION;
 							return;
 						}
 
 						//normal operators need both lhs and rhs operands
 						if (!lhs) {
-							cr.status = compiler_status::ERROR_MISSING_LHS_EXPRESSION;
+							cr.status = parser_status::ERROR_MISSING_LHS_EXPRESSION;
 							return;
 						}
 
 						//check if the lhs token is an operand or the end of a expression
 						if (*lhs != opcodes::op_code::EPE && !opcodes::is_operand(*lhs)) {
-							cr.status = compiler_status::ERROR_INVALID_LHS_EXPRESSION;
+							cr.status = parser_status::ERROR_INVALID_LHS_EXPRESSION;
 							return;
 						}
 						//check if the rhs token is an operand or the start of a expression
 						if (*rhs != opcodes::op_code::EPS && !opcodes::is_operand(*rhs) && *rhs != opcodes::op_code::NOT) {
-							cr.status = compiler_status::ERROR_INVALID_RHS_EXPRESSION;
+							cr.status = parser_status::ERROR_INVALID_RHS_EXPRESSION;
 							return;
 						}
 					}
@@ -283,7 +283,7 @@
 					if (rhs) {
 						//operand can either have an operator or closing brackets
 						if (opcodes::is_operand(*rhs) && !opcodes::is_end(*rhs)) {
-							cr.status = compiler_status::ERROR_INVALID_RHS_EXPRESSION;
+							cr.status = parser_status::ERROR_INVALID_RHS_EXPRESSION;
 							return;
 						}
 					}
@@ -292,7 +292,7 @@
 					if (lhs) {
 						//operand can either have an operator or opening brackets
 						if (opcodes::is_operand(*lhs) && !opcodes::is_start(*lhs)) {
-							cr.status = compiler_status::ERROR_INVALID_LHS_EXPRESSION;
+							cr.status = parser_status::ERROR_INVALID_LHS_EXPRESSION;
 							return;
 						}
 					}
@@ -304,19 +304,19 @@
 						//if an rhs token exists check it
 						if (rhs) {
 							if (!opcodes::is_operand(*rhs) && *rhs != opcodes::op_code::NOT && !opcodes::is_start(*rhs)) {
-								cr.status = compiler_status::ERROR_INVALID_RHS_EXPRESSION;
+								cr.status = parser_status::ERROR_INVALID_RHS_EXPRESSION;
 								return;
 							}
 						}
 						else {
-							cr.status = compiler_status::ERROR_MISSING_RHS_EXPRESSION;
+							cr.status = parser_status::ERROR_MISSING_RHS_EXPRESSION;
 							return;
 						}
 
 						//if an lhs token exists check it
 						if (lhs) {
 							if (!opcodes::is_operator(*lhs) && !opcodes::is_start(*lhs)) {
-								cr.status = compiler_status::ERROR_INVALID_LHS_EXPRESSION;
+								cr.status = parser_status::ERROR_INVALID_LHS_EXPRESSION;
 								return;
 							}
 						}
@@ -326,7 +326,7 @@
 						//if an rhs token exists check it
 						if (rhs) {
 							if (!opcodes::is_operator(*rhs) && ! opcodes::is_end(*rhs)) {
-								cr.status = compiler_status::ERROR_INVALID_RHS_EXPRESSION;
+								cr.status = parser_status::ERROR_INVALID_RHS_EXPRESSION;
 								return;
 							}
 						}
@@ -334,12 +334,12 @@
 						//if an lhs token exists check it
 						if (lhs) {
 							if (!opcodes::is_operand(*lhs) && !opcodes::is_end(*lhs)) {
-								cr.status = compiler_status::ERROR_INVALID_LHS_EXPRESSION;
+								cr.status = parser_status::ERROR_INVALID_LHS_EXPRESSION;
 								return;
 							}
 						}
 						else {
-							cr.status = compiler_status::ERROR_MISSING_LHS_EXPRESSION;
+							cr.status = parser_status::ERROR_MISSING_LHS_EXPRESSION;
 							return;
 						}
 					}//CLOSING BRACKETS
@@ -349,7 +349,7 @@
 			}
 		}
 
-		void convert_postfix(expr::expression& target, compiler_result& cr) {
+		void convert_postfix(expr::expression& target, parser_result& cr) {
 
 
 			containers::array<opcodes::op_code, EXPRESSION_SIZE> stack_buffer;
@@ -404,27 +404,27 @@
 
 
 
-		bool compile_expression(const char* exp_src,
+		bool parse_expression(const char* exp_src,
 								expr::expression& target,
-								compiler_result& cr) {
+								parser_result& cr) {
 
 
-			if (cr.status != compiler_status::OK) return false;
+			if (cr.status != parser_status::OK) return false;
 			validate_syntax(exp_src, cr);
 
 
-			if (cr.status != compiler_status::OK) return false;
+			if (cr.status != parser_status::OK) return false;
 			tokenize_expression(exp_src, target, cr);
 
 
-			if (cr.status != compiler_status::OK) return false;
+			if (cr.status != parser_status::OK) return false;
 			validate_expression(target, cr);
 
 
-			if (cr.status != compiler_status::OK) return false;
+			if (cr.status != parser_status::OK) return false;
 			convert_postfix(target, cr);
 
-			return cr.status == compiler_status::OK;
+			return cr.status == parser_status::OK;
 		}
 
 

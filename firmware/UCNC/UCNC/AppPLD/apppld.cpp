@@ -63,33 +63,41 @@ namespace apps{
 		for (uint8_t t = 0; t < 8; t++){
 
 			io::set_indicators((t + 1) << 8 | 0x00);
-
+			
+			config::output_config outp_config;
+			config::read_output_config(outp_config, t);
+			
+		
 			char exp_buffer[EXPRESSION_SIZE];
 			opcodes::op_code op_buffer[EXPRESSION_SIZE];
 			expr::expression exp_target;
 
 			exp_target.data = (&op_buffer[0]);
-
+			
 			config::read_expression(exp_buffer, t);
-			parser::compiler_result result;
-			parser::compile_expression(exp_buffer, exp_target, result);
+			parser::parser_result result;
+			parser::parse_expression(exp_buffer, exp_target, result);
 
-			if(result.status == parser::compiler_status::OK){
+			if(result.status == parser::parser_status::OK){
 
 				for (uint16_t r = 0; r < 256; r++) {
 					io::set_indicators((t + 1) << 8 | r);
 
-					expr::expression_data data = (uint8_t)r;
+					if(outp_config.active){					
+						expr::expression_data data = (uint8_t)r;
 
-					switch (expr::eval(exp_target, data)){
-						case opcodes::op_code::TRUE		: truth_table[r] |= (0x80 >> t);	break;
-						case opcodes::op_code::FALSE	: truth_table[r] &= ~(0x80 >> t);	break;
-						default: halt();
+						switch (expr::execute(exp_target, data)){
+							case opcodes::op_code::TRUE		: truth_table[r] |= (0x80 >> t);	break;
+							case opcodes::op_code::FALSE	: truth_table[r] &= ~(0x80 >> t);	break;
+							default: halt();
+						}
+					} else{
+						truth_table[r] &= ~(0x80 >> t);
 					}
+						
 				}
 
-			}
-			else {
+			} else {
 				halt();
 			}
 		}
@@ -159,6 +167,7 @@ namespace apps{
 					serial::write(' ');
 				}
 				serial::write_line();
+				io::led_on_for(500);
 			}
 		}
 		return true;

@@ -170,7 +170,7 @@ namespace prot{
 			$100	- Serial Output 	(1/0)
 			$101	- Buzzer 			(1/0)
 		*/
-		serial::write_P(PSTR("# Ctrl-x\t: Reset"));																	serial::write_line(3);
+		serial::write_P(PSTR("# Ctrl-x\t: Reset"));																	serial::write_line(2);		
 
 		serial::write_P(PSTR("# Input"));																			serial::write_line();
 		serial::write_P(PSTR("# $2N0 - Threshold\t: 0-100% Input(51%) >= 50% -> TRUE"));							serial::write_line();
@@ -429,10 +429,10 @@ namespace prot{
 			opcodes::op_code op_buffer[EXPRESSION_SIZE];
 			expr::expression exp;
 			exp.data = (opcodes::op_code*)(&op_buffer[0]);
-			parser::compiler_result result;
-			parser::compile_expression(exp_buffer, exp, result);
+			parser::parser_result result;
+			parser::parse_expression(exp_buffer, exp, result);
 
-			if(result.status == parser::compiler_status::OK){
+			if(result.status == parser::parser_status::OK){
 				config::write_expression(exp_buffer, ct.target);
 				write_status(CMDE_OK);
 			}

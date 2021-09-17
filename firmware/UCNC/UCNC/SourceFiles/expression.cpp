@@ -38,7 +38,7 @@
 	void set_data_bit_g(expression_data &data, opcodes::op_code state ) { set_data_bit_at(data, state, 6); }
 	void set_data_bit_h(expression_data &data, opcodes::op_code state ) { set_data_bit_at(data, state, 7); }
 
-	opcodes::op_code eval(expression& exp_target, expression_data& input_data) {
+	opcodes::op_code execute(expression& exp_target, expression_data& input_data) {
 
 		opcodes::op_code stack_buffer[EXPRESSION_SIZE];
 		uint16_t stack_index = 0;
