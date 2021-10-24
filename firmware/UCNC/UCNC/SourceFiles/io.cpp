@@ -279,7 +279,7 @@ namespace io {
 		//STOP TIMER 0 PRESCLAER
 		TCCR1B = (1 << WGM12);
 		//BUZZER OFF
-		TCCR0B = 0x00;	//0 DIV PRESCLARER
+		TCCR0B = 0x00;	//0 DIV PRESCALER
 	}
 
 	void buzzer_on_for(uint16_t milliseconds){
