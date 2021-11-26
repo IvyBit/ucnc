@@ -14,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L 4xxx:4051 U5
+L cnc-universal-input-rescue:4051-4xxx U5
 U 1 1 5FE651B4
 P 12350 1800
 F 0 "U5" H 12450 2550 50  0000 L CNN
@@ -26,7 +26,7 @@ F 4 "C21379" H 12350 1800 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0101
+L cnc-universal-input-rescue:GND-power #PWR0101
 U 1 1 5FE6564E
 P 12400 2750
 F 0 "#PWR0101" H 12400 2500 50  0001 C CNN
@@ -44,7 +44,7 @@ Connection ~ 12400 2700
 Wire Wire Line
 	12400 2700 12450 2700
 $Comp
-L power:+12V #PWR0102
+L cnc-universal-input-rescue:+12V-power #PWR0102
 U 1 1 5FE65B52
 P 12350 900
 F 0 "#PWR0102" H 12350 750 50  0001 C CNN
@@ -77,7 +77,7 @@ Wire Wire Line
 Wire Wire Line
 	11850 1900 11700 1900
 $Comp
-L Device:R_Small R35
+L cnc-universal-input-rescue:R_Small-Device R35
 U 1 1 5FE8B64A
 P 13550 2150
 F 0 "R35" H 13300 2250 50  0000 L CNN
@@ -89,7 +89,7 @@ F 4 "C17772" H 13550 2150 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Small R34
+L cnc-universal-input-rescue:R_Small-Device R34
 U 1 1 5FE8C132
 P 13550 1850
 F 0 "R34" H 13300 1950 50  0000 L CNN
@@ -101,7 +101,7 @@ F 4 "C17724" H 13550 1850 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0103
+L cnc-universal-input-rescue:GND-power #PWR0103
 U 1 1 5FE90508
 P 13550 2450
 F 0 "#PWR0103" H 13550 2200 50  0001 C CNN
@@ -112,7 +112,7 @@ F 3 "" H 13550 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0104
+L cnc-universal-input-rescue:+12V-power #PWR0104
 U 1 1 5FEAB35F
 P 1150 700
 F 0 "#PWR0104" H 1150 550 50  0001 C CNN
@@ -123,7 +123,7 @@ F 3 "" H 1150 700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0105
+L cnc-universal-input-rescue:GND-power #PWR0105
 U 1 1 5FEAB8AC
 P 1150 1000
 F 0 "#PWR0105" H 1150 750 50  0001 C CNN
@@ -138,7 +138,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 950  1150 1000
 $Comp
-L Amplifier_Operational:AD8001AR U8
+L cnc-universal-input-rescue:AD8001AR-Amplifier_Operational U8
 U 1 1 5FEB57AA
 P 13200 1300
 F 0 "U8" H 13300 1500 50  0000 L CNN
@@ -154,7 +154,7 @@ Wire Wire Line
 Wire Wire Line
 	13100 1000 13100 900 
 $Comp
-L power:GND #PWR0106
+L cnc-universal-input-rescue:GND-power #PWR0106
 U 1 1 5FEC1035
 P 13100 1750
 F 0 "#PWR0106" H 13100 1500 50  0001 C CNN
@@ -173,7 +173,7 @@ Wire Wire Line
 Wire Wire Line
 	12850 1650 13550 1650
 $Comp
-L Diode:BZX84Cxx D17
+L cnc-universal-input-rescue:BZX84Cxx-Diode D17
 U 1 1 5FED1B73
 P 13700 2200
 F 0 "D17" H 13400 2350 50  0000 L CNN
@@ -187,7 +187,7 @@ $EndComp
 Wire Wire Line
 	13550 1300 13550 1650
 $Comp
-L Connector:AVR-ISP-6 J9
+L cnc-universal-input-rescue:AVR-ISP-6-Connector J9
 U 1 1 5FEFDB30
 P 10200 8850
 F 0 "J9" H 10350 9350 50  0000 R CNN
@@ -199,7 +199,7 @@ F 4 "C192301" H 10200 8850 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x03 J1
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J1
 U 1 1 5FEFF2AD
 P 900 850
 F 0 "J1" V 1050 800 50  0000 C CNN
@@ -215,7 +215,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 950  1100 950 
 $Comp
-L power:+12V #PWR0111
+L cnc-universal-input-rescue:+12V-power #PWR0111
 U 1 1 5FF09C6D
 P 1150 1350
 F 0 "#PWR0111" H 1150 1200 50  0001 C CNN
@@ -226,7 +226,7 @@ F 3 "" H 1150 1350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0112
+L cnc-universal-input-rescue:GND-power #PWR0112
 U 1 1 5FF09C73
 P 1150 1650
 F 0 "#PWR0112" H 1150 1400 50  0001 C CNN
@@ -241,7 +241,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 1600 1150 1650
 $Comp
-L Connector:Screw_Terminal_01x03 J2
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J2
 U 1 1 5FF09C82
 P 900 1500
 F 0 "J2" V 1050 1450 50  0000 C CNN
@@ -273,7 +273,7 @@ SG
 Text Label 11700 1600 2    50   ~ 0
 SH
 $Comp
-L power:+24V #PWR0113
+L cnc-universal-input-rescue:+24V-power #PWR0113
 U 1 1 5FF0E2C1
 P 13100 900
 F 0 "#PWR0113" H 13100 750 50  0001 C CNN
@@ -320,7 +320,7 @@ Wire Wire Line
 Wire Wire Line
 	10600 8950 10700 8950
 $Comp
-L power:+5V #PWR0114
+L cnc-universal-input-rescue:+5V-power #PWR0114
 U 1 1 5FF4640B
 P 10100 8300
 F 0 "#PWR0114" H 10100 8150 50  0001 C CNN
@@ -347,7 +347,7 @@ POWER
 Wire Wire Line
 	12850 1200 12900 1200
 $Comp
-L power:+5V #PWR0117
+L cnc-universal-input-rescue:+5V-power #PWR0117
 U 1 1 5FF7A5F2
 P 10600 4550
 F 0 "#PWR0117" H 10600 4400 50  0001 C CNN
@@ -407,7 +407,7 @@ Wire Wire Line
 Wire Wire Line
 	11150 7300 11300 7300
 $Comp
-L Device:C_Small C1
+L cnc-universal-input-rescue:C_Small-Device C1
 U 1 1 5FFE32BF
 P 12050 5250
 F 0 "C1" V 11900 5300 50  0000 L CNN
@@ -419,7 +419,7 @@ F 4 "C1804" H 12050 5250 50  0001 C CNN "LCSC"
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:C_Small C2
+L cnc-universal-input-rescue:C_Small-Device C2
 U 1 1 5FFE4081
 P 11850 5250
 F 0 "C2" V 11950 5300 50  0000 L CNN
@@ -431,7 +431,7 @@ F 4 "C1804" H 11850 5250 50  0001 C CNN "LCSC"
 	0    1    1    0   
 $EndComp
 $Comp
-L power:GND #PWR0118
+L cnc-universal-input-rescue:GND-power #PWR0118
 U 1 1 5FFEFB10
 P 11950 5400
 F 0 "#PWR0118" H 11950 5150 50  0001 C CNN
@@ -452,7 +452,7 @@ Wire Wire Line
 Wire Wire Line
 	11150 5500 11300 5500
 $Comp
-L Device:LED_Small D9
+L cnc-universal-input-rescue:LED_Small-Device D9
 U 1 1 60099950
 P 8500 1100
 F 0 "D9" H 8350 1000 50  0000 C CNN
@@ -464,7 +464,7 @@ F 4 "C205441" H 8500 1100 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L 74xx:74HC595 U4
+L cnc-universal-input-rescue:74HC595-74xx U4
 U 1 1 600D29CA
 P 7150 1500
 F 0 "U4" H 7300 2050 50  0000 C CNN
@@ -476,7 +476,7 @@ F 4 "C5947" H 7150 1500 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:LED_Small D10
+L cnc-universal-input-rescue:LED_Small-Device D10
 U 1 1 60124A6F
 P 8500 1300
 F 0 "D10" H 8350 1200 50  0000 C CNN
@@ -488,7 +488,7 @@ F 4 "C205441" H 8500 1300 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D11
+L cnc-universal-input-rescue:LED_Small-Device D11
 U 1 1 6012B6BA
 P 8500 1500
 F 0 "D11" H 8350 1400 50  0000 C CNN
@@ -500,7 +500,7 @@ F 4 "C205441" H 8500 1500 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D12
+L cnc-universal-input-rescue:LED_Small-Device D12
 U 1 1 60132607
 P 8500 1700
 F 0 "D12" H 8350 1600 50  0000 C CNN
@@ -512,7 +512,7 @@ F 4 "C205441" H 8500 1700 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D13
+L cnc-universal-input-rescue:LED_Small-Device D13
 U 1 1 601399A5
 P 8500 1900
 F 0 "D13" H 8350 1800 50  0000 C CNN
@@ -524,7 +524,7 @@ F 4 "C205441" H 8500 1900 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D14
+L cnc-universal-input-rescue:LED_Small-Device D14
 U 1 1 60141376
 P 8500 2100
 F 0 "D14" H 8350 2000 50  0000 C CNN
@@ -536,7 +536,7 @@ F 4 "C205441" H 8500 2100 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D15
+L cnc-universal-input-rescue:LED_Small-Device D15
 U 1 1 60149311
 P 8500 2300
 F 0 "D15" H 8350 2200 50  0000 C CNN
@@ -548,7 +548,7 @@ F 4 "C205441" H 8500 2300 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D16
+L cnc-universal-input-rescue:LED_Small-Device D16
 U 1 1 601514B3
 P 8500 2500
 F 0 "D16" H 8350 2400 50  0000 C CNN
@@ -599,7 +599,7 @@ Wire Wire Line
 	8750 2500 8750 2550
 Connection ~ 8750 2500
 $Comp
-L power:GND #PWR0119
+L cnc-universal-input-rescue:GND-power #PWR0119
 U 1 1 601A1153
 P 8750 2550
 F 0 "#PWR0119" H 8750 2300 50  0001 C CNN
@@ -610,7 +610,7 @@ F 3 "" H 8750 2550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0120
+L cnc-universal-input-rescue:+12V-power #PWR0120
 U 1 1 6022350C
 P 1150 2000
 F 0 "#PWR0120" H 1150 1850 50  0001 C CNN
@@ -621,7 +621,7 @@ F 3 "" H 1150 2000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0121
+L cnc-universal-input-rescue:GND-power #PWR0121
 U 1 1 60223512
 P 1150 2300
 F 0 "#PWR0121" H 1150 2050 50  0001 C CNN
@@ -636,7 +636,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 2250 1150 2300
 $Comp
-L Connector:Screw_Terminal_01x03 J3
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J3
 U 1 1 60223521
 P 900 2150
 F 0 "J3" V 1050 2100 50  0000 C CNN
@@ -662,7 +662,7 @@ Wire Notes Line
 Text Notes 600  2100 3    79   ~ 0
  SC
 $Comp
-L power:+12V #PWR0122
+L cnc-universal-input-rescue:+12V-power #PWR0122
 U 1 1 602303C9
 P 1150 2650
 F 0 "#PWR0122" H 1150 2500 50  0001 C CNN
@@ -673,7 +673,7 @@ F 3 "" H 1150 2650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0123
+L cnc-universal-input-rescue:GND-power #PWR0123
 U 1 1 602303CF
 P 1150 2950
 F 0 "#PWR0123" H 1150 2700 50  0001 C CNN
@@ -688,7 +688,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 2900 1150 2950
 $Comp
-L Connector:Screw_Terminal_01x03 J4
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J4
 U 1 1 602303DE
 P 900 2800
 F 0 "J4" V 1050 2750 50  0000 C CNN
@@ -714,7 +714,7 @@ Wire Notes Line
 Text Notes 600  2750 3    79   ~ 0
  SD
 $Comp
-L power:+12V #PWR0124
+L cnc-universal-input-rescue:+12V-power #PWR0124
 U 1 1 602569DC
 P 2450 700
 F 0 "#PWR0124" H 2450 550 50  0001 C CNN
@@ -725,7 +725,7 @@ F 3 "" H 2450 700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0125
+L cnc-universal-input-rescue:GND-power #PWR0125
 U 1 1 602569E2
 P 2450 1000
 F 0 "#PWR0125" H 2450 750 50  0001 C CNN
@@ -740,7 +740,7 @@ Wire Wire Line
 Wire Wire Line
 	2450 950  2450 1000
 $Comp
-L Connector:Screw_Terminal_01x03 J5
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J5
 U 1 1 602569F1
 P 2200 850
 F 0 "J5" V 2350 800 50  0000 C CNN
@@ -756,7 +756,7 @@ Wire Wire Line
 Wire Wire Line
 	2450 950  2400 950 
 $Comp
-L power:+12V #PWR0126
+L cnc-universal-input-rescue:+12V-power #PWR0126
 U 1 1 60256A07
 P 2450 1350
 F 0 "#PWR0126" H 2450 1200 50  0001 C CNN
@@ -767,7 +767,7 @@ F 3 "" H 2450 1350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0127
+L cnc-universal-input-rescue:GND-power #PWR0127
 U 1 1 60256A0D
 P 2450 1650
 F 0 "#PWR0127" H 2450 1400 50  0001 C CNN
@@ -782,7 +782,7 @@ Wire Wire Line
 Wire Wire Line
 	2450 1600 2450 1650
 $Comp
-L Connector:Screw_Terminal_01x03 J6
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J6
 U 1 1 60256A1C
 P 2200 1500
 F 0 "J6" V 2350 1450 50  0000 C CNN
@@ -818,7 +818,7 @@ Text Notes 1900 800  3    79   ~ 0
 Text Notes 1900 1450 3    79   ~ 0
  SF
 $Comp
-L power:+12V #PWR0128
+L cnc-universal-input-rescue:+12V-power #PWR0128
 U 1 1 60256A3E
 P 2450 2000
 F 0 "#PWR0128" H 2450 1850 50  0001 C CNN
@@ -829,7 +829,7 @@ F 3 "" H 2450 2000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0129
+L cnc-universal-input-rescue:GND-power #PWR0129
 U 1 1 60256A44
 P 2450 2300
 F 0 "#PWR0129" H 2450 2050 50  0001 C CNN
@@ -844,7 +844,7 @@ Wire Wire Line
 Wire Wire Line
 	2450 2250 2450 2300
 $Comp
-L Connector:Screw_Terminal_01x03 J7
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J7
 U 1 1 60256A53
 P 2200 2150
 F 0 "J7" V 2350 2100 50  0000 C CNN
@@ -888,7 +888,7 @@ Wire Wire Line
 Wire Wire Line
 	6750 1700 6650 1700
 $Comp
-L power:+5V #PWR0134
+L cnc-universal-input-rescue:+5V-power #PWR0134
 U 1 1 60507A16
 P 7150 850
 F 0 "#PWR0134" H 7150 700 50  0001 C CNN
@@ -899,7 +899,7 @@ F 3 "" H 7150 850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0135
+L cnc-universal-input-rescue:GND-power #PWR0135
 U 1 1 60507DC3
 P 7150 2250
 F 0 "#PWR0135" H 7150 2000 50  0001 C CNN
@@ -914,7 +914,7 @@ Wire Wire Line
 Wire Wire Line
 	7150 850  7150 900 
 $Comp
-L power:GND #PWR0136
+L cnc-universal-input-rescue:GND-power #PWR0136
 U 1 1 60A6D5A4
 P 10100 9300
 F 0 "#PWR0136" H 10100 9050 50  0001 C CNN
@@ -937,7 +937,7 @@ Wire Notes Line
 Text Notes 6150 1900 1    79   ~ 0
 INPUT
 $Comp
-L Device:LED_Small D1
+L cnc-universal-input-rescue:LED_Small-Device D1
 U 1 1 60D38BBE
 P 5650 1100
 F 0 "D1" H 5500 1000 50  0000 C CNN
@@ -949,7 +949,7 @@ F 4 "C205444" H 5650 1100 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L 74xx:74HC595 U2
+L cnc-universal-input-rescue:74HC595-74xx U2
 U 1 1 60D38BCB
 P 4300 1500
 F 0 "U2" H 4450 2050 50  0000 C CNN
@@ -961,7 +961,7 @@ F 4 "C5947" H 4300 1500 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:LED_Small D2
+L cnc-universal-input-rescue:LED_Small-Device D2
 U 1 1 60D38BD1
 P 5650 1300
 F 0 "D2" H 5500 1200 50  0000 C CNN
@@ -973,7 +973,7 @@ F 4 "C205444" H 5650 1300 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D3
+L cnc-universal-input-rescue:LED_Small-Device D3
 U 1 1 60D38BDF
 P 5650 1500
 F 0 "D3" H 5500 1400 50  0000 C CNN
@@ -985,7 +985,7 @@ F 4 "C205444" H 5650 1500 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D4
+L cnc-universal-input-rescue:LED_Small-Device D4
 U 1 1 60D38BEC
 P 5650 1700
 F 0 "D4" H 5500 1600 50  0000 C CNN
@@ -997,7 +997,7 @@ F 4 "C205444" H 5650 1700 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D5
+L cnc-universal-input-rescue:LED_Small-Device D5
 U 1 1 60D38BF9
 P 5650 1900
 F 0 "D5" H 5500 1800 50  0000 C CNN
@@ -1009,7 +1009,7 @@ F 4 "C205444" H 5650 1900 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D6
+L cnc-universal-input-rescue:LED_Small-Device D6
 U 1 1 60D38C06
 P 5650 2100
 F 0 "D6" H 5500 2000 50  0000 C CNN
@@ -1021,7 +1021,7 @@ F 4 "C205444" H 5650 2100 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D7
+L cnc-universal-input-rescue:LED_Small-Device D7
 U 1 1 60D38C13
 P 5650 2300
 F 0 "D7" H 5500 2200 50  0000 C CNN
@@ -1033,7 +1033,7 @@ F 4 "C205444" H 5650 2300 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:LED_Small D8
+L cnc-universal-input-rescue:LED_Small-Device D8
 U 1 1 60D38C20
 P 5650 2500
 F 0 "D8" H 5500 2400 50  0000 C CNN
@@ -1084,7 +1084,7 @@ Wire Wire Line
 	5900 2500 5900 2550
 Connection ~ 5900 2500
 $Comp
-L power:GND #PWR0137
+L cnc-universal-input-rescue:GND-power #PWR0137
 U 1 1 60D38C44
 P 5900 2550
 F 0 "#PWR0137" H 5900 2300 50  0001 C CNN
@@ -1106,7 +1106,7 @@ Wire Wire Line
 Wire Wire Line
 	3900 1700 3800 1700
 $Comp
-L power:+5V #PWR0138
+L cnc-universal-input-rescue:+5V-power #PWR0138
 U 1 1 60D38C65
 P 4300 850
 F 0 "#PWR0138" H 4300 700 50  0001 C CNN
@@ -1117,7 +1117,7 @@ F 3 "" H 4300 850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0139
+L cnc-universal-input-rescue:GND-power #PWR0139
 U 1 1 60D38C6B
 P 4300 2250
 F 0 "#PWR0139" H 4300 2000 50  0001 C CNN
@@ -1150,7 +1150,7 @@ SSELC
 Text Label 11300 6900 0    50   ~ 0
 OUT-SER
 $Comp
-L power:GND #PWR0140
+L cnc-universal-input-rescue:GND-power #PWR0140
 U 1 1 60E79B51
 P 10550 7750
 F 0 "#PWR0140" H 10550 7500 50  0001 C CNN
@@ -1205,7 +1205,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 3500 6350 3500
 $Comp
-L Isolator:SFH617A-4 U9
+L cnc-universal-input-rescue:SFH617A-4-Isolator U9
 U 1 1 615EBFDC
 P 6700 3600
 F 0 "U9" H 6700 3925 50  0000 C CNN
@@ -1219,7 +1219,7 @@ $EndComp
 Wire Wire Line
 	7000 3500 7150 3500
 $Comp
-L power:GNDD #PWR0143
+L cnc-universal-input-rescue:GNDD-power #PWR0143
 U 1 1 6166A107
 P 7150 3700
 F 0 "#PWR0143" H 7150 3450 50  0001 C CNN
@@ -1251,7 +1251,7 @@ Wire Notes Line
 Text Notes 14300 2400 1    79   ~ 0
 EXTERNAL
 $Comp
-L 74xx:74HC595 U3
+L cnc-universal-input-rescue:74HC595-74xx U3
 U 1 1 61D3DD7E
 P 4350 3850
 F 0 "U3" H 4500 4400 50  0000 C CNN
@@ -1272,7 +1272,7 @@ Wire Wire Line
 Wire Wire Line
 	3950 4050 3900 4050
 $Comp
-L power:+5V #PWR0149
+L cnc-universal-input-rescue:+5V-power #PWR0149
 U 1 1 61D3DE18
 P 4350 3200
 F 0 "#PWR0149" H 4350 3050 50  0001 C CNN
@@ -1283,7 +1283,7 @@ F 3 "" H 4350 3200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0150
+L cnc-universal-input-rescue:GND-power #PWR0150
 U 1 1 61D3DE1E
 P 4350 4600
 F 0 "#PWR0150" H 4350 4350 50  0001 C CNN
@@ -1330,7 +1330,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 5050 6350 5050
 $Comp
-L Isolator:SFH617A-4 U10
+L cnc-universal-input-rescue:SFH617A-4-Isolator U10
 U 1 1 628DB03A
 P 6700 5150
 F 0 "U10" H 6700 5475 50  0000 C CNN
@@ -1344,7 +1344,7 @@ $EndComp
 Wire Wire Line
 	7000 5050 7150 5050
 $Comp
-L power:GNDD #PWR0153
+L cnc-universal-input-rescue:GNDD-power #PWR0153
 U 1 1 628DB049
 P 7150 5250
 F 0 "#PWR0153" H 7150 5000 50  0001 C CNN
@@ -1396,7 +1396,7 @@ Wire Wire Line
 Wire Wire Line
 	7900 3500 7850 3500
 $Comp
-L Isolator:SFH617A-4 U13
+L cnc-universal-input-rescue:SFH617A-4-Isolator U13
 U 1 1 62983C1E
 P 8200 3600
 F 0 "U13" H 8200 3925 50  0000 C CNN
@@ -1410,7 +1410,7 @@ $EndComp
 Wire Wire Line
 	8500 3500 8650 3500
 $Comp
-L power:GNDD #PWR0162
+L cnc-universal-input-rescue:GNDD-power #PWR0162
 U 1 1 62983C2D
 P 8650 3700
 F 0 "#PWR0162" H 8650 3450 50  0001 C CNN
@@ -1470,7 +1470,7 @@ OH
 Text Label 9650 9200 3    50   ~ 0
 ~RST
 $Comp
-L power:+5V #PWR0172
+L cnc-universal-input-rescue:+5V-power #PWR0172
 U 1 1 62AF0A7D
 P 9650 8300
 F 0 "#PWR0172" H 9650 8150 50  0001 C CNN
@@ -1481,7 +1481,7 @@ F 3 "" H 9650 8300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Small R17
+L cnc-universal-input-rescue:R_Small-Device R17
 U 1 1 62AF2453
 P 9650 8450
 F 0 "R17" V 9550 8450 50  0000 L CNN
@@ -1513,7 +1513,7 @@ Wire Wire Line
 Wire Wire Line
 	9300 1550 9450 1550
 $Comp
-L Interface_USB:CH340G U18
+L cnc-universal-input-rescue:CH340G-Interface_USB U18
 U 1 1 5FECC9E5
 P 14600 5450
 F 0 "U18" H 14800 6050 50  0000 C CNN
@@ -1533,7 +1533,7 @@ Wire Wire Line
 Wire Wire Line
 	15600 5150 15400 5150
 $Comp
-L Device:C_Small C13
+L cnc-universal-input-rescue:C_Small-Device C13
 U 1 1 5FFDE22D
 P 14300 4800
 F 0 "C13" V 14150 4900 50  0000 L CNN
@@ -1563,7 +1563,7 @@ NoConn ~ 15000 5650
 NoConn ~ 15000 5850
 NoConn ~ 14200 5150
 $Comp
-L Device:LED_Small D18
+L cnc-universal-input-rescue:LED_Small-Device D18
 U 1 1 6072782B
 P 15150 4900
 F 0 "D18" H 14750 4900 50  0000 C CNN
@@ -1575,7 +1575,7 @@ F 4 "C205441" H 15150 4900 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:LED_Small D19
+L cnc-universal-input-rescue:LED_Small-Device D19
 U 1 1 607291BA
 P 15400 4900
 F 0 "D19" H 15000 4900 50  0000 C CNN
@@ -1601,7 +1601,7 @@ Wire Wire Line
 Wire Wire Line
 	15150 4750 15150 4800
 $Comp
-L Device:R_Small R66
+L cnc-universal-input-rescue:R_Small-Device R66
 U 1 1 60939591
 P 15150 4650
 F 0 "R66" V 15250 4750 50  0000 L CNN
@@ -1613,7 +1613,7 @@ F 4 "C17604" H 15150 4650 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Small R67
+L cnc-universal-input-rescue:R_Small-Device R67
 U 1 1 60939A04
 P 15400 4650
 F 0 "R67" V 15500 4750 50  0000 L CNN
@@ -1652,7 +1652,7 @@ Wire Notes Line
 Text Notes 12800 5500 1    79   ~ 0
 UART
 $Comp
-L Switch:SW_Push SW1
+L cnc-universal-input-rescue:SW_Push-Switch SW1
 U 1 1 6162787D
 P 9450 8850
 F 0 "SW1" H 9800 8950 50  0000 R CNN
@@ -1673,7 +1673,7 @@ Wire Wire Line
 Wire Wire Line
 	9450 9050 9450 9200
 $Comp
-L power:GND #PWR0182
+L cnc-universal-input-rescue:GND-power #PWR0182
 U 1 1 6175B3E9
 P 9450 9200
 F 0 "#PWR0182" H 9450 8950 50  0001 C CNN
@@ -1684,7 +1684,7 @@ F 3 "" H 9450 9200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Switch:SW_Push SW2
+L cnc-universal-input-rescue:SW_Push-Switch SW2
 U 1 1 618DF371
 P 12400 6600
 F 0 "SW2" H 12600 6800 50  0000 R CNN
@@ -1696,7 +1696,7 @@ F 4 "C318884" H 12400 6600 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L power:GND #PWR0184
+L cnc-universal-input-rescue:GND-power #PWR0184
 U 1 1 61BA31AD
 P 12400 6850
 F 0 "#PWR0184" H 12400 6600 50  0001 C CNN
@@ -1713,7 +1713,7 @@ Wire Wire Line
 Text Label 11300 6500 0    50   ~ 0
 ~RST
 $Comp
-L Device:C_Small C9
+L cnc-universal-input-rescue:C_Small-Device C9
 U 1 1 61DDCFEB
 P 9550 5150
 F 0 "C9" V 9400 5300 50  0000 L CNN
@@ -1731,7 +1731,7 @@ Wire Wire Line
 Wire Wire Line
 	9550 5250 9550 5300
 $Comp
-L power:GND #PWR0185
+L cnc-universal-input-rescue:GND-power #PWR0185
 U 1 1 61E7EF53
 P 9550 5300
 F 0 "#PWR0185" H 9550 5050 50  0001 C CNN
@@ -1764,7 +1764,7 @@ Wire Wire Line
 Wire Wire Line
 	11500 2100 11500 2450
 $Comp
-L Device:R_Small R68
+L cnc-universal-input-rescue:R_Small-Device R68
 U 1 1 62535C39
 P 11500 2550
 F 0 "R68" H 11600 2650 50  0000 L CNN
@@ -1776,7 +1776,7 @@ F 4 "C17724" H 11500 2550 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0187
+L cnc-universal-input-rescue:GND-power #PWR0187
 U 1 1 6258BC3C
 P 11500 2650
 F 0 "#PWR0187" H 11500 2400 50  0001 C CNN
@@ -1795,7 +1795,7 @@ Wire Wire Line
 Wire Wire Line
 	2450 2650 2450 2700
 $Comp
-L power:GND #PWR0131
+L cnc-universal-input-rescue:GND-power #PWR0131
 U 1 1 60256A75
 P 2450 2950
 F 0 "#PWR0131" H 2450 2700 50  0001 C CNN
@@ -1806,7 +1806,7 @@ F 3 "" H 2450 2950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0130
+L cnc-universal-input-rescue:+12V-power #PWR0130
 U 1 1 60256A6F
 P 2450 2650
 F 0 "#PWR0130" H 2450 2500 50  0001 C CNN
@@ -1817,7 +1817,7 @@ F 3 "" H 2450 2650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x03 J8
+L cnc-universal-input-rescue:Screw_Terminal_01x03-Connector J8
 U 1 1 60256A84
 P 2200 2800
 F 0 "J8" V 2350 2750 50  0000 C CNN
@@ -1845,7 +1845,7 @@ OH
 Text Label 9300 850  2    50   ~ 0
 OA
 $Comp
-L Device:C_Small C18
+L cnc-universal-input-rescue:C_Small-Device C18
 U 1 1 60382BC5
 P 6450 2500
 F 0 "C18" H 6250 2650 50  0000 L CNN
@@ -1857,7 +1857,7 @@ F 4 "C49678" H 6450 2500 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0190
+L cnc-universal-input-rescue:+5V-power #PWR0190
 U 1 1 6038363B
 P 6450 2400
 F 0 "#PWR0190" H 6450 2250 50  0001 C CNN
@@ -1868,7 +1868,7 @@ F 3 "" H 6450 2400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0191
+L cnc-universal-input-rescue:GND-power #PWR0191
 U 1 1 60384056
 P 6450 2600
 F 0 "#PWR0191" H 6450 2350 50  0001 C CNN
@@ -1879,7 +1879,7 @@ F 3 "" H 6450 2600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C16
+L cnc-universal-input-rescue:C_Small-Device C16
 U 1 1 60384C8F
 P 3600 2300
 F 0 "C16" H 3692 2346 50  0000 L CNN
@@ -1891,7 +1891,7 @@ F 4 "C49678" H 3600 2300 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0192
+L cnc-universal-input-rescue:+5V-power #PWR0192
 U 1 1 60384C95
 P 3600 2200
 F 0 "#PWR0192" H 3600 2050 50  0001 C CNN
@@ -1902,7 +1902,7 @@ F 3 "" H 3600 2200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0193
+L cnc-universal-input-rescue:GND-power #PWR0193
 U 1 1 60384C9B
 P 3600 2400
 F 0 "#PWR0193" H 3600 2150 50  0001 C CNN
@@ -1913,7 +1913,7 @@ F 3 "" H 3600 2400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C17
+L cnc-universal-input-rescue:C_Small-Device C17
 U 1 1 603DD2E3
 P 3600 4750
 F 0 "C17" H 3692 4796 50  0000 L CNN
@@ -1925,7 +1925,7 @@ F 4 "C49678" H 3600 4750 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0194
+L cnc-universal-input-rescue:+5V-power #PWR0194
 U 1 1 603DD2E9
 P 3600 4650
 F 0 "#PWR0194" H 3600 4500 50  0001 C CNN
@@ -1936,7 +1936,7 @@ F 3 "" H 3600 4650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0195
+L cnc-universal-input-rescue:GND-power #PWR0195
 U 1 1 603DD2EF
 P 3600 4850
 F 0 "#PWR0195" H 3600 4600 50  0001 C CNN
@@ -1947,7 +1947,7 @@ F 3 "" H 3600 4850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C20
+L cnc-universal-input-rescue:C_Small-Device C20
 U 1 1 6059DF95
 P 13200 3400
 F 0 "C20" H 13250 3300 50  0000 L CNN
@@ -1959,7 +1959,7 @@ F 4 "C49678" H 13200 3400 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0196
+L cnc-universal-input-rescue:GND-power #PWR0196
 U 1 1 6059DFA1
 P 13200 3500
 F 0 "#PWR0196" H 13200 3250 50  0001 C CNN
@@ -1970,7 +1970,7 @@ F 3 "" H 13200 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0197
+L cnc-universal-input-rescue:+12V-power #PWR0197
 U 1 1 605F5EDA
 P 13200 3300
 F 0 "#PWR0197" H 13200 3150 50  0001 C CNN
@@ -1981,7 +1981,7 @@ F 3 "" H 13200 3300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C21
+L cnc-universal-input-rescue:C_Small-Device C21
 U 1 1 605F6BC3
 P 15550 6000
 F 0 "C21" H 15650 6150 50  0000 L CNN
@@ -1993,7 +1993,7 @@ F 4 "C49678" H 15550 6000 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C19
+L cnc-universal-input-rescue:C_Small-Device C19
 U 1 1 60650E13
 P 9600 7550
 F 0 "C19" H 9692 7596 50  0000 L CNN
@@ -2005,7 +2005,7 @@ F 4 "C49678" H 9600 7550 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0200
+L cnc-universal-input-rescue:+5V-power #PWR0200
 U 1 1 60650E19
 P 9600 7450
 F 0 "#PWR0200" H 9600 7300 50  0001 C CNN
@@ -2016,7 +2016,7 @@ F 3 "" H 9600 7450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0201
+L cnc-universal-input-rescue:GND-power #PWR0201
 U 1 1 60650E1F
 P 9600 7650
 F 0 "#PWR0201" H 9600 7400 50  0001 C CNN
@@ -2028,7 +2028,7 @@ F 3 "" H 9600 7650 50  0001 C CNN
 $EndComp
 NoConn ~ 15000 5750
 $Comp
-L Device:C_Small C23
+L cnc-universal-input-rescue:C_Small-Device C23
 U 1 1 602F0F9B
 P 13850 950
 F 0 "C23" H 13950 850 50  0000 L CNN
@@ -2040,7 +2040,7 @@ F 4 "C49678" H 13850 950 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0202
+L cnc-universal-input-rescue:GND-power #PWR0202
 U 1 1 602F0FA1
 P 13850 1050
 F 0 "#PWR0202" H 13850 800 50  0001 C CNN
@@ -2051,7 +2051,7 @@ F 3 "" H 13850 1050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+24V #PWR0203
+L cnc-universal-input-rescue:+24V-power #PWR0203
 U 1 1 60349356
 P 13850 850
 F 0 "#PWR0203" H 13850 700 50  0001 C CNN
@@ -2062,7 +2062,7 @@ F 3 "" H 13850 850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C22
+L cnc-universal-input-rescue:CP_Small-Device C22
 U 1 1 60304AF2
 P 13650 950
 F 0 "C22" V 13738 996 50  0000 L CNN
@@ -2074,7 +2074,7 @@ F 4 "C13585" H 13650 950 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0204
+L cnc-universal-input-rescue:GND-power #PWR0204
 U 1 1 60305758
 P 13650 1050
 F 0 "#PWR0204" H 13650 800 50  0001 C CNN
@@ -2085,7 +2085,7 @@ F 3 "" H 13650 1050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+24V #PWR0205
+L cnc-universal-input-rescue:+24V-power #PWR0205
 U 1 1 603058C6
 P 13650 850
 F 0 "#PWR0205" H 13650 700 50  0001 C CNN
@@ -2096,7 +2096,7 @@ F 3 "" H 13650 850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Transistor_FET:2N7002 Q11
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q11
 U 1 1 6009DBE7
 P 10900 1000
 F 0 "Q11" V 10800 900 50  0000 C CNN
@@ -2108,7 +2108,7 @@ F 4 "C8545" H 10900 1000 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:R_Small R69
+L cnc-universal-input-rescue:R_Small-Device R69
 U 1 1 600A062B
 P 10550 900
 F 0 "R69" V 10450 850 50  0000 L CNN
@@ -2122,7 +2122,7 @@ $EndComp
 Wire Wire Line
 	10650 900  10700 900 
 $Comp
-L power:+12V #PWR0206
+L cnc-universal-input-rescue:+12V-power #PWR0206
 U 1 1 600FB559
 P 10400 850
 F 0 "#PWR0206" H 10400 700 50  0001 C CNN
@@ -2156,7 +2156,7 @@ Wire Wire Line
 Wire Wire Line
 	10650 750  10650 900 
 $Comp
-L power:GND #PWR0207
+L cnc-universal-input-rescue:GND-power #PWR0207
 U 1 1 605ACDEE
 P 11150 1000
 F 0 "#PWR0207" H 11150 750 50  0001 C CNN
@@ -2169,7 +2169,7 @@ $EndComp
 Text Label 10800 1850 2    50   ~ 0
 SSELB
 $Comp
-L Transistor_FET:2N7002 Q12
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q12
 U 1 1 60669982
 P 10900 1650
 F 0 "Q12" V 10800 1550 50  0000 C CNN
@@ -2181,7 +2181,7 @@ F 4 "C8545" H 10900 1650 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:R_Small R70
+L cnc-universal-input-rescue:R_Small-Device R70
 U 1 1 60669988
 P 10550 1550
 F 0 "R70" V 10450 1500 50  0000 L CNN
@@ -2195,7 +2195,7 @@ $EndComp
 Wire Wire Line
 	10650 1550 10700 1550
 $Comp
-L power:+12V #PWR0208
+L cnc-universal-input-rescue:+12V-power #PWR0208
 U 1 1 6066998F
 P 10400 1500
 F 0 "#PWR0208" H 10400 1350 50  0001 C CNN
@@ -2223,7 +2223,7 @@ Wire Wire Line
 Wire Wire Line
 	10650 1400 10650 1550
 $Comp
-L power:GND #PWR0209
+L cnc-universal-input-rescue:GND-power #PWR0209
 U 1 1 6066999E
 P 11150 1650
 F 0 "#PWR0209" H 11150 1400 50  0001 C CNN
@@ -2236,7 +2236,7 @@ $EndComp
 Text Label 10800 2450 2    50   ~ 0
 SSELC
 $Comp
-L Transistor_FET:2N7002 Q13
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q13
 U 1 1 606CC6F6
 P 10900 2250
 F 0 "Q13" V 10800 2150 50  0000 C CNN
@@ -2248,7 +2248,7 @@ F 4 "C8545" H 10900 2250 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:R_Small R71
+L cnc-universal-input-rescue:R_Small-Device R71
 U 1 1 606CC6FC
 P 10550 2150
 F 0 "R71" V 10450 2100 50  0000 L CNN
@@ -2262,7 +2262,7 @@ $EndComp
 Wire Wire Line
 	10650 2150 10700 2150
 $Comp
-L power:+12V #PWR0210
+L cnc-universal-input-rescue:+12V-power #PWR0210
 U 1 1 606CC703
 P 10400 2100
 F 0 "#PWR0210" H 10400 1950 50  0001 C CNN
@@ -2290,7 +2290,7 @@ Wire Wire Line
 Wire Wire Line
 	10650 2000 10650 2150
 $Comp
-L power:GND #PWR0211
+L cnc-universal-input-rescue:GND-power #PWR0211
 U 1 1 606CC712
 P 11150 2250
 F 0 "#PWR0211" H 11150 2000 50  0001 C CNN
@@ -2349,7 +2349,7 @@ F 4 "C61063" H 3550 6100 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:L_Small L1
+L cnc-universal-input-rescue:L_Small-Device L1
 U 1 1 608DCB73
 P 4350 5700
 F 0 "L1" V 4535 5700 50  0000 C CNN
@@ -2361,7 +2361,7 @@ F 4 "C169377" V 4350 5700 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:D_Schottky_Small D20
+L cnc-universal-input-rescue:D_Schottky_Small-Device D20
 U 1 1 608EB79F
 P 4150 6150
 F 0 "D20" H 4150 6355 50  0000 C CNN
@@ -2392,7 +2392,7 @@ Connection ~ 3950 6350
 Wire Wire Line
 	3950 6350 3950 6400
 $Comp
-L power:GND #PWR0107
+L cnc-universal-input-rescue:GND-power #PWR0107
 U 1 1 60A70AD0
 P 3950 6400
 F 0 "#PWR0107" H 3950 6150 50  0001 C CNN
@@ -2405,7 +2405,7 @@ $EndComp
 Wire Wire Line
 	4150 6250 4150 6400
 $Comp
-L power:GND #PWR0108
+L cnc-universal-input-rescue:GND-power #PWR0108
 U 1 1 60B956B5
 P 4150 6400
 F 0 "#PWR0108" H 4150 6150 50  0001 C CNN
@@ -2427,7 +2427,7 @@ Wire Wire Line
 	4150 5700 4250 5700
 Connection ~ 4150 5700
 $Comp
-L Device:CP_Small C6
+L cnc-universal-input-rescue:CP_Small-Device C6
 U 1 1 60FEAE17
 P 4600 6150
 F 0 "C6" V 4450 6250 50  0000 L CNN
@@ -2443,7 +2443,7 @@ Wire Wire Line
 Wire Wire Line
 	4450 5700 4600 5700
 $Comp
-L power:GND #PWR0110
+L cnc-universal-input-rescue:GND-power #PWR0110
 U 1 1 610BC605
 P 4600 6400
 F 0 "#PWR0110" H 4600 6150 50  0001 C CNN
@@ -2478,7 +2478,7 @@ F 4 "C62594" H 3550 7550 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:L_Small L2
+L cnc-universal-input-rescue:L_Small-Device L2
 U 1 1 61622B53
 P 4350 7150
 F 0 "L2" V 4535 7150 50  0000 C CNN
@@ -2509,7 +2509,7 @@ Connection ~ 3950 7800
 Wire Wire Line
 	3950 7800 3950 7850
 $Comp
-L power:GND #PWR0116
+L cnc-universal-input-rescue:GND-power #PWR0116
 U 1 1 61622B6A
 P 3950 7850
 F 0 "#PWR0116" H 3950 7600 50  0001 C CNN
@@ -2522,7 +2522,7 @@ $EndComp
 Wire Wire Line
 	4150 7700 4150 7850
 $Comp
-L power:GND #PWR0212
+L cnc-universal-input-rescue:GND-power #PWR0212
 U 1 1 61622B71
 P 4150 7850
 F 0 "#PWR0212" H 4150 7600 50  0001 C CNN
@@ -2538,7 +2538,7 @@ Wire Wire Line
 	4150 7150 4250 7150
 Connection ~ 4150 7150
 $Comp
-L Device:CP_Small C7
+L cnc-universal-input-rescue:CP_Small-Device C7
 U 1 1 61622B98
 P 4600 7600
 F 0 "C7" V 4450 7700 50  0000 L CNN
@@ -2554,7 +2554,7 @@ Wire Wire Line
 Wire Wire Line
 	4450 7150 4600 7150
 $Comp
-L power:GND #PWR0214
+L cnc-universal-input-rescue:GND-power #PWR0214
 U 1 1 61622BA1
 P 4600 7850
 F 0 "#PWR0214" H 4600 7600 50  0001 C CNN
@@ -2571,7 +2571,7 @@ Wire Wire Line
 	4750 7150 5800 7150
 Connection ~ 4750 7150
 $Comp
-L power:+24V #PWR0216
+L cnc-universal-input-rescue:+24V-power #PWR0216
 U 1 1 6169BCD6
 P 2200 5600
 F 0 "#PWR0216" H 2200 5450 50  0001 C CNN
@@ -2587,7 +2587,7 @@ Wire Wire Line
 	2200 7350 2200 5900
 Connection ~ 2200 5900
 $Comp
-L Device:CP_Small C3
+L cnc-universal-input-rescue:CP_Small-Device C3
 U 1 1 61796581
 P 2550 6150
 F 0 "C3" V 2400 6250 50  0000 L CNN
@@ -2601,7 +2601,7 @@ $EndComp
 Wire Wire Line
 	2550 6050 2550 5900
 $Comp
-L power:GND #PWR0217
+L cnc-universal-input-rescue:GND-power #PWR0217
 U 1 1 61796588
 P 2550 6400
 F 0 "#PWR0217" H 2550 6150 50  0001 C CNN
@@ -2614,7 +2614,7 @@ $EndComp
 Wire Wire Line
 	2550 6250 2550 6400
 $Comp
-L Device:C_Small C4
+L cnc-universal-input-rescue:C_Small-Device C4
 U 1 1 6198ED6E
 P 2850 6150
 F 0 "C4" V 2700 6300 50  0000 L CNN
@@ -2628,7 +2628,7 @@ $EndComp
 Wire Wire Line
 	2850 6250 2850 6400
 $Comp
-L power:GND #PWR0218
+L cnc-universal-input-rescue:GND-power #PWR0218
 U 1 1 6198ED75
 P 2850 6400
 F 0 "#PWR0218" H 2850 6150 50  0001 C CNN
@@ -2649,7 +2649,7 @@ Wire Wire Line
 Wire Wire Line
 	2550 5900 2850 5900
 $Comp
-L power:+5V #PWR0220
+L cnc-universal-input-rescue:+5V-power #PWR0220
 U 1 1 61E10732
 P 5800 5600
 F 0 "#PWR0220" H 5800 5450 50  0001 C CNN
@@ -2664,7 +2664,7 @@ Wire Wire Line
 Wire Wire Line
 	5800 7150 5800 7050
 $Comp
-L power:+12V #PWR0221
+L cnc-universal-input-rescue:+12V-power #PWR0221
 U 1 1 61F15BA8
 P 5800 7050
 F 0 "#PWR0221" H 5800 6900 50  0001 C CNN
@@ -2675,7 +2675,7 @@ F 3 "" H 5800 7050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0222
+L cnc-universal-input-rescue:GND-power #PWR0222
 U 1 1 61F98FB3
 P 3200 6400
 F 0 "#PWR0222" H 3200 6150 50  0001 C CNN
@@ -2690,7 +2690,7 @@ Wire Wire Line
 Wire Wire Line
 	3200 6350 3200 6400
 $Comp
-L power:GND #PWR0223
+L cnc-universal-input-rescue:GND-power #PWR0223
 U 1 1 6201BA3E
 P 3200 7850
 F 0 "#PWR0223" H 3200 7600 50  0001 C CNN
@@ -2707,7 +2707,7 @@ Wire Wire Line
 Wire Wire Line
 	2200 7350 3250 7350
 $Comp
-L Connector:Screw_Terminal_01x02 J14
+L cnc-universal-input-rescue:Screw_Terminal_01x02-Connector J14
 U 1 1 631826F0
 P 2400 8150
 F 0 "J14" H 2400 8300 50  0000 C CNN
@@ -2729,7 +2729,7 @@ Wire Wire Line
 Wire Wire Line
 	11300 7400 11150 7400
 $Comp
-L power:GND #PWR0148
+L cnc-universal-input-rescue:GND-power #PWR0148
 U 1 1 606D318E
 P 11300 7850
 F 0 "#PWR0148" H 11300 7600 50  0001 C CNN
@@ -2740,7 +2740,7 @@ F 3 "" H 11300 7850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:LED_Small D22
+L cnc-universal-input-rescue:LED_Small-Device D22
 U 1 1 608EB1A4
 P 11300 7750
 F 0 "D22" H 11050 7650 50  0000 C CNN
@@ -2752,7 +2752,7 @@ F 4 "C205441" H 11300 7750 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:R_Small R60
+L cnc-universal-input-rescue:R_Small-Device R60
 U 1 1 608EB1AC
 P 11300 7550
 F 0 "R60" V 11400 7400 50  0000 L CNN
@@ -2766,7 +2766,7 @@ $EndComp
 Wire Wire Line
 	14650 1000 14550 1000
 $Comp
-L power:GNDD #PWR0189
+L cnc-universal-input-rescue:GNDD-power #PWR0189
 U 1 1 5FFA09F8
 P 14650 1200
 F 0 "#PWR0189" H 14650 950 50  0001 C CNN
@@ -2785,7 +2785,7 @@ Wire Wire Line
 Wire Wire Line
 	14650 1200 14650 1100
 $Comp
-L power:+5VD #PWR0188
+L cnc-universal-input-rescue:+5VD-power #PWR0188
 U 1 1 5FEF3703
 P 14650 900
 F 0 "#PWR0188" H 14650 750 50  0001 C CNN
@@ -2796,7 +2796,7 @@ F 3 "" H 14650 900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x02 J13
+L cnc-universal-input-rescue:Screw_Terminal_01x02-Connector J13
 U 1 1 5FEF2B76
 P 14900 1000
 F 0 "J13" H 14900 1150 50  0000 C CNN
@@ -2816,7 +2816,7 @@ BB
 Text Label 7150 3400 1    50   ~ 0
 BA
 $Comp
-L Diode:BAT54A D23
+L cnc-universal-input-rescue:BAT54A-Diode D23
 U 1 1 614B069D
 P 14750 2400
 F 0 "D23" H 15050 2200 50  0000 C CNN
@@ -2828,7 +2828,7 @@ F 4 "C556167" H 14750 2400 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Diode:BAT54A D24
+L cnc-universal-input-rescue:BAT54A-Diode D24
 U 1 1 614B06A3
 P 14750 1900
 F 0 "D24" H 15050 1700 50  0000 C CNN
@@ -2840,7 +2840,7 @@ F 4 "C556167" H 14750 1900 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5VD #PWR0227
+L cnc-universal-input-rescue:+5VD-power #PWR0227
 U 1 1 614B06A9
 P 14750 1700
 F 0 "#PWR0227" H 14750 1550 50  0001 C CNN
@@ -2851,7 +2851,7 @@ F 3 "" H 14750 1700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5VD #PWR0228
+L cnc-universal-input-rescue:+5VD-power #PWR0228
 U 1 1 614B06AF
 P 14750 2200
 F 0 "#PWR0228" H 14750 2050 50  0001 C CNN
@@ -2878,7 +2878,7 @@ BG
 Text Label 15650 2850 0    50   ~ 0
 BH
 $Comp
-L power:GND #PWR0231
+L cnc-universal-input-rescue:GND-power #PWR0231
 U 1 1 61719D9F
 P 3900 4400
 F 0 "#PWR0231" H 3900 4150 50  0001 C CNN
@@ -2897,7 +2897,7 @@ Text Label 11300 7200 0    50   ~ 0
 Text Label 11300 7000 0    50   ~ 0
 OUT-RCLK
 $Comp
-L Device:R_Pack04 RN1
+L cnc-universal-input-rescue:R_Pack04-Device RN1
 U 1 1 619263B4
 P 15450 2000
 F 0 "RN1" V 15775 2000 50  0000 C CNN
@@ -2919,7 +2919,7 @@ Wire Wire Line
 Wire Wire Line
 	7150 4950 7150 5050
 $Comp
-L Device:R_Pack04 RN2
+L cnc-universal-input-rescue:R_Pack04-Device RN2
 U 1 1 6262F36D
 P 15450 2950
 F 0 "RN2" V 15775 2950 50  0000 C CNN
@@ -2951,7 +2951,7 @@ Wire Wire Line
 Wire Wire Line
 	15150 2500 14450 2500
 $Comp
-L Diode:BAT54A D26
+L cnc-universal-input-rescue:BAT54A-Diode D26
 U 1 1 62C5E9B8
 P 14750 3350
 F 0 "D26" H 15050 3150 50  0000 C CNN
@@ -2963,7 +2963,7 @@ F 4 "C556167" H 14750 3350 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L Diode:BAT54A D25
+L cnc-universal-input-rescue:BAT54A-Diode D25
 U 1 1 62C5E9BE
 P 14750 2850
 F 0 "D25" H 15050 2650 50  0000 C CNN
@@ -2975,7 +2975,7 @@ F 4 "C556167" H 14750 2850 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5VD #PWR0229
+L cnc-universal-input-rescue:+5VD-power #PWR0229
 U 1 1 62C5E9C4
 P 14750 2650
 F 0 "#PWR0229" H 14750 2500 50  0001 C CNN
@@ -2986,7 +2986,7 @@ F 3 "" H 14750 2650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5VD #PWR0230
+L cnc-universal-input-rescue:+5VD-power #PWR0230
 U 1 1 62C5E9CA
 P 14750 3150
 F 0 "#PWR0230" H 14750 3000 50  0001 C CNN
@@ -3021,7 +3021,7 @@ Wire Wire Line
 Wire Wire Line
 	15250 3150 15250 3350
 $Comp
-L Device:R_Pack04 RN3
+L cnc-universal-input-rescue:R_Pack04-Device RN3
 U 1 1 62E89C82
 P 7800 1200
 F 0 "RN3" V 8125 1200 50  0000 C CNN
@@ -3033,7 +3033,7 @@ F 4 "C12018" H 7800 1200 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:R_Pack04 RN4
+L cnc-universal-input-rescue:R_Pack04-Device RN4
 U 1 1 62F40D5B
 P 7800 1600
 F 0 "RN4" V 7350 1600 50  0000 C CNN
@@ -3105,7 +3105,7 @@ Wire Wire Line
 Wire Wire Line
 	8050 2500 8400 2500
 $Comp
-L Device:R_Pack04 RN5
+L cnc-universal-input-rescue:R_Pack04-Device RN5
 U 1 1 637940EC
 P 4950 1200
 F 0 "RN5" V 5275 1200 50  0000 C CNN
@@ -3117,7 +3117,7 @@ F 4 "C12034" H 4950 1200 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:R_Pack04 RN6
+L cnc-universal-input-rescue:R_Pack04-Device RN6
 U 1 1 637940F2
 P 4950 1600
 F 0 "RN6" V 4500 1600 50  0000 C CNN
@@ -3189,7 +3189,7 @@ Wire Wire Line
 Wire Wire Line
 	4750 1800 4700 1800
 $Comp
-L Device:R_Pack04 RN7
+L cnc-universal-input-rescue:R_Pack04-Device RN7
 U 1 1 63C5FD82
 P 10600 3050
 F 0 "RN7" V 10900 3050 50  0000 C CNN
@@ -3205,7 +3205,7 @@ SA
 Text Label 10950 3800 3    50   ~ 0
 SB
 $Comp
-L Device:R_Pack04 RN8
+L cnc-universal-input-rescue:R_Pack04-Device RN8
 U 1 1 6424749A
 P 11800 3050
 F 0 "RN8" V 12100 3050 50  0000 C CNN
@@ -3221,7 +3221,7 @@ SC
 Text Label 11150 3800 3    50   ~ 0
 SD
 $Comp
-L Device:R_Pack04 RN9
+L cnc-universal-input-rescue:R_Pack04-Device RN9
 U 1 1 642BB739
 P 10600 3450
 F 0 "RN9" V 10150 3450 50  0000 C CNN
@@ -3237,7 +3237,7 @@ SE
 Text Label 11350 3800 3    50   ~ 0
 SF
 $Comp
-L Device:R_Pack04 RN10
+L cnc-universal-input-rescue:R_Pack04-Device RN10
 U 1 1 6433402B
 P 11800 3450
 F 0 "RN10" V 11350 3450 50  0000 C CNN
@@ -3355,7 +3355,7 @@ Connection ~ 10400 3550
 Wire Wire Line
 	10400 3550 10400 3450
 $Comp
-L power:+12V #PWR0232
+L cnc-universal-input-rescue:+12V-power #PWR0232
 U 1 1 65EB2ED2
 P 10400 2850
 F 0 "#PWR0232" H 10400 2700 50  0001 C CNN
@@ -3366,7 +3366,7 @@ F 3 "" H 10400 2850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0233
+L cnc-universal-input-rescue:GND-power #PWR0233
 U 1 1 65EB51E0
 P 12000 3800
 F 0 "#PWR0233" H 12000 3550 50  0001 C CNN
@@ -3377,7 +3377,7 @@ F 3 "" H 12000 3800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C27
+L cnc-universal-input-rescue:CP_Small-Device C27
 U 1 1 6612620D
 P 13650 3400
 F 0 "C27" V 13738 3446 50  0000 L CNN
@@ -3389,7 +3389,7 @@ F 4 "C13585" H 13650 3400 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0234
+L cnc-universal-input-rescue:GND-power #PWR0234
 U 1 1 66126213
 P 13650 3500
 F 0 "#PWR0234" H 13650 3250 50  0001 C CNN
@@ -3400,7 +3400,7 @@ F 3 "" H 13650 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0235
+L cnc-universal-input-rescue:+12V-power #PWR0235
 U 1 1 66193692
 P 13650 3300
 F 0 "#PWR0235" H 13650 3150 50  0001 C CNN
@@ -3411,7 +3411,7 @@ F 3 "" H 13650 3300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0154
+L cnc-universal-input-rescue:GND-power #PWR0154
 U 1 1 6700B74A
 P 6900 5500
 F 0 "#PWR0154" H 6900 5250 50  0001 C CNN
@@ -3422,7 +3422,7 @@ F 3 "" H 6900 5500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0155
+L cnc-universal-input-rescue:GND-power #PWR0155
 U 1 1 6700BA23
 P 8350 3950
 F 0 "#PWR0155" H 8350 3700 50  0001 C CNN
@@ -3433,7 +3433,7 @@ F 3 "" H 8350 3950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0157
+L cnc-universal-input-rescue:GND-power #PWR0157
 U 1 1 6700BF36
 P 6850 3950
 F 0 "#PWR0157" H 6850 3700 50  0001 C CNN
@@ -3466,7 +3466,7 @@ OUT-E
 Text Label 6650 5850 0    50   ~ 0
 OUT-B
 $Comp
-L Device:Buzzer BZ1
+L cnc-universal-input-rescue:Buzzer-Device BZ1
 U 1 1 6880D998
 P 11500 8650
 F 0 "BZ1" H 11652 8679 50  0000 L CNN
@@ -3478,7 +3478,7 @@ F 4 "C128017" H 11500 8650 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Transistor_FET:2N7002 Q1
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q1
 U 1 1 6881AE4B
 P 11600 9100
 F 0 "Q1" V 11500 9000 50  0000 C CNN
@@ -3500,7 +3500,7 @@ Wire Wire Line
 Wire Wire Line
 	11950 9000 11950 9250
 $Comp
-L power:GND #PWR0160
+L cnc-universal-input-rescue:GND-power #PWR0160
 U 1 1 688EA246
 P 11950 9250
 F 0 "#PWR0160" H 11950 9000 50  0001 C CNN
@@ -3511,7 +3511,7 @@ F 3 "" H 11950 9250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0161
+L cnc-universal-input-rescue:+12V-power #PWR0161
 U 1 1 688EA64F
 P 11250 8300
 F 0 "#PWR0161" H 11250 8150 50  0001 C CNN
@@ -3539,7 +3539,7 @@ Connection ~ 9900 6900
 Wire Wire Line
 	9900 6900 9950 6900
 $Comp
-L MCU_Microchip_ATmega:ATmega328PB-AU U1
+L cnc-universal-input-rescue:ATmega328PB-AU-MCU_Microchip_ATmega U1
 U 1 1 609CE2BE
 P 10550 6200
 F 0 "U1" H 10750 7650 50  0000 C CNN
@@ -3553,7 +3553,7 @@ $EndComp
 Wire Wire Line
 	11150 6400 12400 6400
 $Comp
-L power:+5V #PWR0166
+L cnc-universal-input-rescue:+5V-power #PWR0166
 U 1 1 60BC262E
 P 11900 7600
 F 0 "#PWR0166" H 11900 7450 50  0001 C CNN
@@ -3564,7 +3564,7 @@ F 3 "" H 11900 7600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0167
+L cnc-universal-input-rescue:GND-power #PWR0167
 U 1 1 60BC2634
 P 11900 7800
 F 0 "#PWR0167" H 11900 7550 50  0001 C CNN
@@ -3596,7 +3596,7 @@ Connection ~ 12150 5250
 Wire Wire Line
 	12150 5250 12150 4950
 $Comp
-L power:GND #PWR0169
+L cnc-universal-input-rescue:GND-power #PWR0169
 U 1 1 60EB164C
 P 12150 4600
 F 0 "#PWR0169" H 12150 4350 50  0001 C CNN
@@ -3629,7 +3629,7 @@ Wire Wire Line
 Wire Wire Line
 	2350 7100 2350 7050
 $Comp
-L power:GND #PWR0133
+L cnc-universal-input-rescue:GND-power #PWR0133
 U 1 1 60454751
 P 2350 7100
 F 0 "#PWR0133" H 2350 6850 50  0001 C CNN
@@ -3640,7 +3640,7 @@ F 3 "" H 2350 7100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x02 J10
+L cnc-universal-input-rescue:Screw_Terminal_01x02-Connector J10
 U 1 1 603C6C3F
 P 2550 6950
 F 0 "J10" H 2550 7100 50  0000 C CNN
@@ -3652,7 +3652,7 @@ F 4 "C8404" H 2550 6950 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+24V #PWR0132
+L cnc-universal-input-rescue:+24V-power #PWR0132
 U 1 1 60454363
 P 2350 6900
 F 0 "#PWR0132" H 2350 6750 50  0001 C CNN
@@ -3663,7 +3663,7 @@ F 3 "" H 2350 6900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:Crystal_GND24 Y1
+L cnc-universal-input-rescue:Crystal_GND24-Device Y1
 U 1 1 60C7D282
 P 11950 4950
 F 0 "Y1" H 12144 4996 50  0000 L CNN
@@ -3675,7 +3675,7 @@ F 4 "C13738" H 11950 4950 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0226
+L cnc-universal-input-rescue:+5V-power #PWR0226
 U 1 1 631F61BE
 P 2600 8000
 F 0 "#PWR0226" H 2600 7850 50  0001 C CNN
@@ -3686,7 +3686,7 @@ F 3 "" H 2600 8000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0225
+L cnc-universal-input-rescue:+12V-power #PWR0225
 U 1 1 631F5904
 P 2850 8000
 F 0 "#PWR0225" H 2850 7850 50  0001 C CNN
@@ -3700,7 +3700,7 @@ Connection ~ 14650 1000
 Wire Wire Line
 	13450 4550 13550 4550
 $Comp
-L power:VBUS #PWR02
+L cnc-universal-input-rescue:VBUS-power #PWR02
 U 1 1 61A1567E
 P 13550 4450
 F 0 "#PWR02" H 13550 4300 50  0001 C CNN
@@ -3713,7 +3713,7 @@ $EndComp
 Wire Wire Line
 	13550 4550 13550 4450
 $Comp
-L Isolator:ADuM1201AR U7
+L cnc-universal-input-rescue:ADuM1201AR-Isolator U7
 U 1 1 6156508C
 P 14050 6900
 F 0 "U7" H 14050 7367 50  0000 C CNN
@@ -3757,7 +3757,7 @@ Wire Wire Line
 Wire Wire Line
 	14900 7100 14900 7250
 $Comp
-L power:GND #PWR010
+L cnc-universal-input-rescue:GND-power #PWR010
 U 1 1 6192CA88
 P 14900 7250
 F 0 "#PWR010" H 14900 7000 50  0001 C CNN
@@ -3768,7 +3768,7 @@ F 3 "" H 14900 7250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR09
+L cnc-universal-input-rescue:+5V-power #PWR09
 U 1 1 6192CEC3
 P 14900 6550
 F 0 "#PWR09" H 14900 6400 50  0001 C CNN
@@ -3779,7 +3779,7 @@ F 3 "" H 14900 6550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:VBUS #PWR03
+L cnc-universal-input-rescue:VBUS-power #PWR03
 U 1 1 6192D456
 P 13200 6550
 F 0 "#PWR03" H 13200 6400 50  0001 C CNN
@@ -3790,7 +3790,7 @@ F 3 "" H 13200 6550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L IvyBit:GND_USB #PWR08
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR08
 U 1 1 6192FB10
 P 14600 6100
 F 0 "#PWR08" H 14600 5850 50  0001 C CNN
@@ -3801,7 +3801,7 @@ F 3 "" H 14600 6100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L IvyBit:GND_USB #PWR013
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR013
 U 1 1 6192FD45
 P 15550 6100
 F 0 "#PWR013" H 15550 5850 50  0001 C CNN
@@ -3812,7 +3812,7 @@ F 3 "" H 15550 6100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L IvyBit:GND_USB #PWR06
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR06
 U 1 1 619915D6
 P 14100 5050
 F 0 "#PWR06" H 14100 4800 50  0001 C CNN
@@ -3823,7 +3823,7 @@ F 3 "" H 14100 5050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L IvyBit:GND_USB #PWR04
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR04
 U 1 1 61991823
 P 13200 7250
 F 0 "#PWR04" H 13200 7000 50  0001 C CNN
@@ -3834,7 +3834,7 @@ F 3 "" H 13200 7250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:VBUS #PWR07
+L cnc-universal-input-rescue:VBUS-power #PWR07
 U 1 1 61991C66
 P 14600 4500
 F 0 "#PWR07" H 14600 4350 50  0001 C CNN
@@ -3845,7 +3845,7 @@ F 3 "" H 14600 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C5
+L cnc-universal-input-rescue:C_Small-Device C5
 U 1 1 6199211D
 P 13200 6900
 F 0 "C5" V 13350 7000 50  0000 L CNN
@@ -3863,7 +3863,7 @@ Wire Wire Line
 	13200 7000 13200 7100
 Connection ~ 13200 7100
 $Comp
-L Device:C_Small C10
+L cnc-universal-input-rescue:C_Small-Device C10
 U 1 1 61A5891E
 P 14900 6900
 F 0 "C10" V 14750 7000 50  0000 L CNN
@@ -3881,7 +3881,7 @@ Wire Wire Line
 	14900 7000 14900 7100
 Connection ~ 14900 7100
 $Comp
-L power:VBUS #PWR011
+L cnc-universal-input-rescue:VBUS-power #PWR011
 U 1 1 61B1F4DA
 P 15150 4500
 F 0 "#PWR011" H 15150 4350 50  0001 C CNN
@@ -3892,7 +3892,7 @@ F 3 "" H 15150 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:VBUS #PWR012
+L cnc-universal-input-rescue:VBUS-power #PWR012
 U 1 1 61B1F764
 P 15400 4500
 F 0 "#PWR012" H 15400 4350 50  0001 C CNN
@@ -3903,7 +3903,7 @@ F 3 "" H 15400 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:VBUS #PWR0144
+L cnc-universal-input-rescue:VBUS-power #PWR0144
 U 1 1 61B3838D
 P 15550 5900
 F 0 "#PWR0144" H 15550 5750 50  0001 C CNN
@@ -3914,7 +3914,7 @@ F 3 "" H 15550 5900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C12
+L cnc-universal-input-rescue:C_Small-Device C12
 U 1 1 61EC1277
 P 13550 5800
 F 0 "C12" V 13400 5850 50  0000 L CNN
@@ -3926,7 +3926,7 @@ F 4 "C1804" H 13550 5800 50  0001 C CNN "LCSC"
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:C_Small C11
+L cnc-universal-input-rescue:C_Small-Device C11
 U 1 1 61EC127D
 P 13350 5800
 F 0 "C11" V 13500 5750 50  0000 L CNN
@@ -3959,7 +3959,7 @@ Wire Wire Line
 Wire Wire Line
 	13450 5150 13450 5300
 $Comp
-L Device:Crystal_GND24 Y2
+L cnc-universal-input-rescue:Crystal_GND24-Device Y2
 U 1 1 61EC129D
 P 13450 5500
 F 0 "Y2" H 13644 5546 50  0000 L CNN
@@ -3987,7 +3987,7 @@ Wire Wire Line
 Wire Wire Line
 	13650 6050 13650 5800
 $Comp
-L IvyBit:GND_USB #PWR0145
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR0145
 U 1 1 6211F579
 P 13750 5200
 F 0 "#PWR0145" H 13750 4950 50  0001 C CNN
@@ -3998,7 +3998,7 @@ F 3 "" H 13750 5200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L IvyBit:GND_USB #PWR0146
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR0146
 U 1 1 6224FCE7
 P 13450 5950
 F 0 "#PWR0146" H 13450 5700 50  0001 C CNN
@@ -4021,7 +4021,7 @@ Wire Wire Line
 Wire Wire Line
 	13450 4750 13950 4750
 $Comp
-L IvyBit:GND_USB #PWR0147
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR0147
 U 1 1 62A74BD2
 P 15250 6100
 F 0 "#PWR0147" H 15250 5850 50  0001 C CNN
@@ -4032,7 +4032,7 @@ F 3 "" H 15250 6100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:VBUS #PWR0163
+L cnc-universal-input-rescue:VBUS-power #PWR0163
 U 1 1 62A74BD8
 P 15250 5900
 F 0 "#PWR0163" H 15250 5750 50  0001 C CNN
@@ -4043,7 +4043,7 @@ F 3 "" H 15250 5900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C25
+L cnc-universal-input-rescue:CP_Small-Device C25
 U 1 1 62B38E66
 P 15250 6000
 F 0 "C25" V 15338 6046 50  0000 L CNN
@@ -4055,7 +4055,7 @@ F 4 "C13585" H 15250 6000 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C29
+L cnc-universal-input-rescue:C_Small-Device C29
 U 1 1 60BC2628
 P 11900 7700
 F 0 "C29" H 11992 7746 50  0000 L CNN
@@ -4075,7 +4075,7 @@ Wire Wire Line
 Wire Wire Line
 	4750 7150 4750 8200
 $Comp
-L Device:D_Schottky_Small D21
+L cnc-universal-input-rescue:D_Schottky_Small-Device D21
 U 1 1 62FE6E86
 P 4150 7600
 F 0 "D21" H 4150 7805 50  0000 C CNN
@@ -4121,7 +4121,7 @@ SA
 Wire Wire Line
 	1100 850  1600 850 
 $Comp
-L Connector:TestPoint_Probe TP3
+L cnc-universal-input-rescue:TestPoint_Probe-Connector TP3
 U 1 1 61597FBA
 P 5200 6750
 F 0 "TP3" H 5352 6851 50  0000 L CNN
@@ -4132,7 +4132,7 @@ F 3 "~" H 5400 6750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:TestPoint_Probe TP4
+L cnc-universal-input-rescue:TestPoint_Probe-Connector TP4
 U 1 1 61598959
 P 5200 8200
 F 0 "TP4" H 5352 8301 50  0000 L CNN
@@ -4149,7 +4149,7 @@ Wire Wire Line
 	5200 8200 4750 8200
 Connection ~ 4750 8200
 $Comp
-L Connector:TestPoint_Probe TP2
+L cnc-universal-input-rescue:TestPoint_Probe-Connector TP2
 U 1 1 616555F7
 P 2300 5700
 F 0 "TP2" H 2452 5801 50  0000 L CNN
@@ -4165,7 +4165,7 @@ Connection ~ 2200 5700
 Wire Wire Line
 	2200 5700 2200 5600
 $Comp
-L Connector:TestPoint_Probe TP1
+L cnc-universal-input-rescue:TestPoint_Probe-Connector TP1
 U 1 1 616B4F5B
 P 2250 7600
 F 0 "TP1" H 2402 7701 50  0000 L CNN
@@ -4176,7 +4176,7 @@ F 3 "~" H 2450 7600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0109
+L cnc-universal-input-rescue:GND-power #PWR0109
 U 1 1 616B64DC
 P 2250 7700
 F 0 "#PWR0109" H 2250 7450 50  0001 C CNN
@@ -4189,7 +4189,7 @@ $EndComp
 Wire Wire Line
 	2250 7600 2250 7700
 $Comp
-L Connector:Screw_Terminal_01x02 J15
+L cnc-universal-input-rescue:Screw_Terminal_01x02-Connector J15
 U 1 1 61659F2B
 P 9650 850
 F 0 "J15" V 9900 800 50  0000 C CNN
@@ -4201,7 +4201,7 @@ F 4 "C8404" H 9650 850 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x02 J16
+L cnc-universal-input-rescue:Screw_Terminal_01x02-Connector J16
 U 1 1 6165B842
 P 9650 1050
 F 0 "J16" V 9900 1000 50  0000 C CNN
@@ -4213,7 +4213,7 @@ F 4 "C8404" H 9650 1050 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x02 J17
+L cnc-universal-input-rescue:Screw_Terminal_01x02-Connector J17
 U 1 1 6165BAD9
 P 9650 1250
 F 0 "J17" V 9900 1200 50  0000 C CNN
@@ -4225,7 +4225,7 @@ F 4 "C8404" H 9650 1250 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x02 J18
+L cnc-universal-input-rescue:Screw_Terminal_01x02-Connector J18
 U 1 1 6165BE60
 P 9650 1450
 F 0 "J18" V 9900 1400 50  0000 C CNN
@@ -4239,7 +4239,7 @@ $EndComp
 NoConn ~ 9950 6700
 NoConn ~ 9950 6800
 $Comp
-L Transistor_FET:2N7002 Q2
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q2
 U 1 1 6189B348
 P 6550 4000
 F 0 "Q2" V 6450 3900 50  0000 C CNN
@@ -4253,7 +4253,7 @@ $EndComp
 Text Label 6600 4300 0    50   ~ 0
 OUT-A
 $Comp
-L Transistor_FET:2N7002 Q7
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q7
 U 1 1 6245B483
 P 8050 4000
 F 0 "Q7" V 7950 3900 50  0000 C CNN
@@ -4265,7 +4265,7 @@ F 4 "C8545" H 8050 4000 50  0001 C CNN "LCSC"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Transistor_FET:2N7002 Q3
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q3
 U 1 1 6245CB83
 P 6550 5550
 F 0 "Q3" V 6450 5450 50  0000 C CNN
@@ -4279,7 +4279,7 @@ $EndComp
 Wire Wire Line
 	6350 5050 6350 5000
 $Comp
-L Device:R_Small R1
+L cnc-universal-input-rescue:R_Small-Device R1
 U 1 1 62C51DB4
 P 6350 3350
 F 0 "R1" V 6450 3450 50  0000 L CNN
@@ -4291,7 +4291,7 @@ F 4 "C17557" H 6350 3350 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Small R6
+L cnc-universal-input-rescue:R_Small-Device R6
 U 1 1 62CD818B
 P 7850 3350
 F 0 "R6" V 7950 3450 50  0000 L CNN
@@ -4303,7 +4303,7 @@ F 4 "C17557" H 7850 3350 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0170
+L cnc-universal-input-rescue:+5V-power #PWR0170
 U 1 1 62CD8625
 P 7850 3250
 F 0 "#PWR0170" H 7850 3100 50  0001 C CNN
@@ -4314,7 +4314,7 @@ F 3 "" H 7850 3250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Small R2
+L cnc-universal-input-rescue:R_Small-Device R2
 U 1 1 62D40D40
 P 6350 4900
 F 0 "R2" V 6450 5000 50  0000 L CNN
@@ -4326,7 +4326,7 @@ F 4 "C17557" H 6350 4900 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0173
+L cnc-universal-input-rescue:+5V-power #PWR0173
 U 1 1 62D40D46
 P 6350 4800
 F 0 "#PWR0173" H 6350 4650 50  0001 C CNN
@@ -4337,7 +4337,7 @@ F 3 "" H 6350 4800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C8
+L cnc-universal-input-rescue:CP_Small-Device C8
 U 1 1 631145FE
 P 5700 6200
 F 0 "C8" V 5788 6246 50  0000 L CNN
@@ -4349,7 +4349,7 @@ F 4 "C13585" H 5700 6200 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0115
+L cnc-universal-input-rescue:+5V-power #PWR0115
 U 1 1 63115862
 P 5700 6100
 F 0 "#PWR0115" H 5700 5950 50  0001 C CNN
@@ -4360,7 +4360,7 @@ F 3 "" H 5700 6100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0179
+L cnc-universal-input-rescue:GND-power #PWR0179
 U 1 1 63115B74
 P 5700 6300
 F 0 "#PWR0179" H 5700 6050 50  0001 C CNN
@@ -4371,7 +4371,7 @@ F 3 "" H 5700 6300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR05
+L cnc-universal-input-rescue:+5V-power #PWR05
 U 1 1 61B5A229
 P 6350 3250
 F 0 "#PWR05" H 6350 3100 50  0001 C CNN
@@ -4420,7 +4420,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 6600 6350 6600
 $Comp
-L Isolator:SFH617A-4 U11
+L cnc-universal-input-rescue:SFH617A-4-Isolator U11
 U 1 1 62ADCAE7
 P 6700 6700
 F 0 "U11" H 6700 7025 50  0000 C CNN
@@ -4434,7 +4434,7 @@ $EndComp
 Wire Wire Line
 	7000 6600 7150 6600
 $Comp
-L power:GNDD #PWR018
+L cnc-universal-input-rescue:GNDD-power #PWR018
 U 1 1 62ADCAEE
 P 7150 6800
 F 0 "#PWR018" H 7150 6550 50  0001 C CNN
@@ -4456,7 +4456,7 @@ BC
 Wire Wire Line
 	7150 6500 7150 6600
 $Comp
-L power:GND #PWR016
+L cnc-universal-input-rescue:GND-power #PWR016
 U 1 1 62ADCAFA
 P 6900 7050
 F 0 "#PWR016" H 6900 6800 50  0001 C CNN
@@ -4469,7 +4469,7 @@ $EndComp
 Text Label 6650 7400 0    50   ~ 0
 OUT-C
 $Comp
-L Transistor_FET:2N7002 Q4
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q4
 U 1 1 62ADCB02
 P 6550 7100
 F 0 "Q4" V 6450 7000 50  0000 C CNN
@@ -4483,7 +4483,7 @@ $EndComp
 Wire Wire Line
 	6350 6600 6350 6550
 $Comp
-L Device:R_Small R3
+L cnc-universal-input-rescue:R_Small-Device R3
 U 1 1 62ADCB0A
 P 6350 6450
 F 0 "R3" V 6450 6550 50  0000 L CNN
@@ -4495,7 +4495,7 @@ F 4 "C17557" H 6350 6450 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR014
+L cnc-universal-input-rescue:+5V-power #PWR014
 U 1 1 62ADCB10
 P 6350 6350
 F 0 "#PWR014" H 6350 6200 50  0001 C CNN
@@ -4520,7 +4520,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 8150 6350 8150
 $Comp
-L Isolator:SFH617A-4 U12
+L cnc-universal-input-rescue:SFH617A-4-Isolator U12
 U 1 1 62B343D0
 P 6700 8250
 F 0 "U12" H 6700 8575 50  0000 C CNN
@@ -4534,7 +4534,7 @@ $EndComp
 Wire Wire Line
 	7000 8150 7150 8150
 $Comp
-L power:GNDD #PWR019
+L cnc-universal-input-rescue:GNDD-power #PWR019
 U 1 1 62B343D7
 P 7150 8350
 F 0 "#PWR019" H 7150 8100 50  0001 C CNN
@@ -4556,7 +4556,7 @@ BD
 Wire Wire Line
 	7150 8050 7150 8150
 $Comp
-L power:GND #PWR017
+L cnc-universal-input-rescue:GND-power #PWR017
 U 1 1 62B343E3
 P 6900 8600
 F 0 "#PWR017" H 6900 8350 50  0001 C CNN
@@ -4569,7 +4569,7 @@ $EndComp
 Text Label 6650 8950 0    50   ~ 0
 OUT-D
 $Comp
-L Transistor_FET:2N7002 Q5
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q5
 U 1 1 62B343EB
 P 6550 8650
 F 0 "Q5" V 6450 8550 50  0000 C CNN
@@ -4583,7 +4583,7 @@ $EndComp
 Wire Wire Line
 	6350 8150 6350 8100
 $Comp
-L Device:R_Small R4
+L cnc-universal-input-rescue:R_Small-Device R4
 U 1 1 62B343F3
 P 6350 8000
 F 0 "R4" V 6450 8100 50  0000 L CNN
@@ -4595,7 +4595,7 @@ F 4 "C17557" H 6350 8000 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR015
+L cnc-universal-input-rescue:+5V-power #PWR015
 U 1 1 62B343F9
 P 6350 7900
 F 0 "#PWR015" H 6350 7750 50  0001 C CNN
@@ -4620,7 +4620,7 @@ Wire Wire Line
 Wire Wire Line
 	7900 5050 7850 5050
 $Comp
-L Isolator:SFH617A-4 U14
+L cnc-universal-input-rescue:SFH617A-4-Isolator U14
 U 1 1 62B90FAE
 P 8200 5150
 F 0 "U14" H 8200 5475 50  0000 C CNN
@@ -4634,7 +4634,7 @@ $EndComp
 Wire Wire Line
 	8500 5050 8650 5050
 $Comp
-L power:GNDD #PWR026
+L cnc-universal-input-rescue:GNDD-power #PWR026
 U 1 1 62B90FB5
 P 8650 5250
 F 0 "#PWR026" H 8650 5000 50  0001 C CNN
@@ -4656,7 +4656,7 @@ BF
 Wire Wire Line
 	8650 4950 8650 5050
 $Comp
-L power:GND #PWR023
+L cnc-universal-input-rescue:GND-power #PWR023
 U 1 1 62B90FC1
 P 8400 5500
 F 0 "#PWR023" H 8400 5250 50  0001 C CNN
@@ -4669,7 +4669,7 @@ $EndComp
 Text Label 8150 5850 0    50   ~ 0
 OUT-F
 $Comp
-L Transistor_FET:2N7002 Q6
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q6
 U 1 1 62B90FC9
 P 8050 5550
 F 0 "Q6" V 7950 5450 50  0000 C CNN
@@ -4683,7 +4683,7 @@ $EndComp
 Wire Wire Line
 	7850 5050 7850 5000
 $Comp
-L Device:R_Small R5
+L cnc-universal-input-rescue:R_Small-Device R5
 U 1 1 62B90FD1
 P 7850 4900
 F 0 "R5" V 7950 5000 50  0000 L CNN
@@ -4695,7 +4695,7 @@ F 4 "C17557" H 7850 4900 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR020
+L cnc-universal-input-rescue:+5V-power #PWR020
 U 1 1 62B90FD7
 P 7850 4800
 F 0 "#PWR020" H 7850 4650 50  0001 C CNN
@@ -4720,7 +4720,7 @@ Wire Wire Line
 Wire Wire Line
 	7900 6600 7850 6600
 $Comp
-L Isolator:SFH617A-4 U15
+L cnc-universal-input-rescue:SFH617A-4-Isolator U15
 U 1 1 62D6D1C0
 P 8200 6700
 F 0 "U15" H 8200 7025 50  0000 C CNN
@@ -4734,7 +4734,7 @@ $EndComp
 Wire Wire Line
 	8500 6600 8650 6600
 $Comp
-L power:GNDD #PWR027
+L cnc-universal-input-rescue:GNDD-power #PWR027
 U 1 1 62D6D1C7
 P 8650 6800
 F 0 "#PWR027" H 8650 6550 50  0001 C CNN
@@ -4756,7 +4756,7 @@ BG
 Wire Wire Line
 	8650 6500 8650 6600
 $Comp
-L power:GND #PWR024
+L cnc-universal-input-rescue:GND-power #PWR024
 U 1 1 62D6D1D3
 P 8400 7050
 F 0 "#PWR024" H 8400 6800 50  0001 C CNN
@@ -4769,7 +4769,7 @@ $EndComp
 Text Label 8150 7400 0    50   ~ 0
 OUT-G
 $Comp
-L Transistor_FET:2N7002 Q8
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q8
 U 1 1 62D6D1DB
 P 8050 7100
 F 0 "Q8" V 7950 7000 50  0000 C CNN
@@ -4783,7 +4783,7 @@ $EndComp
 Wire Wire Line
 	7850 6600 7850 6550
 $Comp
-L Device:R_Small R7
+L cnc-universal-input-rescue:R_Small-Device R7
 U 1 1 62D6D1E3
 P 7850 6450
 F 0 "R7" V 7950 6550 50  0000 L CNN
@@ -4795,7 +4795,7 @@ F 4 "C17557" H 7850 6450 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR021
+L cnc-universal-input-rescue:+5V-power #PWR021
 U 1 1 62D6D1E9
 P 7850 6350
 F 0 "#PWR021" H 7850 6200 50  0001 C CNN
@@ -4820,7 +4820,7 @@ Wire Wire Line
 Wire Wire Line
 	7900 8150 7850 8150
 $Comp
-L Isolator:SFH617A-4 U16
+L cnc-universal-input-rescue:SFH617A-4-Isolator U16
 U 1 1 62DCDF4C
 P 8200 8250
 F 0 "U16" H 8200 8575 50  0000 C CNN
@@ -4834,7 +4834,7 @@ $EndComp
 Wire Wire Line
 	8500 8150 8650 8150
 $Comp
-L power:GNDD #PWR028
+L cnc-universal-input-rescue:GNDD-power #PWR028
 U 1 1 62DCDF53
 P 8650 8350
 F 0 "#PWR028" H 8650 8100 50  0001 C CNN
@@ -4856,7 +4856,7 @@ BH
 Wire Wire Line
 	8650 8050 8650 8150
 $Comp
-L power:GND #PWR025
+L cnc-universal-input-rescue:GND-power #PWR025
 U 1 1 62DCDF5F
 P 8400 8600
 F 0 "#PWR025" H 8400 8350 50  0001 C CNN
@@ -4869,7 +4869,7 @@ $EndComp
 Text Label 8150 8950 0    50   ~ 0
 OUT-H
 $Comp
-L Transistor_FET:2N7002 Q9
+L cnc-universal-input-rescue:2N7002-Transistor_FET Q9
 U 1 1 62DCDF67
 P 8050 8650
 F 0 "Q9" V 7950 8550 50  0000 C CNN
@@ -4883,7 +4883,7 @@ $EndComp
 Wire Wire Line
 	7850 8150 7850 8100
 $Comp
-L Device:R_Small R8
+L cnc-universal-input-rescue:R_Small-Device R8
 U 1 1 62DCDF6F
 P 7850 8000
 F 0 "R8" V 7950 8100 50  0000 L CNN
@@ -4895,7 +4895,7 @@ F 4 "C17557" H 7850 8000 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR022
+L cnc-universal-input-rescue:+5V-power #PWR022
 U 1 1 62DCDF75
 P 7850 7900
 F 0 "#PWR022" H 7850 7750 50  0001 C CNN
@@ -4916,7 +4916,7 @@ Wire Wire Line
 Wire Wire Line
 	8050 8850 8050 8950
 $Comp
-L Device:CP_Small C14
+L cnc-universal-input-rescue:CP_Small-Device C14
 U 1 1 634EFE42
 P 5250 7650
 F 0 "C14" V 5338 7696 50  0000 L CNN
@@ -4928,7 +4928,7 @@ F 4 "C13585" H 5250 7650 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0141
+L cnc-universal-input-rescue:GND-power #PWR0141
 U 1 1 634EFE4E
 P 5250 7750
 F 0 "#PWR0141" H 5250 7500 50  0001 C CNN
@@ -4939,7 +4939,7 @@ F 3 "" H 5250 7750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C24
+L cnc-universal-input-rescue:CP_Small-Device C24
 U 1 1 635521FF
 P 5550 7650
 F 0 "C24" V 5638 7696 50  0000 L CNN
@@ -4951,7 +4951,7 @@ F 4 "C13585" H 5550 7650 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0142
+L cnc-universal-input-rescue:GND-power #PWR0142
 U 1 1 6355220B
 P 5550 7750
 F 0 "#PWR0142" H 5550 7500 50  0001 C CNN
@@ -4962,7 +4962,7 @@ F 3 "" H 5550 7750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C26
+L cnc-universal-input-rescue:CP_Small-Device C26
 U 1 1 635B41C4
 P 5850 7650
 F 0 "C26" V 5938 7696 50  0000 L CNN
@@ -4974,7 +4974,7 @@ F 4 "C13585" H 5850 7650 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0151
+L cnc-universal-input-rescue:GND-power #PWR0151
 U 1 1 635B41D0
 P 5850 7750
 F 0 "#PWR0151" H 5850 7500 50  0001 C CNN
@@ -4985,7 +4985,7 @@ F 3 "" H 5850 7750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0152
+L cnc-universal-input-rescue:+12V-power #PWR0152
 U 1 1 63615D93
 P 5850 7550
 F 0 "#PWR0152" H 5850 7400 50  0001 C CNN
@@ -4996,7 +4996,7 @@ F 3 "" H 5850 7550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0156
+L cnc-universal-input-rescue:+12V-power #PWR0156
 U 1 1 63616031
 P 5550 7550
 F 0 "#PWR0156" H 5550 7400 50  0001 C CNN
@@ -5007,7 +5007,7 @@ F 3 "" H 5550 7550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0158
+L cnc-universal-input-rescue:+12V-power #PWR0158
 U 1 1 6361627D
 P 5250 7550
 F 0 "#PWR0158" H 5250 7400 50  0001 C CNN
@@ -5018,7 +5018,7 @@ F 3 "" H 5250 7550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C15
+L cnc-universal-input-rescue:CP_Small-Device C15
 U 1 1 636179EC
 P 5400 6200
 F 0 "C15" V 5488 6246 50  0000 L CNN
@@ -5030,7 +5030,7 @@ F 4 "C13585" H 5400 6200 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR0159
+L cnc-universal-input-rescue:+5V-power #PWR0159
 U 1 1 636179F2
 P 5400 6100
 F 0 "#PWR0159" H 5400 5950 50  0001 C CNN
@@ -5041,7 +5041,7 @@ F 3 "" H 5400 6100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0164
+L cnc-universal-input-rescue:GND-power #PWR0164
 U 1 1 636179F8
 P 5400 6300
 F 0 "#PWR0164" H 5400 6050 50  0001 C CNN
@@ -5052,7 +5052,7 @@ F 3 "" H 5400 6300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP_Small C28
+L cnc-universal-input-rescue:CP_Small-Device C28
 U 1 1 637674BF
 P 4950 7650
 F 0 "C28" V 5038 7696 50  0000 L CNN
@@ -5064,7 +5064,7 @@ F 4 "C13585" H 4950 7650 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0165
+L cnc-universal-input-rescue:GND-power #PWR0165
 U 1 1 637674C5
 P 4950 7750
 F 0 "#PWR0165" H 4950 7500 50  0001 C CNN
@@ -5075,7 +5075,7 @@ F 3 "" H 4950 7750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR0168
+L cnc-universal-input-rescue:+12V-power #PWR0168
 U 1 1 637674CB
 P 4950 7550
 F 0 "#PWR0168" H 4950 7400 50  0001 C CNN
@@ -5086,7 +5086,7 @@ F 3 "" H 4950 7550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:LED_Small D27
+L cnc-universal-input-rescue:LED_Small-Device D27
 U 1 1 638CE74F
 P 15550 7200
 F 0 "D27" H 15550 7350 50  0000 C CNN
@@ -5102,7 +5102,7 @@ Wire Wire Line
 Wire Wire Line
 	15550 6850 15550 6800
 $Comp
-L power:VBUS #PWR0171
+L cnc-universal-input-rescue:VBUS-power #PWR0171
 U 1 1 638CE75E
 P 15550 6800
 F 0 "#PWR0171" H 15550 6650 50  0001 C CNN
@@ -5113,7 +5113,7 @@ F 3 "" H 15550 6800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L IvyBit:GND_USB #PWR0174
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR0174
 U 1 1 63930D1E
 P 15550 7300
 F 0 "#PWR0174" H 15550 7050 50  0001 C CNN
@@ -5124,7 +5124,7 @@ F 3 "" H 15550 7300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Small R9
+L cnc-universal-input-rescue:R_Small-Device R9
 U 1 1 639F6BC0
 P 15550 6950
 F 0 "R9" V 15650 6850 50  0000 L CNN
@@ -5136,7 +5136,7 @@ F 4 "C17513" H 15550 6950 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L IvyBit:GND_USB #PWR01
+L cnc-universal-input-rescue:GND_USB-IvyBit #PWR01
 U 1 1 6192D92A
 P 13150 5150
 F 0 "#PWR01" H 13150 4900 50  0001 C CNN
