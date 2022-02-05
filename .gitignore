@@ -6,5 +6,5 @@ plot/
 *.hex
 *.lss
 *.map
-
+*.o
 cnc-universal-input.zip
