@@ -137,18 +137,6 @@ Wire Wire Line
 	1150 700  1150 750 
 Wire Wire Line
 	1150 950  1150 1000
-$Comp
-L cnc-universal-input-rescue:AD8001AR-Amplifier_Operational U8
-U 1 1 5FEB57AA
-P 13200 1300
-F 0 "U8" H 13300 1500 50  0000 L CNN
-F 1 "TL071CDR" H 13150 1050 50  0000 L CNN
-F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 13100 1100 50  0001 L CNN
-F 3 "https://datasheet.lcsc.com/lcsc/2004131003_SGMICRO-SGMOP07CXS8G-TR_C89712.pdf" H 13350 1450 50  0001 C CNN
-F 4 "C14449" H 13200 1300 50  0001 C CNN "LCSC"
-	1    13200 1300
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	13100 1600 13100 1750
 Wire Wire Line
@@ -5147,4 +5135,16 @@ F 3 "" H 13150 5150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 NoConn ~ 13050 5150
+$Comp
+L cnc-universal-input-rescue:AD8001AR-Amplifier_Operational U8
+U 1 1 5FEB57AA
+P 13200 1300
+F 0 "U8" H 13300 1500 50  0000 L CNN
+F 1 "TL071CDR" H 13150 1050 50  0000 L CNN
+F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 13100 1100 50  0001 L CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2004131003_SGMICRO-SGMOP07CXS8G-TR_C89712.pdf" H 13350 1450 50  0001 C CNN
+F 4 "C89712" H 13200 1300 50  0001 C CNN "LCSC"
+	1    13200 1300
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
